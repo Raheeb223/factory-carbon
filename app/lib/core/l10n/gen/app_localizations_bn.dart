@@ -778,7 +778,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get solarDrawHint =>
-      'মানচিত্রে ছাদের কোণগুলোতে ট্যাপ করুন। ভুল হলে ফেরত বোতাম চাপুন।';
+      'এলাকার নাম খুঁজুন বা GPS বোতাম চাপুন। কাছে জুম করে কারখানার ছাদে ট্যাপ করুন: ছাদের সীমানা নিজে থেকেই আঁকা হবে। সীমানা না এলে ছাদের প্রতিটি কোণে ট্যাপ করুন।';
 
   @override
   String solarPoints(int count) {
@@ -808,47 +808,49 @@ class AppLocalizationsBn extends AppLocalizations {
       'স্যাটেলাইট ছবি কনফিগার করা নেই। বেশি জুম করলে মানচিত্রে ভবনের রেখা দেখা যায়।';
 
   @override
-  String get solarParamsTitle => 'প্যারামিটার';
+  String get solarParamsTitle => 'সোলারের তথ্য';
 
   @override
-  String get paramUsableRoof => 'ব্যবহারযোগ্য ছাদের অংশ';
+  String get paramUsableRoof => 'ব্যবহারযোগ্য ছাদ (%)';
 
   @override
-  String get paramM2PerKwp => 'প্রতি kWp-এ m²';
+  String get paramM2PerKwp => 'প্রতি kW প্যানেলে ছাদের জায়গা (m²)';
 
   @override
-  String get paramPerformanceRatio => 'পারফরম্যান্স রেশিও';
+  String get paramPerformanceRatio => 'সিস্টেমের দক্ষতা (%)';
 
   @override
-  String get paramDegradation => 'প্যানেলের বার্ষিক দক্ষতা হ্রাস';
+  String get paramDegradation => 'প্রতি বছর প্যানেলের ক্ষয় (%)';
 
   @override
-  String get paramCapex => 'বিনিয়োগ (প্রতি kWp টাকা, ঐচ্ছিক)';
+  String get paramCapex => 'প্রতি kW-এ সোলার কোম্পানির দাম (টাকা)';
 
   @override
-  String get paramOm => 'রক্ষণাবেক্ষণ (বিনিয়োগের বার্ষিক অংশ, ঐচ্ছিক)';
+  String get paramOm => 'বার্ষিক রক্ষণাবেক্ষণ (দামের %)';
 
   @override
-  String get paramPrice => 'বিদ্যুতের দাম (টাকা/kWh, ঐচ্ছিক)';
+  String get paramPrice => 'আপনার বিদ্যুতের দাম (প্রতি kWh টাকা)';
 
   @override
-  String get paramPriceHint => 'ডিফল্ট: আপনার বিলের গড়';
+  String get paramPriceHint => 'খালি রাখলে: আপনার বিলের গড়';
 
   @override
-  String get paramExportPrice => 'রপ্তানি মূল্য (টাকা/kWh, ঐচ্ছিক)';
+  String get paramExportPrice =>
+      'বিতরণ কোম্পানি আপনাকে যে দাম দেবে (প্রতি kWh টাকা)';
 
   @override
-  String get paramNetMetering => 'নেট মিটারিং';
+  String get paramNetMetering => 'বাড়তি বিদ্যুৎ গ্রিডে বিক্রি (নেট মিটারিং)';
 
   @override
-  String get paramPsh => 'পিক সান আওয়ার (ঐচ্ছিক)';
+  String get paramPsh => 'দিনে রোদের ঘণ্টা';
 
   @override
-  String get paramPshHint => 'NASA POWER তথ্য ব্যবহার করতে খালি রাখুন';
+  String get paramPshHint =>
+      'খালি রাখলে: আপনার ছাদের জন্য NASA-র স্যাটেলাইট রোদের তথ্য ব্যবহার হবে।';
 
   @override
   String paramDefault(String value) {
-    return 'ডিফল্ট $value';
+    return 'সাধারণ মান $value';
   }
 
   @override
@@ -1612,13 +1614,6 @@ class AppLocalizationsBn extends AppLocalizations {
       'ক্রমানুসারে দেখুন। সমাধানটি কাজের পরিকল্পনায় যোগ করুন; পরের বিল থেকে অ্যাপ সাশ্রয় মেপে দেবে।';
 
   @override
-  String get paramShading => 'ছায়ার ক্ষতি (ভগ্নাংশ, যেমন ০.১ = ১০%)';
-
-  @override
-  String get paramShadingHint =>
-      'পানির ট্যাংক, গাছ বা পাশের ভবনের ছায়ায় যে আলো হারায়। খালি রাখলে = ছায়া নেই।';
-
-  @override
   String get paramRoofStructure => 'ছাদ কি প্যানেলের ভার নিতে পারবে?';
 
   @override
@@ -1933,5 +1928,125 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String actionPaybackUnderMonth(String cost) {
     return 'খরচ $cost টাকা: এক মাসের কম সময়ে উঠে এসেছে';
+  }
+
+  @override
+  String get solarSearchHint =>
+      'এলাকা, রাস্তা বা কারখানার নাম, অথবা স্থানাঙ্ক লিখুন';
+
+  @override
+  String get solarSearchNone =>
+      'কিছু পাওয়া যায়নি। টঙ্গী বা আশুলিয়ার মতো এলাকার নাম লিখে দেখুন।';
+
+  @override
+  String get solarSearchFailed =>
+      'খুঁজতে ইন্টারনেট লাগে। সংযোগ দেখে আবার চেষ্টা করুন।';
+
+  @override
+  String get solarGps => 'আমার অবস্থান (GPS)';
+
+  @override
+  String get solarGpsOff => 'ফোনের সেটিংসে লোকেশন (GPS) চালু করুন।';
+
+  @override
+  String get solarGpsDenied => 'লোকেশনের অনুমতি দেওয়া হয়নি।';
+
+  @override
+  String get solarGpsFailed =>
+      'অবস্থান পাওয়া যায়নি। জানালার কাছে বা বাইরে গিয়ে আবার চেষ্টা করুন।';
+
+  @override
+  String get solarZoomedIn => 'জুম করা হয়েছে। এবার কারখানার ছাদে ট্যাপ করুন।';
+
+  @override
+  String get solarFindingRoof => 'ছাদের সীমানা খোঁজা হচ্ছে…';
+
+  @override
+  String get solarOutlineFound =>
+      'ছাদের সীমানা পাওয়া গেছে। আপনার ছাদের সাথে মিলছে কিনা দেখে \'চালিয়ে যান\' চাপুন।';
+
+  @override
+  String get solarOutlineNone =>
+      'মানচিত্রে এখানে ভবনের সীমানা নেই। ছাদের প্রতিটি কোণে ট্যাপ করুন।';
+
+  @override
+  String get solarOutlineOffline =>
+      'ভবনের সীমানা আনা যায়নি। ছাদের প্রতিটি কোণে ট্যাপ করুন।';
+
+  @override
+  String solarAreaApprox(String area) {
+    return 'প্রায় $area m²';
+  }
+
+  @override
+  String get paramsIntro =>
+      'সব ঘর পূরণ করা ঐচ্ছিক। খালি ঘরে সাধারণ মান ধরা হয়, তাই এখনই \'অনুমান করুন\' চাপতে পারেন।';
+
+  @override
+  String get paramShadeQuestion => 'ছাদে কি কোনো কিছুর ছায়া পড়ে?';
+
+  @override
+  String get paramShadeHint => 'পানির ট্যাংক, গাছ বা পাশের উঁচু ভবন।';
+
+  @override
+  String get shadeNone => 'ছায়া নেই';
+
+  @override
+  String get shadeSome => 'কিছুটা (১০%)';
+
+  @override
+  String get shadeLot => 'অনেক (২৫%)';
+
+  @override
+  String get paramRoofHint =>
+      'প্যানেলের ওজন আছে। পুরনো বা টিনের ছাদ প্রকৌশলী দিয়ে যাচাই করান।';
+
+  @override
+  String get paramCapexHint =>
+      'সোলার কোম্পানির কোটেশন থেকে। উদাহরণ: ১০০ kW-এর দাম ৬০ লাখ টাকা হলে লিখুন ৬০,০০০। খালি রাখলেও আকার ও উৎপাদন দেখবেন, শুধু খরচ উঠে আসার সময় দেখবেন না।';
+
+  @override
+  String get paramNetMeteringHint =>
+      'শুধু যদি আপনার বিতরণ কোম্পানি (DPDC, DESCO, পল্লী বিদ্যুৎ…) অনুমোদন দেয়।';
+
+  @override
+  String get paramsAdvanced => 'উন্নত (প্রকৌশলীদের জন্য)';
+
+  @override
+  String get paramsAdvancedHint => 'ভালো তথ্য না থাকলে খালি রাখুন।';
+
+  @override
+  String get paramUsableRoofHint =>
+      'হাঁটার পথ, ট্যাংক ও সিঁড়ি বাদে ছাদের যে অংশে প্যানেল বসবে।';
+
+  @override
+  String get paramM2PerKwpHint => 'এক kW প্যানেলের জন্য ফাঁকসহ যত জায়গা লাগে।';
+
+  @override
+  String get paramPerformanceRatioHint =>
+      'তাপ, ধুলা, তার ও ইনভার্টারের ক্ষতির পর যতটা বিদ্যুৎ থাকে।';
+
+  @override
+  String get paramDegradationHint => 'প্রতি বছর প্যানেল একটু কম বিদ্যুৎ দেয়।';
+
+  @override
+  String get paramOmHint =>
+      'প্রতি বছর পরিষ্কার ও মেরামত খরচ, বসানোর দামের অংশ হিসেবে। সাধারণত ১–২%।';
+
+  @override
+  String get invalidPercent => '০ থেকে ১০০-এর মধ্যে একটি সংখ্যা লিখুন';
+
+  @override
+  String get solarSearching => 'খোঁজা হচ্ছে…';
+
+  @override
+  String get solarGpsFinding => 'আপনার অবস্থান খোঁজা হচ্ছে…';
+
+  @override
+  String get shadeUnsure => 'জানি না';
+
+  @override
+  String tonnesCo2(String value) {
+    return '$value টন CO₂';
   }
 }

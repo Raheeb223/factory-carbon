@@ -215,7 +215,7 @@ def build_pdf(
             ["Peak sun hours (annual average)", f"{solar.peak_sun_hours_annual_avg:.2f} ({solar.irradiance_source})"],
             ["Annual generation, kWh", _fmt(solar.annual_generation_kwh, 0)],
             ["Share of consumption offset", "not available" if solar.offset_share is None else f"{solar.offset_share * 100:.1f}%"],
-            ["CO2 avoided, tCO2e/year", _fmt(solar.co2_avoided_t_per_year, 2)],
+            ["CO2 avoided, tCO2/year (grid factor: CO2 only)", _fmt(solar.co2_avoided_t_per_year, 2)],
         ]
         if solar.financials:
             fin = solar.financials

@@ -781,7 +781,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get solarDrawHint =>
-      'Tap the roof corners on the map. Use undo to fix mistakes.';
+      'Search your area or tap the GPS button. Zoom in and tap your factory roof: the outline is drawn for you. No outline? Tap each roof corner.';
 
   @override
   String solarPoints(int count) {
@@ -812,47 +812,48 @@ class AppLocalizationsEn extends AppLocalizations {
       'Satellite imagery is not configured. Building outlines are visible on the map at high zoom.';
 
   @override
-  String get solarParamsTitle => 'Parameters';
+  String get solarParamsTitle => 'Solar details';
 
   @override
-  String get paramUsableRoof => 'Usable roof fraction';
+  String get paramUsableRoof => 'Usable roof (%)';
 
   @override
-  String get paramM2PerKwp => 'm² per kWp';
+  String get paramM2PerKwp => 'Roof area per kW of panels (m²)';
 
   @override
-  String get paramPerformanceRatio => 'Performance ratio';
+  String get paramPerformanceRatio => 'System efficiency (%)';
 
   @override
-  String get paramDegradation => 'Degradation per year';
+  String get paramDegradation => 'Panel ageing per year (%)';
 
   @override
-  String get paramCapex => 'Capex (Tk per kWp, optional)';
+  String get paramCapex => 'Installer price per kW (Tk)';
 
   @override
-  String get paramOm => 'O&M (fraction of capex per year, optional)';
+  String get paramOm => 'Yearly maintenance (% of price)';
 
   @override
-  String get paramPrice => 'Electricity price (Tk/kWh, optional)';
+  String get paramPrice => 'Your electricity price (Tk per kWh)';
 
   @override
-  String get paramPriceHint => 'Default: average from your bills';
+  String get paramPriceHint => 'Empty: average from your bills';
 
   @override
-  String get paramExportPrice => 'Export price (Tk/kWh, optional)';
+  String get paramExportPrice => 'Price the utility pays you (Tk per kWh)';
 
   @override
-  String get paramNetMetering => 'Net metering';
+  String get paramNetMetering => 'Sell extra power to the grid (net metering)';
 
   @override
-  String get paramPsh => 'Peak sun hours (optional)';
+  String get paramPsh => 'Sunshine hours per day';
 
   @override
-  String get paramPshHint => 'Leave empty to use NASA POWER data';
+  String get paramPshHint =>
+      'Empty: we use NASA satellite sunlight data for your roof.';
 
   @override
   String paramDefault(String value) {
-    return 'Default $value';
+    return 'Typical $value';
   }
 
   @override
@@ -1620,13 +1621,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Go through these in order. Add the fix to your action plan; the app then measures the saving from your next bills.';
 
   @override
-  String get paramShading => 'Shading loss (fraction, e.g. 0.1 = 10%)';
-
-  @override
-  String get paramShadingHint =>
-      'Sunlight lost to water tanks, trees or nearby buildings. Empty = no shading.';
-
-  @override
   String get paramRoofStructure => 'Can the roof carry panels?';
 
   @override
@@ -1944,5 +1938,129 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String actionPaybackUnderMonth(String cost) {
     return 'Cost Tk $cost: paid back in less than a month';
+  }
+
+  @override
+  String get solarSearchHint =>
+      'Search area, road or factory, or paste coordinates';
+
+  @override
+  String get solarSearchNone =>
+      'Nothing found. Try an area name such as Tongi or Ashulia.';
+
+  @override
+  String get solarSearchFailed =>
+      'Search needs internet. Check the connection and try again.';
+
+  @override
+  String get solarGps => 'My location (GPS)';
+
+  @override
+  String get solarGpsOff => 'Turn on location (GPS) in the phone settings.';
+
+  @override
+  String get solarGpsDenied => 'Location permission was not given.';
+
+  @override
+  String get solarGpsFailed =>
+      'Could not get your location. Try again near a window or outside.';
+
+  @override
+  String get solarZoomedIn => 'Zoomed in. Now tap on your factory roof.';
+
+  @override
+  String get solarFindingRoof => 'Finding the roof outline…';
+
+  @override
+  String get solarOutlineFound =>
+      'Roof outline found. Check that it matches your roof, then tap Continue.';
+
+  @override
+  String get solarOutlineNone =>
+      'No building outline here on the map. Tap each corner of your roof instead.';
+
+  @override
+  String get solarOutlineOffline =>
+      'Could not load building outlines. Tap each corner of your roof instead.';
+
+  @override
+  String solarAreaApprox(String area) {
+    return 'about $area m²';
+  }
+
+  @override
+  String get paramsIntro =>
+      'Every box is optional. Empty boxes use typical values, so you can press Estimate right away.';
+
+  @override
+  String get paramShadeQuestion => 'Is anything shading the roof?';
+
+  @override
+  String get paramShadeHint =>
+      'Water tanks, trees or taller buildings next to the factory.';
+
+  @override
+  String get shadeNone => 'No shade';
+
+  @override
+  String get shadeSome => 'Some (10%)';
+
+  @override
+  String get shadeLot => 'A lot (25%)';
+
+  @override
+  String get paramRoofHint =>
+      'Panels add weight. Old or tin roofs need an engineer\'s check.';
+
+  @override
+  String get paramCapexHint =>
+      'From a solar company\'s quote. Example: Tk 60 lakh for 100 kW = 60,000. Empty: you still see size and output, but no payback.';
+
+  @override
+  String get paramNetMeteringHint =>
+      'Only if your utility (DPDC, DESCO, REB…) has approved it.';
+
+  @override
+  String get paramsAdvanced => 'Advanced (for engineers)';
+
+  @override
+  String get paramsAdvancedHint =>
+      'Leave these empty unless you have better values.';
+
+  @override
+  String get paramUsableRoofHint =>
+      'Part of the roof that can hold panels, after walkways, tanks and stairs.';
+
+  @override
+  String get paramM2PerKwpHint =>
+      'Space one kW of panels needs, including gaps.';
+
+  @override
+  String get paramPerformanceRatioHint =>
+      'Power left after heat, dust, wiring and inverter losses.';
+
+  @override
+  String get paramDegradationHint =>
+      'Panels give a little less power every year.';
+
+  @override
+  String get paramOmHint =>
+      'Cleaning and repairs each year, as a share of the installation price. Often 1–2%.';
+
+  @override
+  String get invalidPercent => 'Enter a number from 0 to 100';
+
+  @override
+  String get solarSearching => 'Searching…';
+
+  @override
+  String get solarGpsFinding => 'Finding your location…';
+
+  @override
+  String get shadeUnsure => 'Not sure';
+
+  @override
+  String tonnesCo2(String value) {
+    return '$value t CO₂';
   }
 }

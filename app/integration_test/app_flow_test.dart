@@ -21,10 +21,12 @@ import 'package:factory_carbon/features/carbon/carbon_screen.dart';
 import 'package:factory_carbon/features/export/export_service.dart';
 import 'package:factory_carbon/features/home/home_shell.dart';
 import 'package:factory_carbon/features/impact/impact_screen.dart';
+import 'package:factory_carbon/features/solar/solar_map_screen.dart';
 import 'package:factory_carbon/features/solar/solar_params_screen.dart';
 import 'package:factory_carbon/features/solar/solar_result_screen.dart';
 import 'package:factory_carbon/features/waste/waste_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image/image.dart' as img;
@@ -283,21 +285,38 @@ void main() {
     expect(String.fromCharCodes(pdf.take(5)), '%PDF-');
     expect(pdf.length, greaterThan(20000));
 
-    // Solar estimate for a ~55 m x 51 m roof (NASA POWER irradiance).
-    Navigator.of(tester.element(find.byType(HomeShell))).push(MaterialPageRoute<void>(
-      builder: (_) => const SolarParamsScreen(polygon: [
-        LatLon(23.99990, 90.42030),
-        LatLon(23.99990, 90.42080),
-        LatLon(24.00040, 90.42080),
-        LatLon(24.00040, 90.42030),
-      ]),
-    ));
+    // Find the roof: place search (Nominatim), pasted coordinates, then one tap on a mapped
+    // building in Tongi draws its outline from OpenStreetMap (Overpass).
+    Navigator.of(tester.element(find.byType(HomeShell))).push(MaterialPageRoute<void>(builder: (_) => const SolarMapScreen()));
+    await pumpUntil(tester, find.byKey(const Key('place-search')));
+    await tester.enterText(find.byKey(const Key('place-search')), 'Tongi');
+    await tester.tap(find.byKey(const Key('place-search-go')));
+    await pumpUntil(tester, find.byKey(const Key('place-results')), timeout: const Duration(seconds: 30));
+    await shot(tester, '15_map_search');
+    // a second enterText on the device does not reach the field once the search has closed
+    // the keyboard, so set the text the way the keyboard would
+    tester
+        .state<EditableTextState>(find.descendant(of: find.byKey(const Key('place-search')), matching: find.byType(EditableText)))
+        .updateEditingValue(const TextEditingValue(text: '23.88225, 90.39692'));
+    await pumpFor(tester, const Duration(milliseconds: 300));
+    expect(find.text('23.88225, 90.39692'), findsOneWidget);
+    await tester.tap(find.byKey(const Key('place-search-go')));
+    await pumpFor(tester, const Duration(seconds: 2));
+    await tester.tapAt(tester.getCenter(find.byType(FlutterMap)));
+    await pumpUntil(tester, find.byType(SnackBar), timeout: const Duration(seconds: 60));
+    final snack = tester.widget<Text>(find.descendant(of: find.byType(SnackBar), matching: find.byType(Text)).first).data;
+    expect(snack, en.solarOutlineFound);
+    expect(find.byKey(const Key('roof-area')), findsOneWidget);
+    await pumpFor(tester, const Duration(seconds: 2));
+    await shot(tester, '15_map_roof');
+    await tester.tap(find.text(en.actionContinue));
+
+    // Solar estimate for that ~3,600 m² roof (NASA POWER irradiance).
     await pumpUntil(tester, find.byType(SolarParamsScreen));
     await pumpFor(tester, const Duration(seconds: 2));
     await shot(tester, '16_solar_params');
-    await tester.scrollUntilVisible(find.byKey(const Key('solar-estimate')), 300,
-        scrollable: find.descendant(of: find.byType(SolarParamsScreen), matching: find.byType(Scrollable)).first);
-    await tapVisible(tester, find.byKey(const Key('solar-estimate')));
+    await tapVisible(tester, find.byKey(const Key('shade-some')));
+    await tapVisible(tester, find.byKey(const Key('solar-estimate'))); // pinned under the form
     await pumpUntil(tester, find.byKey(const Key('solar-disclaimer')), timeout: const Duration(seconds: 90));
     await shot(tester, '17_solar_result');
     await tester.scrollUntilVisible(find.text(en.solarSavePlan), 300,
