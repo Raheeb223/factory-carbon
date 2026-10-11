@@ -16,7 +16,7 @@ class ProductionScreen extends ConsumerWidget {
   const ProductionScreen({super.key});
 
   Future<void> _edit(BuildContext context, WidgetRef ref, {ProductionEntry? entry}) async {
-    final unit = ref.read(factoryProvider).value?.productionUnitLabel ?? 'pieces';
+    final unit = unitLabel(AppLocalizations.of(context), ref.read(factoryProvider).value?.productionUnitLabel);
     final result = await showDialog<(String, double)>(
       context: context,
       builder: (_) => _ProductionDialog(entry: entry, unit: unit),
@@ -30,7 +30,7 @@ class ProductionScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
     final fmt = Fmt.of(context);
-    final unit = ref.watch(factoryProvider).value?.productionUnitLabel ?? 'pieces';
+    final unit = unitLabel(l, ref.watch(factoryProvider).value?.productionUnitLabel);
     final entries = ref.watch(productionProvider);
     return Scaffold(
       appBar: AppBar(title: Text(l.productionTitle)),

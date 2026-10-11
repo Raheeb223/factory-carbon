@@ -7,10 +7,11 @@ import 'dart:convert';
 import 'models.dart';
 
 class DemoDataset {
-  const DemoDataset({required this.bills, required this.production, required this.anomalyMonths});
+  const DemoDataset({required this.bills, required this.production, required this.anomalyMonths, this.actions = const []});
   final List<Bill> bills;
   final List<(String, double)> production;
   final List<String> anomalyMonths;
+  final List<EnergyAction> actions;
 }
 
 DemoDataset parseDemoData(String jsonText, {required String Function() newId, DateTime? now}) {
@@ -46,5 +47,16 @@ DemoDataset parseDemoData(String jsonText, {required String Function() newId, Da
     bills: bills,
     production: production,
     anomalyMonths: (data['anomaly_months'] as List<dynamic>).cast<String>(),
+    actions: [
+      for (final raw in (data['actions'] as List<dynamic>?) ?? const [])
+        EnergyAction(
+          id: newId(),
+          code: (raw as Map<String, dynamic>)['code'] as String,
+          doneMonth: raw['done_month'] as String?,
+          costBdt: (raw['cost_bdt'] as num?)?.toDouble(),
+          origin: DataOrigin.demo,
+          updatedAt: t,
+        ),
+    ],
   );
 }

@@ -28,6 +28,9 @@ class DataAdmin {
     for (final (month, units) in demo.production) {
       await prodRepo.upsertMonth(month, units, DataOrigin.demo);
     }
+    for (final a in demo.actions) {
+      await _ref.read(actionRepositoryProvider).save(a);
+    }
     await _ref.read(resultCacheRepositoryProvider).clear();
     return DemoLoadResult.loaded;
   }
@@ -35,6 +38,7 @@ class DataAdmin {
   Future<void> removeDemo() async {
     await _ref.read(billRepositoryProvider).deleteByOrigin(DataOrigin.demo);
     await _ref.read(productionRepositoryProvider).deleteByOrigin(DataOrigin.demo);
+    await _ref.read(actionRepositoryProvider).deleteByOrigin(DataOrigin.demo);
     await _ref.read(resultCacheRepositoryProvider).clear();
   }
 

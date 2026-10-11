@@ -41,8 +41,29 @@ def test_ols_message_and_cost() -> None:
     assert m.upper_kwh is not None and m.actual_kwh > m.upper_kwh
     msg = next(x for x in r.messages if "October 2023" in x)
     assert "more electricity than expected for the units produced" in msg
-    assert "kWh" in msg and "Tk" in msg and "compressors" in msg
+    assert msg.startswith("Anomaly in") and "estimated extra cost" in msg and "not proven waste" in msg
+    assert "kWh" in msg and "Tk" in msg
     assert r.model_summary["r_squared"] is not None
+
+
+def test_energy_per_unit_and_inspections() -> None:
+    req, anomalies = demo_request()
+    r = analyze(req)
+    m = next(x for x in r.months if x.month == anomalies[0])
+    assert m.kwh_per_unit == round(m.actual_kwh / m.production, 6)  # type: ignore[operator]
+    assert m.expected_kwh_per_unit is not None and m.kwh_per_unit > m.expected_kwh_per_unit  # type: ignore[operator]
+    assert r.baseline_kwh_per_unit is not None and r.baseline_kwh_per_unit < m.kwh_per_unit  # type: ignore[operator]
+    codes = [i.code for i in r.inspections]
+    assert codes[0] == "confirm_cause"  # legitimate reasons are ruled out first
+    assert {"compressed_air", "idle_machines", "boiler_steam", "generator"} <= set(codes)
+
+
+def test_more_production_is_not_flagged() -> None:
+    # 20% more garments with proportionally more electricity is normal, not an anomaly.
+    months = [{"month": f"2024-{i:02d}", "kwh": 10000 + 300 * (i % 3), "production": 20000 + 600 * (i % 3), "cost_bdt": 100000} for i in range(1, 12)]
+    months.append({"month": "2024-12", "kwh": 12360, "production": 24720, "cost_bdt": 120000})
+    r = analyze(WasteAnalyzeRequest.model_validate({"months": months}))
+    assert r.method == "ols_production" and r.flagged_months == [] and r.inspections == []
 
 
 def test_mad_fallback_without_production() -> None:

@@ -21,6 +21,7 @@ def factor_info(name: str, cv: ConfigValue) -> FactorInfo:
         year=cv.year,
         status=cv.status,
         notes=cv.notes,
+        gases=cv.gases,
     )
 
 

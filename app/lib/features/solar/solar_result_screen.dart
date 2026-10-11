@@ -27,6 +27,10 @@ String solarWarningText(AppLocalizations l, Fmt fmt, SolarWarning w) => switch (
   'export_price_missing' => l.swExportPriceMissing,
   'financial_assumptions' => l.swFinancialAssumptions,
   'no_payback' => l.swNoPayback,
+  'shading_not_assessed' => l.swShadingNotAssessed,
+  'structure_unknown' => l.swStructureUnknown,
+  'structure_needs_work' => l.swStructureNeedsWork,
+  'tariff_average_price' => l.swTariffAverage,
   _ => w.message,
 };
 

@@ -4,14 +4,57 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/format.dart';
 import '../../core/l10n/gen/app_localizations.dart';
 import '../../core/theme.dart';
+import '../../data/providers.dart';
 import '../../domain/api_models.dart';
 import '../../widgets/common.dart';
 import '../../widgets/ui.dart';
 import '../import_history/import_screen.dart';
+import '../impact/action_catalog.dart';
+import '../impact/impact_screen.dart';
 import 'waste_chart.dart';
 import 'waste_controller.dart';
 
-/// Electricity waste alerts (spec 8.6).
+/// One numbered check, with a button that adds the matching fix to the action plan.
+class _InspectionRow extends ConsumerWidget {
+  const _InspectionRow({required this.index, required this.inspection});
+  final String index;
+  final Inspection inspection;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
+    final tt = Theme.of(context).textTheme;
+    final (title, how) = inspectionText(l, inspection.code, inspection.title, inspection.detail);
+    final action = actionForInspection(inspection.code);
+    return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      CircleAvatar(
+        radius: 13,
+        backgroundColor: FeatureColors.waste.withValues(alpha: 0.15),
+        child: Text(index, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13, color: FeatureColors.waste)),
+      ),
+      const SizedBox(width: 10),
+      Expanded(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(title, style: tt.titleSmall),
+          const SizedBox(height: 2),
+          Text(how, style: tt.bodySmall?.copyWith(height: 1.35)),
+          if (action != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: OutlinedButton.icon(
+                key: Key('waste-plan-${inspection.code}'),
+                onPressed: () => addToPlan(ref, context, action.code),
+                icon: const Icon(Icons.add_task_rounded, size: 18),
+                label: Text(actionCodeTitle(l, action.code), maxLines: 2),
+              ),
+            ),
+        ]),
+      ),
+    ]);
+  }
+}
+
+/// Unusual electricity use: anomalies with an estimated extra cost (spec 8.6).
 class WasteView extends ConsumerWidget {
   const WasteView({super.key});
 
@@ -56,6 +99,7 @@ class WasteView extends ConsumerWidget {
     final cached = ref.watch(wasteResultProvider);
     final analyze = ref.read(wasteControllerProvider.notifier).analyze;
     final r = cached?.result;
+    final unit = unitLabel(l, ref.watch(factoryProvider).value?.productionUnitLabel);
 
     return ListView(padding: const EdgeInsets.fromLTRB(16, 14, 16, 32), children: [
       Row(children: [
@@ -172,9 +216,42 @@ class WasteView extends ConsumerWidget {
               child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 const IconBlob(Icons.bolt_rounded, color: SeriesColors.flagged, size: 40),
                 const SizedBox(width: 12),
-                Expanded(child: Text(flagMessage(l, fmt, r, m), style: const TextStyle(height: 1.35))),
+                Expanded(
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Text(flagMessage(l, fmt, r, m), style: const TextStyle(height: 1.35)),
+                    if (m.kwhPerUnit != null && m.expectedKwhPerUnit != null) ...[
+                      const SizedBox(height: 6),
+                      Text(
+                        l.wastePerUnit(unit, fmt.number(m.kwhPerUnit, decimals: 3), fmt.number(m.expectedKwhPerUnit, decimals: 3)),
+                        style: const TextStyle(fontWeight: FontWeight.w700),
+                      ),
+                    ],
+                  ]),
+                ),
               ]),
             ),
+        if (r.baselineKwhPerUnit != null)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(4, 4, 4, 0),
+            child: Text(l.wasteBaseline(fmt.number(r.baselineKwhPerUnit, decimals: 3), unit), style: tt.bodySmall),
+          ),
+        if (r.inspections.isNotEmpty)
+          SoftCard(
+            key: const Key('waste-checks'),
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Row(children: [
+                const IconBlob(Icons.checklist_rounded, color: FeatureColors.waste, size: 40),
+                const SizedBox(width: 12),
+                Expanded(child: Text(l.wasteChecksTitle, style: tt.titleMedium)),
+              ]),
+              const SizedBox(height: 6),
+              Text(l.wasteChecksIntro, style: tt.bodySmall),
+              for (final (i, insp) in r.inspections.indexed) ...[
+                const Divider(height: 22),
+                _InspectionRow(index: fmt.number((i + 1).toDouble()), inspection: insp),
+              ],
+            ]),
+          ),
       ],
     ]);
   }

@@ -6,6 +6,7 @@ import '../../core/l10n/gen/app_localizations.dart';
 import '../../core/theme.dart';
 import '../../data/providers.dart';
 import '../../domain/api_models.dart';
+import '../../widgets/co2_explainer.dart';
 import '../../widgets/common.dart';
 import '../../widgets/ui.dart';
 import '../export/export_service.dart';
@@ -61,7 +62,7 @@ class _CarbonViewState extends ConsumerState<CarbonView> {
     final cached = ref.watch(carbonResultProvider);
     final stale = ref.watch(carbonStaleProvider);
     final bills = ref.watch(billsProvider).value ?? const [];
-    final unit = ref.watch(factoryProvider).value?.productionUnitLabel ?? 'units';
+    final unit = unitLabel(l, ref.watch(factoryProvider).value?.productionUnitLabel);
     final loading = control.isLoading;
     final refresh = ref.read(carbonControllerProvider.notifier).refresh;
 
@@ -164,6 +165,10 @@ class _CarbonViewState extends ConsumerState<CarbonView> {
           ),
           if (r.periodStart != null)
             Text('${fmt.month(r.periodStart!)} – ${fmt.month(r.periodEnd!)}', style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 13)),
+          if (t.totalT != null) ...[
+            const SizedBox(height: 8),
+            Co2Plain(tonnes: t.totalT!),
+          ],
           const SizedBox(height: 14),
           SplitBar(parts: [(t.scope2T ?? 0, const Color(0xFFBAE6FD)), (t.scope1T ?? 0, const Color(0xFFFDE68A))], height: 10),
           const SizedBox(height: 10),
@@ -199,6 +204,14 @@ class _CarbonViewState extends ConsumerState<CarbonView> {
         ]),
       ),
       SectionHeader(l.settingsExport),
+      Padding(
+        padding: const EdgeInsets.only(left: 4, right: 4, bottom: 8),
+        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Icon(Icons.edit_note_rounded, size: 18, color: Colors.orange.shade800),
+          const SizedBox(width: 6),
+          Expanded(child: Text(l.draftReportNote, key: const Key('draft-note'), style: tt.bodySmall)),
+        ]),
+      ),
       Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Expanded(
           child: _ExportTile(
@@ -240,6 +253,7 @@ class _CarbonViewState extends ConsumerState<CarbonView> {
             Text(f.value == null ? l.notSet : '${fmt.number(f.value, decimals: 4)} ${f.unit.replaceAll('_per_', '/').replaceAll('_', ' ')}', style: tt.titleMedium?.copyWith(fontWeight: FontWeight.w800)),
             if (f.source.isNotEmpty) Text(l.factorSource(f.source), maxLines: 3, overflow: TextOverflow.ellipsis, style: tt.bodySmall),
             if (f.year != null) Text(l.factorYear('${f.year}'), style: tt.bodySmall),
+            if (f.gases != null) Text(l.factorGases(f.gases!), style: tt.bodySmall?.copyWith(fontWeight: FontWeight.w700)),
           ]),
         ),
       SectionHeader(l.carbonQualityTitle),

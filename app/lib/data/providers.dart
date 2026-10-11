@@ -39,11 +39,13 @@ final factoryRepositoryProvider = Provider<FactoryRepository>((ref) => DriftFact
 final billRepositoryProvider = Provider<BillRepository>((ref) => DriftBillRepository(ref.watch(databaseProvider)));
 final productionRepositoryProvider = Provider<ProductionRepository>((ref) => DriftProductionRepository(ref.watch(databaseProvider)));
 final solarPlanRepositoryProvider = Provider<SolarPlanRepository>((ref) => DriftSolarPlanRepository(ref.watch(databaseProvider)));
+final actionRepositoryProvider = Provider<ActionRepository>((ref) => DriftActionRepository(ref.watch(databaseProvider)));
 final resultCacheRepositoryProvider = Provider<ResultCacheRepository>((ref) => DriftResultCacheRepository(ref.watch(databaseProvider)));
 
 final factoryProvider = StreamProvider<FactoryProfile?>((ref) => ref.watch(factoryRepositoryProvider).watch());
 final billsProvider = StreamProvider<List<Bill>>((ref) => ref.watch(billRepositoryProvider).watchAll());
 final productionProvider = StreamProvider<List<ProductionEntry>>((ref) => ref.watch(productionRepositoryProvider).watchAll());
+final actionsProvider = StreamProvider<List<EnergyAction>>((ref) => ref.watch(actionRepositoryProvider).watchAll());
 final solarPlansProvider = StreamProvider<List<SolarPlan>>((ref) => ref.watch(solarPlanRepositoryProvider).watchAll());
 
 const carbonCacheKey = 'carbon';
@@ -56,7 +58,8 @@ final wasteCacheProvider = StreamProvider<CachedResult?>((ref) => ref.watch(resu
 final containsSyntheticProvider = Provider<bool>((ref) {
   final bills = ref.watch(billsProvider).value ?? const [];
   final production = ref.watch(productionProvider).value ?? const [];
-  return bills.any((b) => b.isSynthetic) || production.any((p) => p.isSynthetic);
+  final actions = ref.watch(actionsProvider).value ?? const [];
+  return bills.any((b) => b.isSynthetic) || production.any((p) => p.isSynthetic) || actions.any((a) => a.isSynthetic);
 });
 
 final healthProvider = FutureProvider<HealthInfo>((ref) => ref.watch(apiClientProvider).health());

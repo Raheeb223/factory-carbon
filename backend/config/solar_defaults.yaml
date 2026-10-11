@@ -23,6 +23,13 @@ performance_ratio:
   year: null
   status: verified
 
+shading_loss:
+  value: 0
+  unit: fraction
+  source: "Default assumption: no shading. Enter the share of sunlight lost to trees, water tanks or nearby buildings for the actual roof."
+  year: null
+  status: verified
+
 degradation_per_year:
   value: 0.005
   unit: fraction_per_year

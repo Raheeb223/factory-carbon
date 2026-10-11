@@ -76,6 +76,20 @@ class SolarPlans extends Table with SyncColumns {
   Set<Column<Object>> get primaryKey => {id};
 }
 
+/// Action plan entries (planned or done energy-saving actions).
+@DataClassName('EnergyActionRow')
+class EnergyActions extends Table with SyncColumns {
+  TextColumn get code => text()();
+  TextColumn get title => text().withDefault(const Constant(''))();
+  TextColumn get doneMonth => text().nullable()();
+  RealColumn get costBdt => real().nullable()();
+  TextColumn get note => text().withDefault(const Constant(''))();
+  TextColumn get origin => text()();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
 /// Last successful API results (carbon, waste) for offline viewing.
 @DataClassName('CachedResultRow')
 class CachedResults extends Table {
@@ -87,12 +101,20 @@ class CachedResults extends Table {
   Set<Column<Object>> get primaryKey => {key};
 }
 
-@DriftDatabase(tables: [FactoryProfiles, Bills, ProductionEntries, SolarPlans, CachedResults])
+@DriftDatabase(tables: [FactoryProfiles, Bills, ProductionEntries, SolarPlans, CachedResults, EnergyActions])
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? driftDatabase(name: 'factory_carbon'));
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+        onCreate: (m) => m.createAll(),
+        onUpgrade: (m, from, to) async {
+          if (from < 2) await m.createTable(energyActions); // v2: action plan
+        },
+      );
 
   /// "Delete all my data": wipes every table.
   Future<void> wipeAll() => transaction(() async {

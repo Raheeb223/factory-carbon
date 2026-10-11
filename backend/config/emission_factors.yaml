@@ -16,6 +16,7 @@ grid_electricity:
     Report to the UNFCCC (2023).
   year: 2022
   status: verified
+  gases: CO2 only (CH4 and N2O from power plants not included)
   notes: >-
     Checked 2026-10-11 against the signed letter hosted by the Department of
     Environment (objectstorage .../office-doe/2024/12/ea2411221c1f4ff49805bb7ac39c66fa.pdf).
@@ -33,6 +34,7 @@ diesel:
     litres, kg CO2e (CO2 2.62818 + CH4 0.00029 + N2O 0.03308; GWP100 from IPCC AR5).
   year: 2025
   status: verified
+  gases: CO2e (CO2 + CH4 + N2O, IPCC AR5 GWP100)
   notes: >-
     Checked 2026-10-11 against the official GOV.UK spreadsheet
     (ghg-conversion-factors-2025-flat-format.xlsx, row ID 1_101_1012_8_1).
@@ -49,6 +51,7 @@ natural_gas:
     kg CO2e (CO2 2.0627 + CH4 0.00307 + N2O 0.00095; GWP100 from IPCC AR5).
   year: 2025
   status: verified
+  gases: CO2e (CO2 + CH4 + N2O, IPCC AR5 GWP100)
   notes: >-
     Checked 2026-10-11 against the official GOV.UK spreadsheet (row ID 1_100_1004_1_1).
     The DESNZ factor reflects UK pipeline gas. Bangladesh gas is ~97% methane with a

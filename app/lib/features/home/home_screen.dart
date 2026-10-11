@@ -6,15 +6,19 @@ import '../../core/format.dart';
 import '../../core/l10n/gen/app_localizations.dart';
 import '../../core/theme.dart';
 import '../../data/providers.dart';
+import '../../domain/impact.dart';
+import '../../widgets/co2_explainer.dart';
 import '../../widgets/common.dart';
 import '../../widgets/connection_card.dart';
 import '../../widgets/language_switch.dart';
 import '../../widgets/ui.dart';
 import '../add_bill/add_bill_screen.dart';
 import '../carbon/carbon_controller.dart';
+import '../impact/impact_screen.dart';
 import '../import_history/import_screen.dart';
 import '../production/production_screen.dart';
 import '../settings/data_admin.dart';
+import '../tutorial/tutorial_screen.dart';
 import '../waste/waste_controller.dart';
 import 'home_shell.dart';
 
@@ -42,6 +46,7 @@ class HomeScreen extends ConsumerWidget {
     final production = ref.watch(productionProvider).value ?? const [];
     final carbon = ref.watch(carbonResultProvider);
     final waste = ref.watch(wasteResultProvider);
+    final impact = ref.watch(overallImpactProvider);
     final months = {for (final b in bills) b.billingMonth}.toList()..sort();
 
     final steps = [
@@ -86,6 +91,12 @@ class HomeScreen extends ConsumerWidget {
                   ],
                 ),
               ),
+              IconButton(
+                key: const Key('home-howto'),
+                tooltip: l.homeHowTo,
+                onPressed: () => _push(context, TutorialScreen(onDone: () => Navigator.of(context).pop())),
+                icon: const Icon(Icons.help_outline_rounded, color: Colors.white, size: 28),
+              ),
               const LanguagePill(),
             ],
           ),
@@ -119,6 +130,8 @@ class HomeScreen extends ConsumerWidget {
               '${fmt.month(carbon.result.periodStart ?? '')} – ${fmt.month(carbon.result.periodEnd ?? '')}',
               style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 12.5),
             ),
+            const SizedBox(height: 8),
+            Co2Plain(tonnes: totals.totalT!),
             if ((totals.scope1T ?? 0) + (totals.scope2T ?? 0) > 0) ...[
               const SizedBox(height: 12),
               SplitBar(parts: [(totals.scope2T ?? 0, const Color(0xFFBAE6FD)), (totals.scope1T ?? 0, const Color(0xFFFDE68A))], height: 8),
@@ -232,6 +245,14 @@ class HomeScreen extends ConsumerWidget {
       FeatureTile(icon: Icons.co2_rounded, color: FeatureColors.carbon, title: l.homeCarbon, subtitle: l.tileCarbonSub, onTap: () => onOpenTab(Tabs.reports)),
       FeatureTile(icon: Icons.bolt_rounded, color: FeatureColors.waste, title: l.homeWaste, subtitle: l.tileWasteSub, onTap: () => onOpenTab(Tabs.reports)),
       FeatureTile(
+        key: const Key('tile-impact'),
+        icon: Icons.savings_rounded,
+        color: FeatureColors.carbon,
+        title: l.impactTitle,
+        subtitle: l.tileImpactSub,
+        onTap: () => _push(context, const ImpactScreen()),
+      ),
+      FeatureTile(
         icon: Icons.solar_power_rounded,
         color: FeatureColors.solar,
         title: l.solarTitle,
@@ -292,6 +313,32 @@ class HomeScreen extends ConsumerWidget {
                               children: [
                                 Text(l.wasteTitle, style: t.titleSmall),
                                 Text(l.wasteFlaggedCount(waste.result.flaggedMonths.length), style: t.bodySmall),
+                              ],
+                            ),
+                          ),
+                          const Icon(Icons.chevron_right_rounded),
+                        ],
+                      ),
+                    ),
+                  if (impact.status == ImpactStatus.measured && impact.savedKwh > 0)
+                    SoftCard(
+                      key: const Key('home-impact'),
+                      color: FeatureColors.carbon.withValues(alpha: 0.07),
+                      borderColor: FeatureColors.carbon.withValues(alpha: 0.3),
+                      onTap: () => _push(context, const ImpactScreen()),
+                      child: Row(
+                        children: [
+                          const IconBlob(Icons.savings_rounded, color: FeatureColors.carbon, filled: true),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  impact.savedBdt == null ? l.impactKwhSaved(fmt.number(impact.savedKwh)) : l.impactTkSaved(fmt.number(impact.savedBdt)),
+                                  style: t.titleSmall,
+                                ),
+                                Text(l.impactSince(fmt.month(impact.startMonth!)), style: t.bodySmall),
                               ],
                             ),
                           ),

@@ -37,6 +37,19 @@ class Fmt {
   String dateTime(DateTime d) => DateFormat.yMMMd(locale).add_Hm().format(d);
 }
 
+/// Production units offered as one-tap choices. Stored in English (the server's PDF
+/// prints the stored text); shown in the app's language by [unitLabel].
+const productionUnitChoices = ['pieces', 'dozens', 'kg', 'meters'];
+
+/// The production unit in the app's language; a unit the user typed is shown as typed.
+String unitLabel(AppLocalizations l, String? stored) => switch (stored?.trim().toLowerCase()) {
+      null || '' || 'pieces' => l.unitPieces,
+      'dozens' => l.unitDozens,
+      'kg' => l.unitKg,
+      'meters' => l.unitMeters,
+      _ => stored!.trim(),
+    };
+
 String billTypeLabel(AppLocalizations l, BillType t) => switch (t) {
       BillType.electricity => l.billTypeElectricity,
       BillType.gas => l.billTypeGas,

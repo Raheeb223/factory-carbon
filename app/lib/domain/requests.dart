@@ -23,6 +23,7 @@ Map<String, dynamic> carbonRequest({
             'total_amount_bdt': b.totalAmountBdt,
             'origin': b.origin.wire,
             'user_edited_fields': b.userEditedFields,
+            'confirmed_at': b.confirmedAt.toUtc().toIso8601String(),
           },
       ],
       'production': [

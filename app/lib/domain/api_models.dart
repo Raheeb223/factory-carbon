@@ -83,7 +83,7 @@ class ExtractBillResult {
 // ------------------------------------------------------------------ shared
 
 class FactorInfo {
-  const FactorInfo({required this.name, required this.value, required this.unit, required this.source, required this.year, required this.status, this.notes});
+  const FactorInfo({required this.name, required this.value, required this.unit, required this.source, required this.year, required this.status, this.notes, this.gases});
   factory FactorInfo.fromJson(Map<String, dynamic> j) => FactorInfo(
         name: j['name'] as String,
         value: _d(j['value']),
@@ -92,6 +92,7 @@ class FactorInfo {
         year: j['year'] as int?,
         status: j['status'] as String,
         notes: j['notes'] as String?,
+        gases: j['gases'] as String?,
       );
   final String name;
   final double? value;
@@ -100,6 +101,9 @@ class FactorInfo {
   final int? year;
   final String status;
   final String? notes;
+
+  /// Which gases the factor covers ("CO2 only" or "CO2e ...").
+  final String? gases;
 
   bool get isPlaceholder => status == 'PLACEHOLDER';
 }
@@ -236,7 +240,20 @@ class CarbonResult {
 // ------------------------------------------------------------------ waste
 
 class WasteMonth {
-  const WasteMonth({required this.month, required this.actualKwh, this.production, this.expectedKwh, this.lowerKwh, this.upperKwh, required this.flagged, this.excessKwh, this.excessPct, this.excessCostBdt});
+  const WasteMonth({
+    required this.month,
+    required this.actualKwh,
+    this.production,
+    this.expectedKwh,
+    this.lowerKwh,
+    this.upperKwh,
+    required this.flagged,
+    this.excessKwh,
+    this.excessPct,
+    this.excessCostBdt,
+    this.kwhPerUnit,
+    this.expectedKwhPerUnit,
+  });
   factory WasteMonth.fromJson(Map<String, dynamic> j) => WasteMonth(
         month: j['month'] as String,
         actualKwh: _d(j['actual_kwh'])!,
@@ -248,6 +265,8 @@ class WasteMonth {
         excessKwh: _d(j['excess_kwh']),
         excessPct: _d(j['excess_pct']),
         excessCostBdt: _d(j['excess_cost_bdt']),
+        kwhPerUnit: _d(j['kwh_per_unit']),
+        expectedKwhPerUnit: _d(j['expected_kwh_per_unit']),
       );
   final String month;
   final double actualKwh;
@@ -259,10 +278,35 @@ class WasteMonth {
   final double? excessKwh;
   final double? excessPct;
   final double? excessCostBdt;
+
+  /// Electricity per unit produced this month, and what was expected for it.
+  final double? kwhPerUnit;
+  final double? expectedKwhPerUnit;
+}
+
+/// A practical check for a flagged month (code is localized by the app).
+class Inspection {
+  const Inspection({required this.code, required this.title, required this.detail});
+  factory Inspection.fromJson(Map<String, dynamic> j) =>
+      Inspection(code: j['code'] as String, title: j['title'] as String, detail: j['detail'] as String);
+  final String code;
+  final String title;
+  final String detail;
 }
 
 class WasteResult {
-  const WasteResult({required this.status, this.method, required this.monthCount, required this.requiredMonths, required this.months, required this.flaggedMonths, this.avgBdtPerKwh, required this.messages});
+  const WasteResult({
+    required this.status,
+    this.method,
+    required this.monthCount,
+    required this.requiredMonths,
+    required this.months,
+    required this.flaggedMonths,
+    this.avgBdtPerKwh,
+    required this.messages,
+    this.baselineKwhPerUnit,
+    this.inspections = const [],
+  });
   factory WasteResult.fromJson(Map<String, dynamic> j) => WasteResult(
         status: j['status'] as String,
         method: j['method'] as String?,
@@ -272,6 +316,8 @@ class WasteResult {
         flaggedMonths: _strings(j['flagged_months']),
         avgBdtPerKwh: _d(j['avg_bdt_per_kwh']),
         messages: _strings(j['messages']),
+        baselineKwhPerUnit: _d(j['baseline_kwh_per_unit']),
+        inspections: ((j['inspections'] as List<dynamic>?) ?? const []).map((e) => Inspection.fromJson(_map(e))).toList(),
       );
   final String status;
   final String? method;
@@ -281,6 +327,10 @@ class WasteResult {
   final List<String> flaggedMonths;
   final double? avgBdtPerKwh;
   final List<String> messages;
+
+  /// Typical kWh per unit produced in the months that were not flagged.
+  final double? baselineKwhPerUnit;
+  final List<Inspection> inspections;
 
   bool get insufficient => status == 'insufficient_data';
   bool get usesProduction => method == 'ols_production';

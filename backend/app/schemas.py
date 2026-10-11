@@ -59,6 +59,7 @@ class FactorInfo(BaseModel):
     year: int | None
     status: FactorStatus
     notes: str | None = None
+    gases: str | None = None
 
 
 class DataQualityNote(BaseModel):
@@ -131,6 +132,8 @@ class ConfirmedBillInput(StrictModel):
     total_amount_bdt: float | None = Field(default=None, ge=0)
     origin: DataOrigin = "bill_image"
     user_edited_fields: list[str] = Field(default_factory=list)
+    # When the manager confirmed it (ISO date), listed in the report's audit trail.
+    confirmed_at: str | None = Field(default=None, max_length=40)
 
 
 class ProductionInput(StrictModel):
@@ -220,6 +223,16 @@ class WasteMonthResult(BaseModel):
     excess_kwh: float | None
     excess_pct: float | None
     excess_cost_bdt: float | None
+    kwh_per_unit: float | None = None
+    expected_kwh_per_unit: float | None = None
+
+
+class Inspection(BaseModel):
+    """A practical check for a flagged month. `code` lets the app localize; text is English."""
+
+    code: str
+    title: str
+    detail: str
 
 
 class WasteAnalyzeResponse(BaseModel):
@@ -234,6 +247,8 @@ class WasteAnalyzeResponse(BaseModel):
     messages: list[str]
     limitations: list[str]
     model_summary: dict[str, float | None]
+    baseline_kwh_per_unit: float | None = None
+    inspections: list[Inspection] = Field(default_factory=list)
 
 
 # ---------------------------------------------------------------- solar
@@ -248,6 +263,7 @@ class SolarParamOverrides(StrictModel):
     usable_roof_fraction: float | None = Field(default=None, gt=0, le=1)
     m2_per_kwp: float | None = Field(default=None, gt=0, le=50)
     performance_ratio: float | None = Field(default=None, gt=0, le=1)
+    shading_loss: float | None = Field(default=None, ge=0, lt=0.9)
     degradation_per_year: float | None = Field(default=None, ge=0, lt=0.1)
     capex_bdt_per_kwp: float | None = Field(default=None, gt=0)
     om_fraction_of_capex_per_year: float | None = Field(default=None, ge=0, lt=0.5)
@@ -255,6 +271,8 @@ class SolarParamOverrides(StrictModel):
     export_price_bdt_per_kwh: float | None = Field(default=None, ge=0)
     net_metering: bool | None = None
     analysis_years: int | None = Field(default=None, ge=1, le=40)
+    # Has an engineer checked the roof can carry panels? Only changes the warnings.
+    roof_structure: Literal["unknown", "ok", "needs_work"] | None = None
 
 
 class ConsumptionMonth(StrictModel):
