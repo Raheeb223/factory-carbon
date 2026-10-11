@@ -10,7 +10,7 @@ class AppLocalizationsBn extends AppLocalizations {
   AppLocalizationsBn([String locale = 'bn']) : super(locale);
 
   @override
-  String get appTitle => 'ফ্যাক্টরি এনার্জি ও কার্বন';
+  String get appTitle => 'BillToGreen';
 
   @override
   String get navHome => 'হোম';

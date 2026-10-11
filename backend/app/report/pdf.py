@@ -246,6 +246,6 @@ def build_pdf(
         canvas.restoreState()
 
     buf = io.BytesIO()
-    doc = SimpleDocTemplate(buf, pagesize=A4, leftMargin=18 * mm, rightMargin=18 * mm, topMargin=22 * mm, bottomMargin=18 * mm, title=f"GHG report - {factory.name}", author="Factory Energy & Carbon")
+    doc = SimpleDocTemplate(buf, pagesize=A4, leftMargin=18 * mm, rightMargin=18 * mm, topMargin=22 * mm, bottomMargin=18 * mm, title=f"GHG report - {factory.name}", author="BillToGreen")
     doc.build(story, onFirstPage=on_page, onLaterPages=on_page)
     return buf.getvalue()
