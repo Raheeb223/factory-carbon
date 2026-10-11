@@ -262,7 +262,7 @@ class _UnitPicker extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     String cap(String s) => s.isEmpty ? s : s[0].toUpperCase() + s.substring(1);
     final options = [
-      for (final c in productionUnitChoices) (c, cap(unitLabel(l, c))),
+      for (final c in productionUnitChoices) (c, c == 'kg' ? unitLabel(l, c) : cap(unitLabel(l, c))),
       ('other', l.unitOther),
     ];
     return Column(

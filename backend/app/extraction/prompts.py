@@ -1,6 +1,6 @@
 """Version-controlled extraction prompt (spec 6.1). Bump PROMPT_VERSION on any change."""
 
-PROMPT_VERSION = "2026-10-10.1"
+PROMPT_VERSION = "2026-10-11.1"
 
 EXTRACTION_PROMPT = """\
 You read one photographed or scanned utility bill from Bangladesh (electricity, gas
@@ -17,6 +17,9 @@ Rules, in priority order:
    thousands separators. Numbers must be plain JSON numbers.
 4. Dates on these bills are written day/month/year. Output `period_start` and
    `period_end` as ISO dates (YYYY-MM-DD) and `billing_month` as YYYY-MM.
+   Two-digit years mean 20YY: "Aug-26" is 2026-08 and "24/07/26" is 2026-07-24.
+   Take the year only from what is printed. Never replace it with the current year or
+   a year you think is more likely, even if it looks recent or in the future.
 5. If a value is missing, cut off, blurred, ambiguous or you are not sure, return
    null for it. NEVER guess or infer a value that is not clearly printed.
 6. NEVER output personal data: no customer names, addresses, phone numbers, meter

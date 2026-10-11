@@ -1859,7 +1859,7 @@ abstract class AppLocalizations {
   /// No description provided for @limitationsBody.
   ///
   /// In en, this message translates to:
-  /// **'• Scope 1 and 2 from utility bills only. No Scope 3; no coal, biomass or other fuels unless entered manually.\n• Bill-reading accuracy has only been measured on a few sample bills. Always check values.\n• The waste check flags statistical outliers against production; it cannot identify causes.\n• Solar results are pre-feasibility estimates only.\n• Emission factors come from published government sources (shown with source and year in the report). Update them when newer editions appear and confirm they match the buyer\'s rules.\n• The app token is weak protection, adequate for a demo only.'**
+  /// **'• Scope 1 and 2 from utility bills only. No Scope 3; no coal, biomass or other fuels unless entered manually.\n• The emissions report is a draft until its method and format are checked against your buyer\'s requirements.\n• Bill-reading accuracy has only been measured on a few sample bills. Always check values.\n• Names are hidden automatically only when printed in English letters. Cover handwritten or Bangla names by hand.\n• The unusual-use check flags statistical outliers against production; it cannot identify causes and does not prove waste.\n• Measured savings compare the whole factory before and after an action; weather, product mix or other changes can also play a part.\n• Solar results are estimates only.\n• Emission factors come from published government sources (shown with source and year in the report). Update them when newer editions appear and confirm they match the buyer\'s rules.\n• The app token is weak protection, adequate for a demo only.'**
   String get limitationsBody;
 
   /// No description provided for @demoNeedsEmpty.
@@ -2765,14 +2765,14 @@ abstract class AppLocalizations {
   /// No description provided for @wastePerUnit.
   ///
   /// In en, this message translates to:
-  /// **'Electricity per {unit}: {actual} kWh (expected {expected})'**
-  String wastePerUnit(String unit, String actual, String expected);
+  /// **'kWh per unit produced: {actual} (expected {expected})'**
+  String wastePerUnit(String actual, String expected);
 
   /// No description provided for @wasteBaseline.
   ///
   /// In en, this message translates to:
-  /// **'Normal months: {value} kWh per {unit}'**
-  String wasteBaseline(String value, String unit);
+  /// **'Normal months: {value} kWh per unit produced'**
+  String wasteBaseline(String value);
 
   /// No description provided for @wasteChecksTitle.
   ///
@@ -2963,8 +2963,8 @@ abstract class AppLocalizations {
   /// No description provided for @impactChartTitle.
   ///
   /// In en, this message translates to:
-  /// **'Electricity per {unit} (kWh)'**
-  String impactChartTitle(String unit);
+  /// **'kWh per unit produced, each month'**
+  String get impactChartTitle;
 
   /// No description provided for @impactBefore.
   ///
@@ -3113,8 +3113,8 @@ abstract class AppLocalizations {
   /// No description provided for @actionResult.
   ///
   /// In en, this message translates to:
-  /// **'Electricity per {unit}: {pct}% ({before} → {after} kWh)'**
-  String actionResult(String unit, String pct, String before, String after);
+  /// **'kWh per unit produced: {pct}% ({before} → {after})'**
+  String actionResult(String pct, String before, String after);
 
   /// No description provided for @actionPayback.
   ///
@@ -3301,6 +3301,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Draft emissions report. It lists every bill and how it was entered, the reporting period, factors and sources. Check its method and format with your buyer before sending it as official.'**
   String get draftReportNote;
+
+  /// No description provided for @actionPaybackUnderMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Cost Tk {cost}: paid back in less than a month'**
+  String actionPaybackUnderMonth(String cost);
 }
 
 class _AppLocalizationsDelegate

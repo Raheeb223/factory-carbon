@@ -117,7 +117,6 @@ class ImpactView extends ConsumerWidget {
     final production = ref.watch(productionProvider).value ?? const [];
     final grid = ref.watch(gridFactorProvider);
     final impact = ref.watch(overallImpactProvider);
-    final unit = unitLabel(l, ref.watch(factoryProvider).value?.productionUnitLabel);
     final inPlan = {for (final a in actions) a.code};
 
     Widget actionCard(EnergyAction a) {
@@ -166,9 +165,14 @@ class ImpactView extends ConsumerWidget {
             if (kind != null && !a.done) ...[const SizedBox(height: 8), Text(actionCodeHow(l, a.code), style: tt.bodySmall?.copyWith(height: 1.35))],
             if (own != null) ...[
               const SizedBox(height: 8),
-              Text(_impactLine(l, fmt, own, unit), style: tt.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+              Text(_impactLine(l, fmt, own), style: tt.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
               if (a.costBdt != null && monthlyBdt != null && monthlyBdt > 0)
-                Text(l.actionPayback(fmt.number(a.costBdt), fmt.number(a.costBdt! / monthlyBdt, decimals: 1)), style: tt.bodySmall),
+                Text(
+                  a.costBdt! < monthlyBdt
+                      ? l.actionPaybackUnderMonth(fmt.number(a.costBdt))
+                      : l.actionPayback(fmt.number(a.costBdt), fmt.number(a.costBdt! / monthlyBdt, decimals: 1)),
+                  style: tt.bodySmall,
+                ),
             ],
             if (!a.done) ...[
               const SizedBox(height: 10),
@@ -210,7 +214,7 @@ class ImpactView extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(l.impactChartTitle(unit), style: tt.titleMedium),
+                Text(l.impactChartTitle, style: tt.titleMedium),
                 const SizedBox(height: 12),
                 _IntensityChart(bills: bills, production: production, start: impact.startMonth!, baseline: impact.baselineKwhPerUnit!),
                 const SizedBox(height: 8),
@@ -298,12 +302,11 @@ class ImpactView extends ConsumerWidget {
     );
   }
 
-  static String _impactLine(AppLocalizations l, Fmt fmt, Impact i, String unit) => switch (i.status) {
+  static String _impactLine(AppLocalizations l, Fmt fmt, Impact i) => switch (i.status) {
     ImpactStatus.measured => l.actionResult(
       fmt.number(i.changePct, decimals: 1),
       fmt.number(i.baselineKwhPerUnit, decimals: 3),
       fmt.number(i.afterKwhPerUnit, decimals: 3),
-      unit,
     ),
     ImpactStatus.tooEarly => l.impactTooEarly,
     ImpactStatus.noBaseline => l.impactNoBaseline,

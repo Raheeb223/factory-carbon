@@ -1071,7 +1071,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get limitationsBody =>
-      '• Scope 1 and 2 from utility bills only. No Scope 3; no coal, biomass or other fuels unless entered manually.\n• Bill-reading accuracy has only been measured on a few sample bills. Always check values.\n• The waste check flags statistical outliers against production; it cannot identify causes.\n• Solar results are pre-feasibility estimates only.\n• Emission factors come from published government sources (shown with source and year in the report). Update them when newer editions appear and confirm they match the buyer\'s rules.\n• The app token is weak protection, adequate for a demo only.';
+      '• Scope 1 and 2 from utility bills only. No Scope 3; no coal, biomass or other fuels unless entered manually.\n• The emissions report is a draft until its method and format are checked against your buyer\'s requirements.\n• Bill-reading accuracy has only been measured on a few sample bills. Always check values.\n• Names are hidden automatically only when printed in English letters. Cover handwritten or Bangla names by hand.\n• The unusual-use check flags statistical outliers against production; it cannot identify causes and does not prove waste.\n• Measured savings compare the whole factory before and after an action; weather, product mix or other changes can also play a part.\n• Solar results are estimates only.\n• Emission factors come from published government sources (shown with source and year in the report). Update them when newer editions appear and confirm they match the buyer\'s rules.\n• The app token is weak protection, adequate for a demo only.';
 
   @override
   String get demoNeedsEmpty =>
@@ -1603,13 +1603,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeHowTo => 'How to use';
 
   @override
-  String wastePerUnit(String unit, String actual, String expected) {
-    return 'Electricity per $unit: $actual kWh (expected $expected)';
+  String wastePerUnit(String actual, String expected) {
+    return 'kWh per unit produced: $actual (expected $expected)';
   }
 
   @override
-  String wasteBaseline(String value, String unit) {
-    return 'Normal months: $value kWh per $unit';
+  String wasteBaseline(String value) {
+    return 'Normal months: $value kWh per unit produced';
   }
 
   @override
@@ -1745,9 +1745,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Production-adjusted, from your own bills. Weather, product mix or other changes can also play a part.';
 
   @override
-  String impactChartTitle(String unit) {
-    return 'Electricity per $unit (kWh)';
-  }
+  String get impactChartTitle => 'kWh per unit produced, each month';
 
   @override
   String get impactBefore => 'Before';
@@ -1827,8 +1825,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get actionCustomHint => 'e.g. Repair the dyeing machine motor';
 
   @override
-  String actionResult(String unit, String pct, String before, String after) {
-    return 'Electricity per $unit: $pct% ($before → $after kWh)';
+  String actionResult(String pct, String before, String after) {
+    return 'kWh per unit produced: $pct% ($before → $after)';
   }
 
   @override
@@ -1942,4 +1940,9 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get draftReportNote =>
       'Draft emissions report. It lists every bill and how it was entered, the reporting period, factors and sources. Check its method and format with your buyer before sending it as official.';
+
+  @override
+  String actionPaybackUnderMonth(String cost) {
+    return 'Cost Tk $cost: paid back in less than a month';
+  }
 }

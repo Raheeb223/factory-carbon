@@ -2,10 +2,13 @@
 
 A mobile app for Bangladeshi garment factories. Photograph utility bills and get:
 
-1. **Structured bill data** read by Gemini, with a **mandatory human review** before anything is used.
-2. A **monthly CO2e report** (Scope 1 + Scope 2, location-based), exportable as PDF or CSV for buyers.
-3. **Electricity waste alerts**: months where electricity use is high for the production level.
-4. A **rooftop solar pre-feasibility** estimate from a roof outline drawn on a map.
+1. **Structured bill data** read by Gemini, with a **mandatory human review** before anything is used. Printed names and addresses are found on the phone (ML Kit, offline) and covered with black boxes before the photo is sent.
+2. A **traceable draft emissions report** (Scope 1 direct + Scope 2 purchased electricity, location-based): reporting period, sources included, factors with source, year and gases covered, and an audit trail of every bill and how it was entered. PDF or CSV.
+3. **Unusual electricity use (anomalies)**: months that used more electricity than expected *for the units produced*, with kWh per unit, an estimated extra cost and an ordered inspection checklist. An anomaly is not called waste until normal causes are ruled out.
+4. A **rooftop solar estimate** from a roof outline drawn on a map: shading, roof strength, installation cost, tariff and self-consumption are taken into account, and the output is labelled an estimate.
+5. **Actions and measured savings**: an action plan, and savings measured afterwards from the factory's own bills (production-adjusted), in Tk, kWh and CO2, with payback and the benefit to the wider community.
+
+For people who find reading hard: a picture tutorial with a **Listen** button (Bangla/English text-to-speech), one-tap choices instead of typing, and the CO2 figure explained in plain words (kg, trees, what Scope 1 and 2 mean).
 
 The app is fully bilingual: **English and বাংলা**. Switch at any time from the first screen, the Home app bar, Settings, or Android 13+ "App languages".
 
@@ -177,8 +180,9 @@ After deploying, build the app with `--dart-define=API_BASE_URL=https://<your-ho
 
 - **Extraction (spec 6.1).** The Google Gen AI SDK (`google-genai`) calls `generate_content` with the image and a version-controlled prompt (`prompts.py`). Settings: `temperature=0`, JSON output constrained by a flat JSON Schema (only keywords the Gemini docs list as supported). Up to 3 retries with exponential backoff, no retry on 4xx. Anything unparseable becomes `null`. Server-side checks return warnings and never block. Run `python -m scripts.eval_extraction` for per-field accuracy against `data/ground_truth/*.json`.
 - **Carbon (6.2).** Scope 2 = kWh × grid factor; Scope 1 = litres × diesel factor + m³ × gas factor. Months without data are `null`. A source whose factor is not set returns an explicit `factor_not_set` error and `null` values; the other sources are still calculated.
-- **Waste (6.3).**
-  - With 6+ months of electricity and production: OLS of `kWh ~ production` (statsmodels) with a leave-one-out 95% prediction interval.
+- **Unusual use / anomalies (6.3).** A transparent baseline, not a black-box model: monthly data is too sparse for ML.
+  - With 6+ months of electricity and production: OLS of `kWh ~ production` (statsmodels), i.e. expected kWh = a + b × units produced, with a leave-one-out 95% prediction interval. A factory making 20% more garments is expected to use more electricity and is not flagged for it (tested).
+  - Each month also reports kWh per unit and the expected kWh per unit; flagged months get an estimated extra cost (excess kWh × average price) and an ordered checklist: rule out production, hours and weather first, then compressed air, idle machines, boiler/steam, generator.
   - To stop one anomaly hiding another (masking), up to 3 passes refit without months already flagged.
   - Without production data: a leave-one-out median/MAD fallback (robust z > 3), labelled lower confidence.
   - On 200 synthetic datasets it found both injected anomalies every time, with about 0.3 false flags per 24 months.
@@ -186,8 +190,10 @@ After deploying, build the app with `--dart-define=API_BASE_URL=https://<your-ho
   - Geodesic area via `pyproj.Geod`; shapely rejects self-intersecting and tiny polygons.
   - Irradiance: NASA POWER `ALLSKY_SFC_SW_DWN` monthly climatology (community `RE`). Cached by location rounded to 0.01°, with an optional disk cache. A manual value can override it.
   - Without net metering, self-consumption is capped at each month's consumption. Financials appear only when capex is given.
-  - The spec example (1,000 m², 70%, 7 m²/kWp, 4.5 PSH, PR 0.8) gives exactly 131,400 kWh/year (tested).
-- **PDF (6.5).** reportlab + matplotlib: cover, summary, monthly chart and table, methodology, factor table with source/year/status, data-quality notes, optional solar page. Every page is stamped "DRAFT: contains unverified emission factors" while any factor is `PLACEHOLDER`, and "SYNTHETIC DEMO DATA" when demo data is included.
+  - The spec example (1,000 m², 70%, 7 m²/kWp, 4.5 PSH, PR 0.8) gives exactly 131,400 kWh/year, and 81.5 t CO2/year avoided at 0.62 kg/kWh when all of it displaces grid electricity (both tested).
+  - Shading loss and an engineer's roof-strength check are inputs; without them the result carries a warning. When the price comes from the bills' average (which includes demand charge and VAT), a warning says real savings may be lower.
+- **Measured savings (Feature 4, on the phone).** Baseline = kWh per unit over up to 12 months before the first completed action; each later month saves baseline × units − actual kWh (the action month is left out). Results under 3 months are labelled early. Tk uses the average bill price; CO2 uses the grid factor from the carbon report. This is a whole-factory comparison (similar to IPMVP Option C), so other changes can also contribute; the app says so.
+- **PDF (6.5).** reportlab + matplotlib: titled "Draft Greenhouse Gas Emissions Report" with a note that method and format still need validating against the buyer's requirements. Cover, summary (period, sources included, Scope 1 direct vs Scope 2 purchased electricity), monthly chart and table, methodology (including how AI-read values are confirmed), factor table with source/year/status/gases (grid factor is CO2 only; fuels are CO2e), data-quality notes, an audit trail of every bill (how it was entered and when it was confirmed), and an optional solar page. Every page is stamped "DRAFT: contains unverified emission factors" while any factor is `PLACEHOLDER`, and "SYNTHETIC DEMO DATA" when demo data is included.
 
 ## Emission factors (verified against primary sources, 2026-10-11)
 
@@ -206,11 +212,24 @@ Each value was checked against the original document or spreadsheet; the YAML `n
 
 The solar rules of thumb (usable fraction 0.6, 7 m²/kWp, PR 0.78, degradation 0.5%/yr) are the values set in `SPEC.md` 6.4. Capex and O&M have no default and must come from a supplier quote.
 
+## What we claim, and what we do not
+
+| Instead of | We say |
+|---|---|
+| "The factory produced 95 t of CO2." | "Draft: 95 tCO2e for Jan 2023 to Dec 2024, from grid electricity (Scope 2, purchased) and diesel and gas (Scope 1, direct), using the factors, sources and years listed." |
+| "Usage rose 20%, so Tk 1.5 lakh was wasted." | "An anomaly: about X kWh more than expected for the units produced, estimated extra cost Tk Y. Check production, working hours and other causes first." |
+| "AI learns normal usage from monthly bills." | "A transparent, production-adjusted baseline (kWh = a + b × units). AI is used only to read bills, and a person confirms every value." |
+| "The solar calculator gives your savings." | "An estimate that accounts for usable roof, shading, roof strength, installation cost, tariff and how much solar power the factory can use." |
+| "A buyer-ready compliance report." | "A draft emissions report, until its method and format are validated against the buyer's requirements." |
+| "This action will save 10%." | "Since the action, electricity per unit fell X%, measured from your own bills: Tk Y, Z kWh, W kg CO2." |
+
 ## Known limitations
 
 - Scope 1 and 2 from utility bills only. No Scope 3; no coal, biomass or captive-generator fuel unless entered manually.
 - Extraction accuracy is measured only on the bills in `backend/data/sample_bills/`. The BPDB sample image is not in the repo yet, so the eval script has not been run against Gemini.
-- The waste detector flags statistical outliers against production and cannot identify causes.
+- The anomaly detector flags statistical outliers against production and cannot identify causes.
+- Measured savings compare the whole factory before and after; weather, product mix or other changes can also contribute.
+- Automatic name hiding reads printed Latin text only; handwritten or Bangla-script names must be covered by hand (the screen asks the user to check).
 - Solar results are pre-feasibility only.
 - Emission factors are published government values (see above). Re-check them each year and against the buyer's reporting rules.
 - The app token is weak protection, adequate for a demo only.
