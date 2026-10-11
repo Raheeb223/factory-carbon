@@ -1,0 +1,56 @@
+name: factory_carbon
+description: "Factory Energy & Carbon: bills to Scope 1+2 reports, waste alerts and solar pre-feasibility."
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.13.5
+
+dependencies:
+  csv: ^8.0.0
+  dio: ^5.11.1
+  drift: ^2.35.2
+  drift_flutter: ^0.3.1
+  file_picker: ^13.1.0
+  fl_chart: ^1.2.0
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  flutter_map: ^8.3.2
+  flutter_riverpod: ^3.4.3
+  image: ^4.10.2
+  image_cropper: ^12.2.1
+  image_picker: ^1.2.4
+  intl: ^0.20.3
+  latlong2: ^0.10.1
+  path: ^1.9.1
+  path_provider: ^2.1.6
+  share_plus: ^13.3.1
+  shared_preferences: ^2.5.6
+  uuid: ^4.6.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  drift_dev: ^2.35.1
+  build_runner: ^2.16.2
+  mocktail: ^1.0.5
+  flutter_launcher_icons: ^0.14.4
+
+flutter:
+  uses-material-design: true
+  generate: true
+  assets:
+    - assets/demo/demo_data.json
+    - assets/templates/history_template.csv
+
+flutter_launcher_icons:
+  android: "ic_launcher"
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/icon/icon.png"
+  adaptive_icon_background: "#0F766E"
+  adaptive_icon_foreground: "assets/icon/icon_foreground.png"
+  min_sdk_android: 21

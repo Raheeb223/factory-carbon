@@ -1,0 +1,276 @@
+{
+  "synthetic": true,
+  "label": "SYNTHETIC DEMO DATA - not a real factory",
+  "seed": 42,
+  "production_unit_label": "pieces",
+  "anomaly_months": [
+    "2023-10",
+    "2024-08"
+  ],
+  "months": [
+    {
+      "month": "2023-01",
+      "production_units": 458800.0,
+      "electricity_kwh": 166919,
+      "electricity_cost_bdt": 1752649.5,
+      "diesel_litres": 1913,
+      "diesel_cost_bdt": 202778.0,
+      "gas_m3": 22232,
+      "gas_cost_bdt": 666960.0,
+      "injected_anomaly": false
+    },
+    {
+      "month": "2023-02",
+      "production_units": 485800.0,
+      "electricity_kwh": 182369,
+      "electricity_cost_bdt": 1914874.5,
+      "diesel_litres": 2838,
+      "diesel_cost_bdt": 300828.0,
+      "gas_m3": 20869,
+      "gas_cost_bdt": 626070.0,
+      "injected_anomaly": false
+    },
+    {
+      "month": "2023-03",
+      "production_units": 485100.0,
+      "electricity_kwh": 175147,
+      "electricity_cost_bdt": 1839043.5,
+      "diesel_litres": 1828,
+      "diesel_cost_bdt": 193768.0,
+      "gas_m3": 25054,
+      "gas_cost_bdt": 751620.0,
+      "injected_anomaly": false
+    },
+    {
+      "month": "2023-04",
+      "production_units": 470600.0,
+      "electricity_kwh": 172419,
+      "electricity_cost_bdt": 1810399.5,
+      "diesel_litres": 2475,
+      "diesel_cost_bdt": 262350.0,
+      "gas_m3": 25449,
+      "gas_cost_bdt": 763470.0,
+      "injected_anomaly": false
+    },
+    {
+      "month": "2023-05",
+      "production_units": 464800.0,
+      "electricity_kwh": 174667,
+      "electricity_cost_bdt": 1834003.5,
+      "diesel_litres": 2714,
+      "diesel_cost_bdt": 287684.0,
+      "gas_m3": 20065,
+      "gas_cost_bdt": 601950.0,
+      "injected_anomaly": false
+    },
+    {
+      "month": "2023-06",
+      "production_units": 469300.0,
+      "electricity_kwh": 177259,
+      "electricity_cost_bdt": 1861219.5,
+      "diesel_litres": 2010,
+      "diesel_cost_bdt": 213060.0,
+      "gas_m3": 21555,
+      "gas_cost_bdt": 646650.0,
+      "injected_anomaly": false
+    },
+    {
+      "month": "2023-07",
+      "production_units": 450100.0,
+      "electricity_kwh": 167375,
+      "electricity_cost_bdt": 1757437.5,
+      "diesel_litres": 1639,
+      "diesel_cost_bdt": 173734.0,
+      "gas_m3": 20967,
+      "gas_cost_bdt": 629010.0,
+      "injected_anomaly": false
+    },
+    {
+      "month": "2023-08",
+      "production_units": 415300.0,
+      "electricity_kwh": 158879,
+      "electricity_cost_bdt": 1668229.5,
+      "diesel_litres": 2711,
+      "diesel_cost_bdt": 287366.0,
+      "gas_m3": 27297,
+      "gas_cost_bdt": 818910.0,
+      "injected_anomaly": false
+    },
+    {
+      "month": "2023-09",
+      "production_units": 418400.0,
+      "electricity_kwh": 163398,
+      "electricity_cost_bdt": 1715679.0,
+      "diesel_litres": 2068,
+      "diesel_cost_bdt": 219208.0,
+      "gas_m3": 25520,
+      "gas_cost_bdt": 765600.0,
+      "injected_anomaly": false
+    },
+    {
+      "month": "2023-10",
+      "production_units": 484900.0,
+      "electricity_kwh": 226812,
+      "electricity_cost_bdt": 2381526.0,
+      "diesel_litres": 2793,
+      "diesel_cost_bdt": 296058.0,
+      "gas_m3": 25774,
+      "gas_cost_bdt": 773220.0,
+      "injected_anomaly": true
+    },
+    {
+      "month": "2023-11",
+      "production_units": 504500.0,
+      "electricity_kwh": 181359,
+      "electricity_cost_bdt": 1904269.5,
+      "diesel_litres": 1842,
+      "diesel_cost_bdt": 195252.0,
+      "gas_m3": 22894,
+      "gas_cost_bdt": 686820.0,
+      "injected_anomaly": false
+    },
+    {
+      "month": "2023-12",
+      "production_units": 448900.0,
+      "electricity_kwh": 165944,
+      "electricity_cost_bdt": 1742412.0,
+      "diesel_litres": 1652,
+      "diesel_cost_bdt": 175112.0,
+      "gas_m3": 22780,
+      "gas_cost_bdt": 683400.0,
+      "injected_anomaly": false
+    },
+    {
+      "month": "2024-01",
+      "production_units": 458500.0,
+      "electricity_kwh": 170327,
+      "electricity_cost_bdt": 1788433.5,
+      "diesel_litres": 2055,
+      "diesel_cost_bdt": 217830.0,
+      "gas_m3": 22095,
+      "gas_cost_bdt": 662850.0,
+      "injected_anomaly": false
+    },
+    {
+      "month": "2024-02",
+      "production_units": 454900.0,
+      "electricity_kwh": 175037,
+      "electricity_cost_bdt": 1837888.5,
+      "diesel_litres": 2472,
+      "diesel_cost_bdt": 262032.0,
+      "gas_m3": 26091,
+      "gas_cost_bdt": 782730.0,
+      "injected_anomaly": false
+    },
+    {
+      "month": "2024-03",
+      "production_units": 467900.0,
+      "electricity_kwh": 177130,
+      "electricity_cost_bdt": 1859865.0,
+      "diesel_litres": 1745,
+      "diesel_cost_bdt": 184970.0,
+      "gas_m3": 23795,
+      "gas_cost_bdt": 713850.0,
+      "injected_anomaly": false
+    },
+    {
+      "month": "2024-04",
+      "production_units": 538500.0,
+      "electricity_kwh": 198977,
+      "electricity_cost_bdt": 2089258.5,
+      "diesel_litres": 2335,
+      "diesel_cost_bdt": 247510.0,
+      "gas_m3": 26846,
+      "gas_cost_bdt": 805380.0,
+      "injected_anomaly": false
+    },
+    {
+      "month": "2024-05",
+      "production_units": 507000.0,
+      "electricity_kwh": 190341,
+      "electricity_cost_bdt": 1998580.5,
+      "diesel_litres": 1844,
+      "diesel_cost_bdt": 195464.0,
+      "gas_m3": 20321,
+      "gas_cost_bdt": 609630.0,
+      "injected_anomaly": false
+    },
+    {
+      "month": "2024-06",
+      "production_units": 438400.0,
+      "electricity_kwh": 162985,
+      "electricity_cost_bdt": 1711342.5,
+      "diesel_litres": 1816,
+      "diesel_cost_bdt": 192496.0,
+      "gas_m3": 29429,
+      "gas_cost_bdt": 882870.0,
+      "injected_anomaly": false
+    },
+    {
+      "month": "2024-07",
+      "production_units": 445300.0,
+      "electricity_kwh": 165634,
+      "electricity_cost_bdt": 1739157.0,
+      "diesel_litres": 2483,
+      "diesel_cost_bdt": 263198.0,
+      "gas_m3": 23956,
+      "gas_cost_bdt": 718680.0,
+      "injected_anomaly": false
+    },
+    {
+      "month": "2024-08",
+      "production_units": 419000.0,
+      "electricity_kwh": 190425,
+      "electricity_cost_bdt": 1999462.5,
+      "diesel_litres": 1897,
+      "diesel_cost_bdt": 201082.0,
+      "gas_m3": 22466,
+      "gas_cost_bdt": 673980.0,
+      "injected_anomaly": true
+    },
+    {
+      "month": "2024-09",
+      "production_units": 419800.0,
+      "electricity_kwh": 157068,
+      "electricity_cost_bdt": 1649214.0,
+      "diesel_litres": 2377,
+      "diesel_cost_bdt": 251962.0,
+      "gas_m3": 28978,
+      "gas_cost_bdt": 869340.0,
+      "injected_anomaly": false
+    },
+    {
+      "month": "2024-10",
+      "production_units": 457000.0,
+      "electricity_kwh": 168356,
+      "electricity_cost_bdt": 1767738.0,
+      "diesel_litres": 2996,
+      "diesel_cost_bdt": 317576.0,
+      "gas_m3": 25095,
+      "gas_cost_bdt": 752850.0,
+      "injected_anomaly": false
+    },
+    {
+      "month": "2024-11",
+      "production_units": 462400.0,
+      "electricity_kwh": 168268,
+      "electricity_cost_bdt": 1766814.0,
+      "diesel_litres": 1664,
+      "diesel_cost_bdt": 176384.0,
+      "gas_m3": 26274,
+      "gas_cost_bdt": 788220.0,
+      "injected_anomaly": false
+    },
+    {
+      "month": "2024-12",
+      "production_units": 496500.0,
+      "electricity_kwh": 183021,
+      "electricity_cost_bdt": 1921720.5,
+      "diesel_litres": 1595,
+      "diesel_cost_bdt": 169070.0,
+      "gas_m3": 23816,
+      "gas_cost_bdt": 714480.0,
+      "injected_anomaly": false
+    }
+  ]
+}

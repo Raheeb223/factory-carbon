@@ -1,0 +1,21 @@
+{
+  "image": "bpdb_may24",
+  "description": "BPDB electricity bill, May 2024 (redacted). Meter readings 4650 -> 4750 differ by 100, but a 1.2 multiplying factor applies, so the printed consumed units (120) must be used.",
+  "expected": {
+    "bill_type": "electricity",
+    "billing_month": "2024-05",
+    "period_start": "2024-05-01",
+    "period_end": "2024-05-30",
+    "consumed_units": 120,
+    "unit": "kWh",
+    "tariff_code": "LT-B",
+    "sanctioned_load_kw": 2.0,
+    "total_amount_bdt": 684.0
+  },
+  "alternatives": {
+    "total_amount_bdt": [684.0, 683.74]
+  },
+  "alternative_notes": {
+    "total_amount_bdt": "684.00 is the rounded net payable; 683.74 is the printed bill-month total. Either is accepted; the eval output records which one was returned."
+  }
+}

@@ -1,0 +1,670 @@
+{
+  "@@locale": "en",
+  "appTitle": "Factory Energy & Carbon",
+  "navHome": "Home",
+  "navBills": "Bills",
+  "navReports": "Reports",
+  "navSolar": "Solar",
+  "navSettings": "Settings",
+  "actionSave": "Save",
+  "actionCancel": "Cancel",
+  "actionRetry": "Try again",
+  "actionDelete": "Delete",
+  "actionEdit": "Edit",
+  "actionContinue": "Continue",
+  "actionClose": "Close",
+  "actionAdd": "Add",
+  "actionUndo": "Undo",
+  "actionClear": "Clear",
+  "syntheticBadge": "SYNTHETIC DATA",
+  "syntheticBanner": "This app contains synthetic demo data. Results do not describe a real factory.",
+  "unverifiedFactorBadge": "Unverified factor",
+  "notAvailable": "Not available",
+  "lastUpdated": "Last updated {time}",
+  "@lastUpdated": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "showingSaved": "Showing the saved result. Update it when you are online.",
+  "errorGeneric": "Something went wrong.",
+  "errorNetwork": "Could not reach the server. Check your internet connection and the server address in Settings.",
+  "errorTimeout": "The server took too long to respond.",
+  "errorRateLimited": "Too many requests. Please wait a moment and try again.",
+  "errorServer": "The server had a problem. Please try again.",
+  "errorUnavailable": "This feature is not available on the server right now.",
+  "fieldRequired": "Required",
+  "invalidNumber": "Enter a valid number",
+  "invalidNonNegative": "Must be zero or more",
+  "invalidLatitude": "Latitude must be between -90 and 90",
+  "invalidLongitude": "Longitude must be between -180 and 180",
+  "invalidFraction": "Enter a value between 0 and 1",
+  "invalidMonth": "Select a month",
+  "onboardingTitle": "Set up your factory",
+  "onboardingIntro": "Turn utility bills into a carbon report for buyers, get warnings about high electricity use and estimate rooftop solar.",
+  "factoryNameLabel": "Factory name",
+  "factoryLocationLabel": "Location (city, district)",
+  "factoryLatLabel": "Latitude (optional)",
+  "factoryLonLabel": "Longitude (optional)",
+  "productionUnitLabel": "Production unit (e.g. pieces)",
+  "privacyTitle": "Your data and privacy",
+  "privacyBody": "• Your factory profile, bills, production and reports are stored only on this phone.\n• When you scan a bill, the cropped photo is sent to our server and to Google's Gemini API to read the values. Crop out names, addresses and consumer or meter numbers first.\n• Our server does not store your photos or data. Google handles uploads under its Gemini API terms: if the server uses Google's free tier, Google may use uploads to improve its products and people at Google may review them.\n• Carbon, waste, solar and PDF calculations send the needed numbers to our server; nothing is stored there.",
+  "privacyAcknowledge": "I have read and understand how my data is handled",
+  "privacyMustAcknowledge": "Please confirm you have read the privacy notice.",
+  "onboardingStart": "Start",
+  "uploadNoticeTitle": "Before your first upload",
+  "uploadNoticeBody": "The cropped photo will be sent to our server and to Google's Gemini API to read the bill. Hide names, addresses, consumer and meter numbers in the crop step. Photos are not stored on our server. On Google's free tier, Google may use uploads to improve its products and people may review them.",
+  "uploadNoticeAccept": "I understand, continue",
+  "homeLatestReport": "Latest carbon report",
+  "homeNoReport": "No report yet. Add bills or import history, then open Reports.",
+  "homeQuickActions": "Quick actions",
+  "homeImportHistory": "Import history (CSV)",
+  "homeProduction": "Production",
+  "homeWaste": "Electricity waste check",
+  "homeCarbon": "Carbon report",
+  "homeBillsCount": "{count, plural, =0{No bills saved} =1{1 bill saved} other{{count} bills saved}}",
+  "@homeBillsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "addBillTitle": "Add bill",
+  "addBillCamera": "Take photo",
+  "addBillGallery": "Choose from gallery",
+  "addBillManual": "Enter manually (no image)",
+  "addBillManualHint": "For diesel receipts, unmetered gas, or when a photo cannot be read.",
+  "cropTitle": "Crop the bill",
+  "cropReminder": "Cut out names, addresses, consumer and meter numbers. Keep consumed units, amounts and dates.",
+  "preparingImage": "Preparing image…",
+  "uploadProgress": "Uploading {percent}%",
+  "@uploadProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "uploadReading": "Reading values. This can take up to a minute.",
+  "uploadFailedTitle": "Could not read the bill",
+  "uploadEnterManually": "Enter manually instead",
+  "reviewTitle": "Check the values",
+  "reviewIntro": "Values were read automatically. Compare each one with the image. Highlighted fields need extra care.",
+  "reviewManualIntro": "Enter the values from your bill or receipt.",
+  "lowConfidence": "Low confidence: check this on the image",
+  "fieldBillType": "Bill type",
+  "billTypeElectricity": "Electricity",
+  "billTypeGas": "Gas",
+  "billTypeDiesel": "Diesel",
+  "billTypeUnknown": "Unknown",
+  "fieldUtilityName": "Utility / supplier",
+  "fieldBillingMonth": "Billing month",
+  "fieldPeriodStart": "Period start",
+  "fieldPeriodEnd": "Period end",
+  "fieldConsumedUnits": "Consumed units",
+  "fieldUnit": "Unit",
+  "fieldTotalAmount": "Total payable (Tk)",
+  "fieldTariffCode": "Tariff code",
+  "fieldSanctionedLoad": "Sanctioned load (kW)",
+  "fieldNotes": "Notes from the reader",
+  "notSet": "Not set",
+  "selectBillType": "Select the bill type",
+  "unitMismatch": "Unit must be {unit} for this bill type",
+  "@unitMismatch": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "reviewConfirm": "I have checked these values against the bill",
+  "reviewMustConfirm": "Tick the box to confirm you checked the values.",
+  "duplicateTitle": "Possible duplicate",
+  "duplicateBody": "A {type} bill for {month} is already saved. Save this one too?",
+  "@duplicateBody": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      },
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "duplicateSaveAnyway": "Save anyway",
+  "billSaved": "Bill saved",
+  "imageWillBeDeleted": "The photo is deleted from this phone after saving.",
+  "imageWillBeKept": "The photo is kept on this phone (Settings).",
+  "warnUnknownBillType": "Bill type could not be identified. Please select it.",
+  "warnPeriodEndBeforeStart": "Period end is before period start.",
+  "warnUnusualPeriodLength": "The billing period length is unusual for a monthly bill.",
+  "warnMonthPeriodMismatch": "Billing month does not match the period end date.",
+  "warnUnitsNotPositive": "Consumed units should be greater than zero.",
+  "warnUnitsAboveCeiling": "Consumed units are unusually high. Please check.",
+  "warnUnitTypeMismatch": "This unit is unusual for this bill type.",
+  "warnPriceOutOfBand": "Amount per unit is outside the usual range. Check the units and the amount.",
+  "warnLowConfidence": "The reader was not confident about this value. Check it on the image.",
+  "billsTitle": "Bills",
+  "billsEmpty": "No bills yet. Add a bill or import history.",
+  "billOriginImage": "From photo",
+  "billOriginManual": "Manual",
+  "billOriginImported": "Imported (not from a bill image)",
+  "billOriginDemo": "Synthetic",
+  "billEdited": "Edited",
+  "deleteBillConfirm": "Delete this bill?",
+  "editBillTitle": "Edit bill",
+  "productionTitle": "Production",
+  "productionEmpty": "No production data yet.",
+  "productionMonth": "Month",
+  "productionUnits": "Units produced ({unit})",
+  "@productionUnits": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "productionAdd": "Add production",
+  "productionReplaceNote": "Saving a month that already exists replaces its value.",
+  "importTitle": "Import history",
+  "importIntro": "Fill 12–24 months in the template: month, electricity kWh, diesel litres, gas m³ and production (electricity cost is optional). Then import it here.",
+  "importGetTemplate": "Get template",
+  "importPickFile": "Choose CSV file",
+  "importRowsReady": "{count, plural, =1{1 month ready to import} other{{count} months ready to import}}",
+  "@importRowsReady": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importErrors": "Fix these problems and choose the file again:",
+  "importWarnings": "Warnings",
+  "importConfirm": "Import",
+  "importDone": "{count, plural, =1{1 month imported} other{{count} months imported}}",
+  "@importDone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importMarked": "Imported rows are marked \"imported (not from a bill image)\" and listed in data-quality notes.",
+  "importFewMonths": "Fewer than 12 months: the waste check needs at least 6, a full year is better.",
+  "issueMissingColumns": "Missing columns: {columns}",
+  "@issueMissingColumns": {
+    "placeholders": {
+      "columns": {
+        "type": "String"
+      }
+    }
+  },
+  "issueNoRows": "The file has no data rows.",
+  "issueBadMonth": "Row {row}: month \"{value}\" must be YYYY-MM",
+  "@issueBadMonth": {
+    "placeholders": {
+      "row": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "issueBadNumber": "Row {row}: {column} \"{value}\" is not a number",
+  "@issueBadNumber": {
+    "placeholders": {
+      "row": {
+        "type": "String"
+      },
+      "column": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "issueNegative": "Row {row}: {column} cannot be negative",
+  "@issueNegative": {
+    "placeholders": {
+      "row": {
+        "type": "String"
+      },
+      "column": {
+        "type": "String"
+      }
+    }
+  },
+  "issueDuplicateMonth": "Row {row}: month {value} appears more than once",
+  "@issueDuplicateMonth": {
+    "placeholders": {
+      "row": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "issueEmptyRow": "Row {row}: no values for {value}; skipped",
+  "@issueEmptyRow": {
+    "placeholders": {
+      "row": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "issueCostWithoutKwh": "Row {row}: cost without kWh for {value}; cost ignored",
+  "@issueCostWithoutKwh": {
+    "placeholders": {
+      "row": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "importColMonth": "Month",
+  "importColKwh": "kWh",
+  "importColDiesel": "Diesel L",
+  "importColGas": "Gas m³",
+  "importColProduction": "Production",
+  "carbonTitle": "Carbon report",
+  "carbonCalculate": "Update report",
+  "carbonNoData": "No confirmed data yet. Add bills or import history.",
+  "carbonScope1": "Scope 1 (diesel + gas)",
+  "carbonScope2": "Scope 2 (grid electricity)",
+  "carbonTotal": "Total",
+  "carbonIntensity": "Per 1,000 {unit}",
+  "@carbonIntensity": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "tonnesCo2e": "{value} tCO2e",
+  "@tonnesCo2e": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "carbonMonthly": "Monthly emissions",
+  "carbonPartialMonth": "* partial month (missing data or factor). Empty months have no data; they are not zero.",
+  "carbonFactorsTitle": "Emission factors",
+  "carbonQualityTitle": "Data quality",
+  "carbonFactorNotSet": "The {factor} emission factor is not set on the server, so these emissions are not calculated.",
+  "@carbonFactorNotSet": {
+    "placeholders": {
+      "factor": {
+        "type": "String"
+      }
+    }
+  },
+  "factorGrid": "grid electricity",
+  "factorDiesel": "diesel",
+  "factorGas": "natural gas",
+  "factorStatusVerified": "Verified",
+  "factorSource": "Source: {source}",
+  "@factorSource": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "factorYear": "Year: {year}",
+  "@factorYear": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "legendElectricity": "Electricity",
+  "legendDiesel": "Diesel",
+  "legendGas": "Gas",
+  "monthsSummary": "{withData} of {total} months have data, {complete} complete",
+  "@monthsSummary": {
+    "placeholders": {
+      "withData": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      },
+      "complete": {
+        "type": "String"
+      }
+    }
+  },
+  "exportPdf": "Export PDF",
+  "exportCsv": "Export CSV",
+  "exportRaw": "Export raw data (CSV)",
+  "exportNeedsResult": "Update the report first.",
+  "exporting": "Preparing…",
+  "methodologyTitle": "Methodology",
+  "methodologyBody": "Scope 2 (location-based) = electricity kWh × grid emission factor. Scope 1 = diesel litres × diesel factor + gas m³ × gas factor. Results are in tonnes CO2e. Intensity is shown only for complete months with production.",
+  "noteMissingData": "No {source} data for these months. They are shown as empty, not zero.",
+  "@noteMissingData": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "noteMonthsWithoutData": "No energy data at all for these months.",
+  "noteMissingProduction": "Production is missing for these months, so intensity is not shown.",
+  "noteMultipleEntries": "More than one entry of the same type in these months; quantities were added. Check for duplicates.",
+  "noteUserEdited": "Some values were corrected by you after automatic reading.",
+  "noteManualEntries": "Some entries were typed in manually without a bill image.",
+  "noteImportedHistory": "Some data was imported from a spreadsheet (not from a bill image).",
+  "noteSyntheticData": "SYNTHETIC demo data is included. These results do not describe a real factory.",
+  "notePlaceholderFactors": "Unverified (PLACEHOLDER) emission factors are in use. Verify them before any real submission.",
+  "noteIncompleteTotals": "Totals include months with missing sources or factors, so they understate the true footprint.",
+  "noteNoData": "No confirmed bills or production data.",
+  "wasteTitle": "Electricity waste check",
+  "wasteAnalyze": "Check now",
+  "wasteInsufficient": "Only {count} months of electricity data. At least {required} months are needed.",
+  "@wasteInsufficient": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      },
+      "required": {
+        "type": "String"
+      }
+    }
+  },
+  "wasteImportPrompt": "Import past bills",
+  "wasteMethodOls": "Expected use is based on your production level.",
+  "wasteMethodMad": "Lower confidence, no production data: compared with a typical month.",
+  "wasteActual": "Actual",
+  "wasteExpected": "Expected",
+  "wasteBand": "Normal range (95%)",
+  "wasteFlagMessage": "{month} used about {pct}% more electricity than expected for the units produced; about {kwh} kWh{cost}. Check compressors, idle machines and generator changeover.",
+  "@wasteFlagMessage": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "pct": {
+        "type": "String"
+      },
+      "kwh": {
+        "type": "String"
+      },
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "wasteFlagMessageMad": "{month} used about {pct}% more electricity than a typical month; about {kwh} kWh{cost}. Check compressors, idle machines and generator changeover.",
+  "@wasteFlagMessageMad": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "pct": {
+        "type": "String"
+      },
+      "kwh": {
+        "type": "String"
+      },
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "wasteCostPart": ", about Tk {amount}",
+  "@wasteCostPart": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "wasteNoCost": " (cost unknown: no bill amounts)",
+  "wasteNoFlags": "No month used clearly more electricity than expected.",
+  "wasteHowTitle": "How this works and its limits",
+  "wasteHowBody": "With at least 6 months of electricity and production data, the app fits a straight line of kWh against production. For each month it predicts the expected kWh from the other months and a 95% range. Months above the range are flagged.\n\nWithout production data it compares each month with your typical month. This is less reliable.\n\nLimits:\n• Only monthly totals, a small sample: results are indicative.\n• Without sub-metering it cannot tell which machine used the extra electricity.\n• It flags statistical outliers; it cannot identify the cause.\n• Product mix, working hours, weather or new machines can explain a flag.",
+  "wasteFlaggedCount": "{count, plural, =0{No months flagged} =1{1 month flagged} other{{count} months flagged}}",
+  "@wasteFlaggedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "solarTitle": "Rooftop solar",
+  "solarNewPlan": "New plan",
+  "solarNoPlans": "No saved plans. Draw your roof to start.",
+  "solarDrawHint": "Tap the roof corners on the map. Use undo to fix mistakes.",
+  "solarPoints": "{count, plural, =1{1 corner} other{{count} corners}}",
+  "@solarPoints": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "solarNeedPoints": "Tap at least 3 corners.",
+  "solarLayerStreet": "Map",
+  "solarLayerSatellite": "Satellite",
+  "solarSatelliteUnavailable": "Satellite imagery is not configured. Building outlines are visible on the map at high zoom.",
+  "solarParamsTitle": "Parameters",
+  "paramUsableRoof": "Usable roof fraction",
+  "paramM2PerKwp": "m² per kWp",
+  "paramPerformanceRatio": "Performance ratio",
+  "paramDegradation": "Degradation per year",
+  "paramCapex": "Capex (Tk per kWp, optional)",
+  "paramOm": "O&M (fraction of capex per year, optional)",
+  "paramPrice": "Electricity price (Tk/kWh, optional)",
+  "paramPriceHint": "Default: average from your bills",
+  "paramExportPrice": "Export price (Tk/kWh, optional)",
+  "paramNetMetering": "Net metering",
+  "paramPsh": "Peak sun hours (optional)",
+  "paramPshHint": "Leave empty to use NASA POWER data",
+  "paramDefault": "Default {value}",
+  "@paramDefault": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "solarEstimate": "Estimate",
+  "solarResultTitle": "Solar estimate",
+  "solarRoofArea": "Roof area",
+  "solarUsableArea": "Usable area",
+  "solarSize": "System size",
+  "solarAnnualGen": "Annual generation",
+  "solarOffset": "Share of consumption offset",
+  "solarCo2": "CO2 avoided per year",
+  "solarPsh": "Peak sun hours (average)",
+  "solarSourceNasa": "NASA POWER",
+  "solarSourceManual": "Manual",
+  "solarFinancials": "Financials",
+  "solarCapex": "Investment",
+  "solarYear1Savings": "Year-1 savings",
+  "solarYear1Om": "Year-1 O&M",
+  "solarPayback": "Simple payback",
+  "solarNoPayback": "No payback",
+  "solarNoFinancials": "Enter a capex per kWp to see savings and payback.",
+  "solarCashflow": "Cumulative cash flow (million Tk)",
+  "solarSavePlan": "Save plan",
+  "solarPlanName": "Plan name",
+  "solarPlanSaved": "Plan saved",
+  "solarNotes": "Notes",
+  "solarDisclaimer": "Pre-feasibility estimate. Structural load, shading and electrical design need a professional assessment.",
+  "valueYears": "{value} years",
+  "@valueYears": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "valueKwp": "{value} kWp",
+  "@valueKwp": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "valueKwhYear": "{value} kWh/year",
+  "@valueKwhYear": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "valueM2": "{value} m²",
+  "@valueM2": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "valueTk": "Tk {value}",
+  "@valueTk": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "valuePercent": "{value}%",
+  "@valuePercent": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsTitle": "Settings",
+  "settingsLanguage": "Language",
+  "languageSystem": "Device default",
+  "languageEnglish": "English",
+  "languageBangla": "বাংলা",
+  "settingsKeepImages": "Keep bill images on this phone",
+  "settingsKeepImagesHint": "Off: photos are deleted once the values are read.",
+  "settingsFactory": "Factory profile",
+  "settingsDataHandling": "How your data is handled",
+  "settingsLimitations": "Known limitations",
+  "settingsLoadDemo": "Load demo data (synthetic)",
+  "settingsLoadDemoHint": "Adds 24 months of made-up bills and production with 2 injected anomalies.",
+  "settingsRemoveDemo": "Remove demo data",
+  "demoLoaded": "Synthetic demo data loaded",
+  "demoRemoved": "Demo data removed",
+  "settingsDeleteAll": "Delete all my data",
+  "deleteAllConfirmTitle": "Delete all data?",
+  "deleteAllConfirmBody": "This permanently deletes the factory profile, bills, production, solar plans, saved reports and kept images from this phone. It cannot be undone.",
+  "deleteAllDone": "All data deleted",
+  "settingsServer": "Server",
+  "serverStatusOk": "Connected",
+  "serverStatusError": "Not reachable",
+  "serverExtractionOff": "Bill reading is not configured on the server; use manual entry.",
+  "settingsExport": "Export",
+  "dataHandlingTitle": "How your data is handled",
+  "dataHandlingPhoneTitle": "Stored on this phone",
+  "dataHandlingPhoneBody": "Factory profile, confirmed bills, production, solar plans and the last calculated reports. Bill photos only if you turn on \"Keep bill images\". Delete everything any time in Settings.",
+  "dataHandlingServerTitle": "Sent to our server",
+  "dataHandlingServerBody": "The cropped bill photo (to read it), and the numbers needed for each calculation: monthly quantities, amounts, production, roof outline. The server keeps nothing: no database, no stored images, no logged request contents.",
+  "dataHandlingGoogleTitle": "Sent to Google",
+  "dataHandlingGoogleBody": "The cropped bill photo is passed to Google's Gemini API to read the values, under Google's Gemini API terms. On Google's free (unpaid) tier, Google may use the content to improve its products and human reviewers may read it; on a paid (billing-enabled) project it does not use it for that. Crop out personal details before uploading. The app never asks Gemini for names, addresses, consumer or meter numbers.",
+  "dataHandlingNasaTitle": "Sent to NASA POWER",
+  "dataHandlingNasaBody": "For solar estimates our server asks NASA POWER for sunlight data at the roof's approximate location (rounded). No other data is sent.",
+  "limitationsTitle": "Known limitations",
+  "limitationsBody": "• Scope 1 and 2 from utility bills only. No Scope 3; no coal, biomass or other fuels unless entered manually.\n• Bill-reading accuracy has only been measured on a few sample bills. Always check values.\n• The waste check flags statistical outliers against production; it cannot identify causes.\n• Solar results are pre-feasibility estimates only.\n• Emission factors come from published government sources (shown with source and year in the report). Update them when newer editions appear and confirm they match the buyer's rules.\n• The app token is weak protection, adequate for a demo only.",
+  "demoNeedsEmpty": "Demo data can only be loaded when the app has no real bills or production. Export or delete your data first.",
+  "carbonStale": "Your data changed after this report was calculated. Update it.",
+  "serverSettingsTitle": "Server connection",
+  "serverUrlLabel": "Server address",
+  "serverUrlHint": "e.g. 192.168.1.20:8000 or https://api.example.com",
+  "serverTokenLabel": "App token",
+  "serverTest": "Test connection",
+  "serverReset": "Use default",
+  "serverInvalidUrl": "Enter a valid address, e.g. 192.168.1.20:8000",
+  "serverSaved": "Server settings saved",
+  "serverTestOk": "Connected to the server.",
+  "serverHelp": "Testing with your phone? Run start_backend.ps1 on your computer, connect the phone and the computer to the same Wi-Fi, then enter the address and token the script prints (for example 192.168.1.20:8000).",
+  "serverCurrent": "Now using: {url}",
+  "@serverCurrent": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "languageChoose": "Language / ভাষা",
+  "pickMonth": "Select month",
+  "previousYear": "Previous year",
+  "nextYear": "Next year",
+  "homeGettingStarted": "Getting started",
+  "stepAddData": "Add a bill or import past months",
+  "stepProduction": "Enter monthly production",
+  "stepReport": "Create your carbon report",
+  "stepWaste": "Check for electricity waste",
+  "homeStatMonths": "Months with data",
+  "homeStatLatest": "Latest month",
+  "homeTryDemo": "Just looking around? Load synthetic demo data to see every feature.",
+  "homeLoadDemo": "Load demo data",
+  "filterAll": "All",
+  "reviewMainSection": "Main values",
+  "reviewMoreDetails": "More details (optional)",
+  "reviewImageHint": "Pinch to zoom the bill",
+  "addBillScanTitle": "Scan a bill",
+  "addBillScanHint": "Take or choose a photo. You will crop out personal details and check every value before saving.",
+  "solarMyLocation": "Go to factory location",
+  "errInvalidPolygon": "The roof outline is not valid. Make sure its edges do not cross.",
+  "errPolygonTooSmall": "The roof outline is too small. Zoom in and tap the roof corners.",
+  "errPolygonTooLarge": "The roof outline is too large. Draw only the factory roof.",
+  "errUnitMismatch": "A saved entry has the wrong unit for its type. Fix it in Bills.",
+  "errIrradiance": "Could not get sunlight data. Enter peak sun hours manually or try again.",
+  "errDailyCap": "Today's bill-reading limit is reached. Try tomorrow or enter the bill manually.",
+  "errExtractionFailed": "Could not read the bill. Try a clearer photo or enter it manually.",
+  "errFileTooLarge": "The photo is too large.",
+  "errUnsupportedFile": "Use a JPG, PNG or PDF file.",
+  "errInvalidToken": "The server rejected the app token. Check Server connection in Settings.",
+  "errExtractionUnavailable": "Bill reading is not set up on the server yet. Enter the bill manually.",
+  "swConsumptionPartial": "Your electricity history covers {count} of 12 months; the others use your average month.",
+  "@swConsumptionPartial": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "swExcessNotCounted": "About {kwh} kWh/year is more than you use in those months and is not counted (no net metering).",
+  "@swExcessNotCounted": {
+    "placeholders": {
+      "kwh": {
+        "type": "String"
+      }
+    }
+  },
+  "swNoConsumption": "No electricity bills yet, so the share of use covered and savings cannot be estimated.",
+  "swGridFactorNotSet": "The grid emission factor is not set on the server, so CO2 avoided is not calculated.",
+  "swCo2NeedsConsumption": "CO2 avoided needs your electricity history (or net metering).",
+  "swGridPlaceholder": "CO2 avoided uses an unverified grid emission factor.",
+  "swPriceMissing": "Savings need an electricity price: enter one, or add bills with amounts.",
+  "swFinancialsNeedConsumption": "Savings need your electricity history when there is no net metering.",
+  "swOmNotIncluded": "Maintenance (O&M) cost is not included.",
+  "swExportPriceMissing": "Net metering is on but no export price is set; exported energy is valued at zero.",
+  "swFinancialAssumptions": "Assumes a constant electricity price and no loan cost.",
+  "swNoPayback": "Yearly savings do not cover maintenance, so there is no payback."
+}

@@ -1,0 +1,3126 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Factory Energy & Carbon API",
+    "description": "Stateless backend for the Factory Energy & Carbon mobile app. Every /v1 request needs the X-App-Token header.",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/v1/health": {
+      "get": {
+        "tags": [
+          "meta"
+        ],
+        "summary": "Health",
+        "operationId": "health_v1_health_get",
+        "parameters": [
+          {
+            "name": "x-app-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-App-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request Entity Too Large"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unsupported Media Type"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Gateway"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Gateway Timeout"
+          }
+        }
+      }
+    },
+    "/v1/extract-bill": {
+      "post": {
+        "tags": [
+          "extraction"
+        ],
+        "summary": "Extract Bill",
+        "operationId": "extract_bill_v1_extract_bill_post",
+        "parameters": [
+          {
+            "name": "x-app-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-App-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_extract_bill_v1_extract_bill_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtractBillResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request Entity Too Large"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unsupported Media Type"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Gateway"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Gateway Timeout"
+          }
+        }
+      }
+    },
+    "/v1/carbon/calculate": {
+      "post": {
+        "tags": [
+          "carbon"
+        ],
+        "summary": "Carbon Calculate",
+        "operationId": "carbon_calculate_v1_carbon_calculate_post",
+        "parameters": [
+          {
+            "name": "x-app-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-App-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CarbonCalculateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarbonCalculateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request Entity Too Large"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unsupported Media Type"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Gateway"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Gateway Timeout"
+          }
+        }
+      }
+    },
+    "/v1/waste/analyze": {
+      "post": {
+        "tags": [
+          "waste"
+        ],
+        "summary": "Waste Analyze",
+        "operationId": "waste_analyze_v1_waste_analyze_post",
+        "parameters": [
+          {
+            "name": "x-app-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-App-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WasteAnalyzeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WasteAnalyzeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request Entity Too Large"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unsupported Media Type"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Gateway"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Gateway Timeout"
+          }
+        }
+      }
+    },
+    "/v1/solar/defaults": {
+      "get": {
+        "tags": [
+          "solar"
+        ],
+        "summary": "Solar Defaults",
+        "operationId": "solar_defaults_v1_solar_defaults_get",
+        "parameters": [
+          {
+            "name": "x-app-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-App-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SolarDefaultsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request Entity Too Large"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unsupported Media Type"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Gateway"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Gateway Timeout"
+          }
+        }
+      }
+    },
+    "/v1/solar/estimate": {
+      "post": {
+        "tags": [
+          "solar"
+        ],
+        "summary": "Solar Estimate",
+        "operationId": "solar_estimate_v1_solar_estimate_post",
+        "parameters": [
+          {
+            "name": "x-app-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-App-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolarEstimateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SolarEstimateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request Entity Too Large"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unsupported Media Type"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Gateway"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Gateway Timeout"
+          }
+        }
+      }
+    },
+    "/v1/report/pdf": {
+      "post": {
+        "tags": [
+          "report"
+        ],
+        "summary": "Report Pdf",
+        "operationId": "report_pdf_v1_report_pdf_post",
+        "parameters": [
+          {
+            "name": "x-app-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-App-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportPdfRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PDF report",
+            "content": {
+              "application/pdf": {}
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request Entity Too Large"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unsupported Media Type"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Gateway"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Gateway Timeout"
+          }
+        }
+      }
+    },
+    "/v1/templates/history.csv": {
+      "get": {
+        "tags": [
+          "templates"
+        ],
+        "summary": "History Template",
+        "operationId": "history_template_v1_templates_history_csv_get",
+        "parameters": [
+          {
+            "name": "x-app-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-App-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/csv": {}
+            }
+          },
+          "400": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "413": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request Entity Too Large"
+          },
+          "415": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unsupported Media Type"
+          },
+          "422": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "429": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "502": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Gateway"
+          },
+          "503": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "504": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Gateway Timeout"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Body_extract_bill_v1_extract_bill_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File",
+            "description": "Bill image (PNG/JPEG) or single-page PDF"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_extract_bill_v1_extract_bill_post"
+      },
+      "CalculationError": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "factor": {
+            "type": "string",
+            "title": "Factor"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "factor",
+          "message"
+        ],
+        "title": "CalculationError"
+      },
+      "CarbonCalculateRequest": {
+        "properties": {
+          "bills": {
+            "items": {
+              "$ref": "#/components/schemas/ConfirmedBillInput"
+            },
+            "type": "array",
+            "maxItems": 2000,
+            "title": "Bills"
+          },
+          "production": {
+            "items": {
+              "$ref": "#/components/schemas/ProductionInput"
+            },
+            "type": "array",
+            "maxItems": 600,
+            "title": "Production"
+          },
+          "production_unit_label": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 40
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Production Unit Label"
+          },
+          "period_start": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
+                "examples": [
+                  "2024-05"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Period Start"
+          },
+          "period_end": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
+                "examples": [
+                  "2024-05"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Period End"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "bills"
+        ],
+        "title": "CarbonCalculateRequest"
+      },
+      "CarbonCalculateResponse": {
+        "properties": {
+          "period_start": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Period Start"
+          },
+          "period_end": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Period End"
+          },
+          "months": {
+            "items": {
+              "$ref": "#/components/schemas/MonthEmissions"
+            },
+            "type": "array",
+            "title": "Months"
+          },
+          "totals": {
+            "$ref": "#/components/schemas/CarbonTotals"
+          },
+          "factors": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/FactorInfo"
+            },
+            "type": "object",
+            "title": "Factors"
+          },
+          "placeholders_in_use": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Placeholders In Use"
+          },
+          "errors": {
+            "items": {
+              "$ref": "#/components/schemas/CalculationError"
+            },
+            "type": "array",
+            "title": "Errors"
+          },
+          "data_quality_notes": {
+            "items": {
+              "$ref": "#/components/schemas/DataQualityNote"
+            },
+            "type": "array",
+            "title": "Data Quality Notes"
+          },
+          "production_unit_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Production Unit Label"
+          },
+          "methodology": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Methodology"
+          }
+        },
+        "type": "object",
+        "required": [
+          "period_start",
+          "period_end",
+          "months",
+          "totals",
+          "factors",
+          "placeholders_in_use",
+          "errors",
+          "data_quality_notes",
+          "production_unit_label",
+          "methodology"
+        ],
+        "title": "CarbonCalculateResponse"
+      },
+      "CarbonTotals": {
+        "properties": {
+          "scope1_t": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scope1 T"
+          },
+          "scope2_t": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scope2 T"
+          },
+          "total_t": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total T"
+          },
+          "production_units": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Production Units"
+          },
+          "intensity_t_per_1000_units": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Intensity T Per 1000 Units"
+          },
+          "months_in_period": {
+            "type": "integer",
+            "title": "Months In Period"
+          },
+          "months_with_data": {
+            "type": "integer",
+            "title": "Months With Data"
+          },
+          "complete_months": {
+            "type": "integer",
+            "title": "Complete Months"
+          }
+        },
+        "type": "object",
+        "required": [
+          "scope1_t",
+          "scope2_t",
+          "total_t",
+          "production_units",
+          "intensity_t_per_1000_units",
+          "months_in_period",
+          "months_with_data",
+          "complete_months"
+        ],
+        "title": "CarbonTotals"
+      },
+      "CashFlowYear": {
+        "properties": {
+          "year": {
+            "type": "integer",
+            "title": "Year"
+          },
+          "generation_kwh": {
+            "type": "number",
+            "title": "Generation Kwh"
+          },
+          "savings_bdt": {
+            "type": "number",
+            "title": "Savings Bdt"
+          },
+          "om_bdt": {
+            "type": "number",
+            "title": "Om Bdt"
+          },
+          "net_bdt": {
+            "type": "number",
+            "title": "Net Bdt"
+          },
+          "cumulative_bdt": {
+            "type": "number",
+            "title": "Cumulative Bdt"
+          }
+        },
+        "type": "object",
+        "required": [
+          "year",
+          "generation_kwh",
+          "savings_bdt",
+          "om_bdt",
+          "net_bdt",
+          "cumulative_bdt"
+        ],
+        "title": "CashFlowYear"
+      },
+      "ConfirmedBillInput": {
+        "properties": {
+          "billing_month": {
+            "type": "string",
+            "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
+            "title": "Billing Month",
+            "examples": [
+              "2024-05"
+            ]
+          },
+          "bill_type": {
+            "type": "string",
+            "enum": [
+              "electricity",
+              "gas",
+              "diesel"
+            ],
+            "title": "Bill Type"
+          },
+          "consumed_units": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Consumed Units"
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "kWh",
+              "m3",
+              "litre"
+            ],
+            "title": "Unit"
+          },
+          "total_amount_bdt": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Amount Bdt"
+          },
+          "origin": {
+            "type": "string",
+            "enum": [
+              "bill_image",
+              "manual",
+              "imported",
+              "demo"
+            ],
+            "title": "Origin",
+            "default": "bill_image"
+          },
+          "user_edited_fields": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "User Edited Fields"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "billing_month",
+          "bill_type",
+          "consumed_units",
+          "unit"
+        ],
+        "title": "ConfirmedBillInput",
+        "description": "A bill the user has reviewed and confirmed on the device."
+      },
+      "ConsumptionMonth": {
+        "properties": {
+          "month": {
+            "type": "string",
+            "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
+            "title": "Month",
+            "examples": [
+              "2024-05"
+            ]
+          },
+          "kwh": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Kwh"
+          },
+          "cost_bdt": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cost Bdt"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "month",
+          "kwh"
+        ],
+        "title": "ConsumptionMonth"
+      },
+      "DataQualityNote": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "months": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Months"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "title": "DataQualityNote"
+      },
+      "ErrorBody": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "title": "ErrorBody"
+      },
+      "ErrorResponse": {
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/ErrorBody"
+          }
+        },
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "title": "ErrorResponse"
+      },
+      "ExtractBillResponse": {
+        "properties": {
+          "bill": {
+            "$ref": "#/components/schemas/ExtractedBill"
+          },
+          "warnings": {
+            "items": {
+              "$ref": "#/components/schemas/ExtractionWarning"
+            },
+            "type": "array",
+            "title": "Warnings"
+          },
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "prompt_version": {
+            "type": "string",
+            "title": "Prompt Version"
+          }
+        },
+        "type": "object",
+        "required": [
+          "bill",
+          "warnings",
+          "model",
+          "prompt_version"
+        ],
+        "title": "ExtractBillResponse"
+      },
+      "ExtractedBill": {
+        "properties": {
+          "bill_type": {
+            "type": "string",
+            "enum": [
+              "electricity",
+              "gas",
+              "diesel",
+              "unknown"
+            ],
+            "title": "Bill Type"
+          },
+          "utility_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Utility Name"
+          },
+          "billing_month": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{4}-(0[1-9]|1[0-2])$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Billing Month"
+          },
+          "period_start": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Period Start"
+          },
+          "period_end": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Period End"
+          },
+          "consumed_units": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Consumed Units"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "kWh",
+                  "m3",
+                  "litre"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit"
+          },
+          "total_amount_bdt": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Amount Bdt"
+          },
+          "tariff_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tariff Code"
+          },
+          "sanctioned_load_kw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sanctioned Load Kw"
+          },
+          "field_confidence": {
+            "additionalProperties": {
+              "type": "string",
+              "enum": [
+                "high",
+                "medium",
+                "low"
+              ]
+            },
+            "type": "object",
+            "title": "Field Confidence"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "bill_type"
+        ],
+        "title": "ExtractedBill",
+        "description": "Structured data read from a bill. All fields nullable except bill_type."
+      },
+      "ExtractionWarning": {
+        "properties": {
+          "field": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Field"
+          },
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "field",
+          "code",
+          "message"
+        ],
+        "title": "ExtractionWarning"
+      },
+      "FactorInfo": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Year"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "verified",
+              "PLACEHOLDER"
+            ],
+            "title": "Status"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "value",
+          "unit",
+          "source",
+          "year",
+          "status"
+        ],
+        "title": "FactorInfo",
+        "description": "Metadata of a configured constant, returned wherever it is used."
+      },
+      "FactoryInfo": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "location": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Location"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "FactoryInfo"
+      },
+      "HealthFactorStatus": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "verified",
+              "PLACEHOLDER"
+            ],
+            "title": "Status"
+          },
+          "has_value": {
+            "type": "boolean",
+            "title": "Has Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "has_value"
+        ],
+        "title": "HealthFactorStatus"
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "ok",
+            "title": "Status"
+          },
+          "app_version": {
+            "type": "string",
+            "title": "App Version"
+          },
+          "api_version": {
+            "type": "string",
+            "title": "Api Version"
+          },
+          "gemini_configured": {
+            "type": "boolean",
+            "title": "Gemini Configured"
+          },
+          "gemini_model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gemini Model"
+          },
+          "emission_factors": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/HealthFactorStatus"
+            },
+            "type": "object",
+            "title": "Emission Factors"
+          },
+          "placeholders": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Placeholders"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "app_version",
+          "api_version",
+          "gemini_configured",
+          "gemini_model",
+          "emission_factors",
+          "placeholders"
+        ],
+        "title": "HealthResponse"
+      },
+      "LatLon": {
+        "properties": {
+          "lat": {
+            "type": "number",
+            "maximum": 90.0,
+            "minimum": -90.0,
+            "title": "Lat"
+          },
+          "lon": {
+            "type": "number",
+            "maximum": 180.0,
+            "minimum": -180.0,
+            "title": "Lon"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "lat",
+          "lon"
+        ],
+        "title": "LatLon"
+      },
+      "MonthEmissions": {
+        "properties": {
+          "month": {
+            "type": "string",
+            "title": "Month"
+          },
+          "electricity_kwh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Electricity Kwh"
+          },
+          "diesel_litres": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Diesel Litres"
+          },
+          "gas_m3": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gas M3"
+          },
+          "scope2_electricity_t": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scope2 Electricity T"
+          },
+          "scope1_diesel_t": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scope1 Diesel T"
+          },
+          "scope1_gas_t": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scope1 Gas T"
+          },
+          "scope1_t": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scope1 T"
+          },
+          "scope2_t": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scope2 T"
+          },
+          "total_t": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total T"
+          },
+          "is_complete": {
+            "type": "boolean",
+            "title": "Is Complete"
+          },
+          "missing": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Missing"
+          },
+          "production_units": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Production Units"
+          },
+          "intensity_t_per_1000_units": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Intensity T Per 1000 Units"
+          }
+        },
+        "type": "object",
+        "required": [
+          "month",
+          "electricity_kwh",
+          "diesel_litres",
+          "gas_m3",
+          "scope2_electricity_t",
+          "scope1_diesel_t",
+          "scope1_gas_t",
+          "scope1_t",
+          "scope2_t",
+          "total_t",
+          "is_complete",
+          "missing",
+          "production_units",
+          "intensity_t_per_1000_units"
+        ],
+        "title": "MonthEmissions"
+      },
+      "ProductionInput": {
+        "properties": {
+          "month": {
+            "type": "string",
+            "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
+            "title": "Month",
+            "examples": [
+              "2024-05"
+            ]
+          },
+          "units_produced": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Units Produced"
+          },
+          "origin": {
+            "type": "string",
+            "enum": [
+              "bill_image",
+              "manual",
+              "imported",
+              "demo"
+            ],
+            "title": "Origin",
+            "default": "manual"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "month",
+          "units_produced"
+        ],
+        "title": "ProductionInput"
+      },
+      "ReportPdfRequest": {
+        "properties": {
+          "factory": {
+            "$ref": "#/components/schemas/FactoryInfo"
+          },
+          "carbon": {
+            "$ref": "#/components/schemas/CarbonCalculateRequest"
+          },
+          "solar": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SolarEstimateResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "contains_synthetic_data": {
+            "type": "boolean",
+            "title": "Contains Synthetic Data",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "factory",
+          "carbon"
+        ],
+        "title": "ReportPdfRequest"
+      },
+      "SolarDefaultsResponse": {
+        "properties": {
+          "params": {
+            "items": {
+              "$ref": "#/components/schemas/SolarParamUsed"
+            },
+            "type": "array",
+            "title": "Params"
+          },
+          "net_metering": {
+            "type": "boolean",
+            "title": "Net Metering"
+          },
+          "disclaimer": {
+            "type": "string",
+            "title": "Disclaimer"
+          }
+        },
+        "type": "object",
+        "required": [
+          "params",
+          "net_metering",
+          "disclaimer"
+        ],
+        "title": "SolarDefaultsResponse"
+      },
+      "SolarEstimateRequest": {
+        "properties": {
+          "polygon": {
+            "items": {
+              "$ref": "#/components/schemas/LatLon"
+            },
+            "type": "array",
+            "maxItems": 200,
+            "minItems": 3,
+            "title": "Polygon"
+          },
+          "params": {
+            "$ref": "#/components/schemas/SolarParamOverrides"
+          },
+          "consumption": {
+            "items": {
+              "$ref": "#/components/schemas/ConsumptionMonth"
+            },
+            "type": "array",
+            "maxItems": 600,
+            "title": "Consumption"
+          },
+          "manual_peak_sun_hours": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 12.0,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Manual Peak Sun Hours"
+          },
+          "manual_peak_sun_hours_monthly": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array",
+                "maxItems": 12,
+                "minItems": 12
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Manual Peak Sun Hours Monthly"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "polygon"
+        ],
+        "title": "SolarEstimateRequest"
+      },
+      "SolarEstimateResponse": {
+        "properties": {
+          "roof_area_m2": {
+            "type": "number",
+            "title": "Roof Area M2"
+          },
+          "usable_area_m2": {
+            "type": "number",
+            "title": "Usable Area M2"
+          },
+          "kwp": {
+            "type": "number",
+            "title": "Kwp"
+          },
+          "centroid": {
+            "$ref": "#/components/schemas/LatLon"
+          },
+          "peak_sun_hours_monthly": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Peak Sun Hours Monthly"
+          },
+          "peak_sun_hours_annual_avg": {
+            "type": "number",
+            "title": "Peak Sun Hours Annual Avg"
+          },
+          "irradiance_source": {
+            "type": "string",
+            "enum": [
+              "nasa_power",
+              "manual"
+            ],
+            "title": "Irradiance Source"
+          },
+          "monthly_generation_kwh": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Monthly Generation Kwh"
+          },
+          "annual_generation_kwh": {
+            "type": "number",
+            "title": "Annual Generation Kwh"
+          },
+          "annual_consumption_kwh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Annual Consumption Kwh"
+          },
+          "self_consumed_kwh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Self Consumed Kwh"
+          },
+          "exported_kwh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exported Kwh"
+          },
+          "offset_share": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Offset Share"
+          },
+          "co2_avoided_t_per_year": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Co2 Avoided T Per Year"
+          },
+          "financials": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SolarFinancials"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "params_used": {
+            "items": {
+              "$ref": "#/components/schemas/SolarParamUsed"
+            },
+            "type": "array",
+            "title": "Params Used"
+          },
+          "factors": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/FactorInfo"
+            },
+            "type": "object",
+            "title": "Factors"
+          },
+          "warnings": {
+            "items": {
+              "$ref": "#/components/schemas/SolarWarning"
+            },
+            "type": "array",
+            "title": "Warnings"
+          },
+          "disclaimer": {
+            "type": "string",
+            "title": "Disclaimer"
+          }
+        },
+        "type": "object",
+        "required": [
+          "roof_area_m2",
+          "usable_area_m2",
+          "kwp",
+          "centroid",
+          "peak_sun_hours_monthly",
+          "peak_sun_hours_annual_avg",
+          "irradiance_source",
+          "monthly_generation_kwh",
+          "annual_generation_kwh",
+          "annual_consumption_kwh",
+          "self_consumed_kwh",
+          "exported_kwh",
+          "offset_share",
+          "co2_avoided_t_per_year",
+          "financials",
+          "params_used",
+          "factors",
+          "warnings",
+          "disclaimer"
+        ],
+        "title": "SolarEstimateResponse"
+      },
+      "SolarFinancials": {
+        "properties": {
+          "capex_bdt": {
+            "type": "number",
+            "title": "Capex Bdt"
+          },
+          "electricity_price_bdt_per_kwh": {
+            "type": "number",
+            "title": "Electricity Price Bdt Per Kwh"
+          },
+          "year1_savings_bdt": {
+            "type": "number",
+            "title": "Year1 Savings Bdt"
+          },
+          "year1_om_bdt": {
+            "type": "number",
+            "title": "Year1 Om Bdt"
+          },
+          "year1_net_bdt": {
+            "type": "number",
+            "title": "Year1 Net Bdt"
+          },
+          "simple_payback_years": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Simple Payback Years"
+          },
+          "cashflow": {
+            "items": {
+              "$ref": "#/components/schemas/CashFlowYear"
+            },
+            "type": "array",
+            "title": "Cashflow"
+          }
+        },
+        "type": "object",
+        "required": [
+          "capex_bdt",
+          "electricity_price_bdt_per_kwh",
+          "year1_savings_bdt",
+          "year1_om_bdt",
+          "year1_net_bdt",
+          "simple_payback_years",
+          "cashflow"
+        ],
+        "title": "SolarFinancials"
+      },
+      "SolarParamOverrides": {
+        "properties": {
+          "usable_roof_fraction": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Usable Roof Fraction"
+          },
+          "m2_per_kwp": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 50.0,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "M2 Per Kwp"
+          },
+          "performance_ratio": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Performance Ratio"
+          },
+          "degradation_per_year": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMaximum": 0.1,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Degradation Per Year"
+          },
+          "capex_bdt_per_kwp": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Capex Bdt Per Kwp"
+          },
+          "om_fraction_of_capex_per_year": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMaximum": 0.5,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Om Fraction Of Capex Per Year"
+          },
+          "electricity_price_bdt_per_kwh": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Electricity Price Bdt Per Kwh"
+          },
+          "export_price_bdt_per_kwh": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Export Price Bdt Per Kwh"
+          },
+          "net_metering": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Net Metering"
+          },
+          "analysis_years": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 40.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Analysis Years"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "SolarParamOverrides"
+      },
+      "SolarParamUsed": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit"
+          },
+          "origin": {
+            "type": "string",
+            "enum": [
+              "default",
+              "override",
+              "derived"
+            ],
+            "title": "Origin"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "verified",
+                  "PLACEHOLDER"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "value",
+          "unit",
+          "origin",
+          "status",
+          "source"
+        ],
+        "title": "SolarParamUsed"
+      },
+      "SolarWarning": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "title": "SolarWarning",
+        "description": "Machine-readable note so the app can localize it; `message` is English."
+      },
+      "WasteAnalyzeRequest": {
+        "properties": {
+          "months": {
+            "items": {
+              "$ref": "#/components/schemas/WasteMonthInput"
+            },
+            "type": "array",
+            "maxItems": 600,
+            "title": "Months"
+          },
+          "production_unit_label": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 40
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Production Unit Label"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "months"
+        ],
+        "title": "WasteAnalyzeRequest"
+      },
+      "WasteAnalyzeResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "insufficient_data"
+            ],
+            "title": "Status"
+          },
+          "method": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "ols_production",
+                  "median_mad"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Method"
+          },
+          "confidence_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confidence Label"
+          },
+          "month_count": {
+            "type": "integer",
+            "title": "Month Count"
+          },
+          "required_months": {
+            "type": "integer",
+            "title": "Required Months"
+          },
+          "months": {
+            "items": {
+              "$ref": "#/components/schemas/WasteMonthResult"
+            },
+            "type": "array",
+            "title": "Months"
+          },
+          "flagged_months": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Flagged Months"
+          },
+          "avg_bdt_per_kwh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avg Bdt Per Kwh"
+          },
+          "messages": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Messages"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Limitations"
+          },
+          "model_summary": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Model Summary"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "method",
+          "confidence_label",
+          "month_count",
+          "required_months",
+          "months",
+          "flagged_months",
+          "avg_bdt_per_kwh",
+          "messages",
+          "limitations",
+          "model_summary"
+        ],
+        "title": "WasteAnalyzeResponse"
+      },
+      "WasteMonthInput": {
+        "properties": {
+          "month": {
+            "type": "string",
+            "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
+            "title": "Month",
+            "examples": [
+              "2024-05"
+            ]
+          },
+          "kwh": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kwh"
+          },
+          "production": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Production"
+          },
+          "cost_bdt": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cost Bdt"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "month"
+        ],
+        "title": "WasteMonthInput"
+      },
+      "WasteMonthResult": {
+        "properties": {
+          "month": {
+            "type": "string",
+            "title": "Month"
+          },
+          "actual_kwh": {
+            "type": "number",
+            "title": "Actual Kwh"
+          },
+          "production": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Production"
+          },
+          "expected_kwh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Kwh"
+          },
+          "lower_kwh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lower Kwh"
+          },
+          "upper_kwh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Upper Kwh"
+          },
+          "flagged": {
+            "type": "boolean",
+            "title": "Flagged"
+          },
+          "excess_kwh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Excess Kwh"
+          },
+          "excess_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Excess Pct"
+          },
+          "excess_cost_bdt": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Excess Cost Bdt"
+          }
+        },
+        "type": "object",
+        "required": [
+          "month",
+          "actual_kwh",
+          "production",
+          "expected_kwh",
+          "lower_kwh",
+          "upper_kwh",
+          "flagged",
+          "excess_kwh",
+          "excess_pct",
+          "excess_cost_bdt"
+        ],
+        "title": "WasteMonthResult"
+      }
+    }
+  }
+}
