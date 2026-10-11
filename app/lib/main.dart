@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app.dart';
@@ -8,6 +9,8 @@ import 'data/settings_store.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Phone-first layouts: always portrait.
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   final settings = await PrefsSettingsStore.open();
   final db = AppDatabase();
   runApp(ProviderScope(

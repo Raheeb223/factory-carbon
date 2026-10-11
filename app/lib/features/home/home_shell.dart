@@ -31,16 +31,19 @@ class _HomeShellState extends State<HomeShell> {
     ];
     return Scaffold(
       body: IndexedStack(index: _index, children: pages),
-      bottomNavigationBar: NavigationBar(
+      bottomNavigationBar: DecoratedBox(
+        decoration: BoxDecoration(boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 16, offset: const Offset(0, -4))]),
+        child: NavigationBar(
         selectedIndex: _index,
         onDestinationSelected: _go,
         destinations: [
-          NavigationDestination(icon: const Icon(Icons.home_outlined), selectedIcon: const Icon(Icons.home), label: l.navHome),
-          NavigationDestination(icon: const Icon(Icons.receipt_long_outlined), selectedIcon: const Icon(Icons.receipt_long), label: l.navBills),
-          NavigationDestination(icon: const Icon(Icons.insights_outlined), selectedIcon: const Icon(Icons.insights), label: l.navReports),
-          NavigationDestination(icon: const Icon(Icons.solar_power_outlined), selectedIcon: const Icon(Icons.solar_power), label: l.navSolar),
-          NavigationDestination(icon: const Icon(Icons.settings_outlined), selectedIcon: const Icon(Icons.settings), label: l.navSettings),
+          NavigationDestination(icon: const Icon(Icons.home_outlined), selectedIcon: const Icon(Icons.home_rounded), label: l.navHome),
+          NavigationDestination(icon: const Icon(Icons.receipt_long_outlined), selectedIcon: const Icon(Icons.receipt_long_rounded), label: l.navBills),
+          NavigationDestination(icon: const Icon(Icons.insights_outlined), selectedIcon: const Icon(Icons.insights_rounded), label: l.navReports),
+          NavigationDestination(icon: const Icon(Icons.solar_power_outlined), selectedIcon: const Icon(Icons.solar_power_rounded), label: l.navSolar),
+          NavigationDestination(icon: const Icon(Icons.settings_outlined), selectedIcon: const Icon(Icons.settings_rounded), label: l.navSettings),
         ],
+        ),
       ),
     );
   }
@@ -51,4 +54,5 @@ abstract final class Tabs {
   static const bills = 1;
   static const reports = 2;
   static const solar = 3;
+  static const settings = 4;
 }

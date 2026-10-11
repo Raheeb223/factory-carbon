@@ -389,7 +389,7 @@ abstract class AppLocalizations {
   /// No description provided for @uploadNoticeBody.
   ///
   /// In en, this message translates to:
-  /// **'The cropped photo will be sent to our server and to Google\'s Gemini API to read the bill. Hide names, addresses, consumer and meter numbers in the crop step. Photos are not stored on our server. On Google\'s free tier, Google may use uploads to improve its products and people may review them.'**
+  /// **'The photo will be sent to our server and to Google\'s Gemini API to read the bill. Before sending, you crop the bill and cover names, addresses, consumer and meter numbers with black boxes. Photos are not stored on our server. On Google\'s free tier, Google may use uploads to improve its products and people may review them.'**
   String get uploadNoticeBody;
 
   /// No description provided for @uploadNoticeAccept.
@@ -485,7 +485,7 @@ abstract class AppLocalizations {
   /// No description provided for @cropReminder.
   ///
   /// In en, this message translates to:
-  /// **'Cut out names, addresses, consumer and meter numbers. Keep consumed units, amounts and dates.'**
+  /// **'First trim the photo to the bill. In the next step you can cover any names, addresses, consumer or meter numbers that are inside it.'**
   String get cropReminder;
 
   /// No description provided for @preparingImage.
@@ -1997,7 +1997,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeStatMonths.
   ///
   /// In en, this message translates to:
-  /// **'Months with data'**
+  /// **'Months'**
   String get homeStatMonths;
 
   /// No description provided for @homeStatLatest.
@@ -2051,7 +2051,7 @@ abstract class AppLocalizations {
   /// No description provided for @addBillScanHint.
   ///
   /// In en, this message translates to:
-  /// **'Take or choose a photo. You will crop out personal details and check every value before saving.'**
+  /// **'Take or choose a photo. You will hide personal details and check every value before saving.'**
   String get addBillScanHint;
 
   /// No description provided for @solarMyLocation.
@@ -2197,6 +2197,360 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Yearly savings do not cover maintenance, so there is no payback.'**
   String get swNoPayback;
+
+  /// No description provided for @introSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get introSkip;
+
+  /// No description provided for @introNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get introNext;
+
+  /// No description provided for @introGetStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Get started'**
+  String get introGetStarted;
+
+  /// No description provided for @intro1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Snap a bill. We read it.'**
+  String get intro1Title;
+
+  /// No description provided for @intro1Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo of your electricity, gas or diesel bill. AI reads the numbers, and you check them before anything is saved.'**
+  String get intro1Body;
+
+  /// No description provided for @intro2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Carbon report in one tap'**
+  String get intro2Title;
+
+  /// No description provided for @intro2Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Get the Scope 1 + 2 carbon report your buyers ask for, ready to share as PDF or spreadsheet.'**
+  String get intro2Body;
+
+  /// No description provided for @intro3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Cut waste. Go solar.'**
+  String get intro3Title;
+
+  /// No description provided for @intro3Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Spot months with unusually high electricity use, and estimate what rooftop solar could save you.'**
+  String get intro3Body;
+
+  /// No description provided for @introPrivacyNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data stays on this phone.'**
+  String get introPrivacyNote;
+
+  /// No description provided for @onboardingFormSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A few details for your reports. You can change them later.'**
+  String get onboardingFormSubtitle;
+
+  /// No description provided for @factoryCoordsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional. Used to centre the solar map on your factory.'**
+  String get factoryCoordsHint;
+
+  /// No description provided for @homeGreetingMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'Good morning'**
+  String get homeGreetingMorning;
+
+  /// No description provided for @homeGreetingAfternoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Good afternoon'**
+  String get homeGreetingAfternoon;
+
+  /// No description provided for @homeGreetingEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Good evening'**
+  String get homeGreetingEvening;
+
+  /// No description provided for @homeFootprint.
+  ///
+  /// In en, this message translates to:
+  /// **'Carbon footprint'**
+  String get homeFootprint;
+
+  /// No description provided for @homeHeroEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s measure your factory\'s energy and carbon.'**
+  String get homeHeroEmpty;
+
+  /// No description provided for @homeScanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan a bill'**
+  String get homeScanTitle;
+
+  /// No description provided for @homeScanSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo of an electricity, gas or diesel bill. We read the numbers for you.'**
+  String get homeScanSubtitle;
+
+  /// No description provided for @homeExplore.
+  ///
+  /// In en, this message translates to:
+  /// **'What would you like to do?'**
+  String get homeExplore;
+
+  /// No description provided for @tileBillsSub.
+  ///
+  /// In en, this message translates to:
+  /// **'See and edit saved bills'**
+  String get tileBillsSub;
+
+  /// No description provided for @tileImportSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Add past months from a spreadsheet'**
+  String get tileImportSub;
+
+  /// No description provided for @tileProductionSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly output for intensity'**
+  String get tileProductionSub;
+
+  /// No description provided for @tileCarbonSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Scope 1 + 2 report and PDF'**
+  String get tileCarbonSub;
+
+  /// No description provided for @tileWasteSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Find unusual electricity use'**
+  String get tileWasteSub;
+
+  /// No description provided for @tileSolarSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Rooftop solar estimate'**
+  String get tileSolarSub;
+
+  /// No description provided for @connOfflineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Not connected to the server'**
+  String get connOfflineTitle;
+
+  /// No description provided for @connOfflineBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Bill reading, reports and solar need the server. Your saved data is safe on this phone.'**
+  String get connOfflineBody;
+
+  /// No description provided for @connOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Server connected'**
+  String get connOnline;
+
+  /// No description provided for @connChecking.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking connection…'**
+  String get connChecking;
+
+  /// No description provided for @connReadingOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Bill reading ready'**
+  String get connReadingOn;
+
+  /// No description provided for @uploadStepSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending the photo'**
+  String get uploadStepSend;
+
+  /// No description provided for @uploadStepRead.
+  ///
+  /// In en, this message translates to:
+  /// **'AI is reading the bill'**
+  String get uploadStepRead;
+
+  /// No description provided for @uploadStepReview.
+  ///
+  /// In en, this message translates to:
+  /// **'You check every value'**
+  String get uploadStepReview;
+
+  /// No description provided for @addBillTipsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tips for a good photo'**
+  String get addBillTipsTitle;
+
+  /// No description provided for @addBillTip1.
+  ///
+  /// In en, this message translates to:
+  /// **'Lay the bill flat in good light'**
+  String get addBillTip1;
+
+  /// No description provided for @addBillTip2.
+  ///
+  /// In en, this message translates to:
+  /// **'Fit the whole bill in the frame'**
+  String get addBillTip2;
+
+  /// No description provided for @addBillTip3.
+  ///
+  /// In en, this message translates to:
+  /// **'Cover names, addresses and account numbers'**
+  String get addBillTip3;
+
+  /// No description provided for @addBillOr.
+  ///
+  /// In en, this message translates to:
+  /// **'or'**
+  String get addBillOr;
+
+  /// No description provided for @billsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'All your energy bills in one place'**
+  String get billsSubtitle;
+
+  /// No description provided for @reportsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your carbon footprint and electricity waste'**
+  String get reportsSubtitle;
+
+  /// No description provided for @solarSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimate rooftop solar for your factory'**
+  String get solarSubtitle;
+
+  /// No description provided for @settingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Language, server, privacy and your data'**
+  String get settingsSubtitle;
+
+  /// No description provided for @solarHowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How it works'**
+  String get solarHowTitle;
+
+  /// No description provided for @solarHow1.
+  ///
+  /// In en, this message translates to:
+  /// **'Draw your roof on the map'**
+  String get solarHow1;
+
+  /// No description provided for @solarHow2.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the assumptions'**
+  String get solarHow2;
+
+  /// No description provided for @solarHow3.
+  ///
+  /// In en, this message translates to:
+  /// **'See size, output and payback'**
+  String get solarHow3;
+
+  /// No description provided for @wasteAllGoodTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'All good'**
+  String get wasteAllGoodTitle;
+
+  /// No description provided for @wasteAttentionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs attention'**
+  String get wasteAttentionTitle;
+
+  /// No description provided for @carbonScopeSplit.
+  ///
+  /// In en, this message translates to:
+  /// **'Scope 1 (fuel) vs Scope 2 (electricity)'**
+  String get carbonScopeSplit;
+
+  /// No description provided for @reviewAiRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Read by AI'**
+  String get reviewAiRead;
+
+  /// No description provided for @reviewManualBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual entry'**
+  String get reviewManualBadge;
+
+  /// No description provided for @redactTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide private details'**
+  String get redactTitle;
+
+  /// No description provided for @redactHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag your finger over names, addresses, consumer and meter numbers. Each one is covered with a black box, and only the covered photo is sent.'**
+  String get redactHint;
+
+  /// No description provided for @redactKeepVisible.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep units, amounts and dates visible.'**
+  String get redactKeepVisible;
+
+  /// No description provided for @redactNothing.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing private on the photo? Just continue.'**
+  String get redactNothing;
+
+  /// No description provided for @redactSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Read this bill'**
+  String get redactSend;
+
+  /// No description provided for @redactPreparing.
+  ///
+  /// In en, this message translates to:
+  /// **'Covering the details…'**
+  String get redactPreparing;
+
+  /// No description provided for @redactAreas.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No areas covered} =1{1 area covered} other{{count} areas covered}}'**
+  String redactAreas(int count);
 }
 
 class _AppLocalizationsDelegate

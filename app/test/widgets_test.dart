@@ -1,12 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:factory_carbon/app.dart';
 import 'package:factory_carbon/data/drift_repositories.dart';
 import 'package:factory_carbon/data/providers.dart';
 import 'package:factory_carbon/data/settings_store.dart';
 import 'package:factory_carbon/domain/api_models.dart';
+import 'package:factory_carbon/domain/image_prep.dart';
 import 'package:factory_carbon/domain/models.dart';
+import 'package:factory_carbon/features/add_bill/redact_screen.dart';
 import 'package:factory_carbon/features/add_bill/review_screen.dart';
 import 'package:factory_carbon/features/bills/bills_screen.dart';
 import 'package:factory_carbon/features/carbon/carbon_screen.dart';
@@ -23,36 +26,40 @@ import 'helpers.dart';
 final _png = img.encodePng(img.Image(width: 40, height: 60));
 
 ExtractBillResult _extraction() => ExtractBillResult(
-      bill: ExtractedBill(
-        billType: BillType.electricity,
-        billingMonth: '2024-05',
-        periodStart: DateTime(2024, 5, 1),
-        periodEnd: DateTime(2024, 5, 30),
-        consumedUnits: 100,
-        unit: EnergyUnit.kWh,
-        totalAmountBdt: 684,
-        tariffCode: 'LT-B',
-        fieldConfidence: const {'consumed_units': 'low', 'tariff_code': 'high'},
-        notes: 'Multiplying factor 1.2',
-      ),
-      warnings: const [ExtractionWarning(field: 'total_amount_bdt', code: 'price_per_unit_out_of_band', message: 'Amount per unit is Tk 6.84, check.')],
-      model: 'fake',
-      promptVersion: 'v1',
-    );
+  bill: ExtractedBill(
+    billType: BillType.electricity,
+    billingMonth: '2024-05',
+    periodStart: DateTime(2024, 5, 1),
+    periodEnd: DateTime(2024, 5, 30),
+    consumedUnits: 100,
+    unit: EnergyUnit.kWh,
+    totalAmountBdt: 684,
+    tariffCode: 'LT-B',
+    fieldConfidence: const {'consumed_units': 'low', 'tariff_code': 'high'},
+    notes: 'Multiplying factor 1.2',
+  ),
+  warnings: const [ExtractionWarning(field: 'total_amount_bdt', code: 'price_per_unit_out_of_band', message: 'Amount per unit is Tk 6.84, check.')],
+  model: 'fake',
+  promptVersion: 'v1',
+);
 
 Finder _scrollable() => find.byType(Scrollable).first;
 
-Future<void> _scrollTo(WidgetTester tester, Finder f, {double delta = 150}) =>
-    tester.scrollUntilVisible(f, delta, scrollable: _scrollable());
+Future<void> _scrollTo(WidgetTester tester, Finder f, {double delta = 150}) => tester.scrollUntilVisible(f, delta, scrollable: _scrollable());
 
 void main() {
   testWidgets('onboarding requires the privacy acknowledgement before saving', (tester) async {
     final db = memoryDb();
-    await tester.pumpWidget(ProviderScope(
-      overrides: testOverrides(db: db, api: fakeApi(FakeAdapter(defaultHandler))),
-      retry: (_, _) => null,
-      child: const FactoryCarbonApp(),
-    ));
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: testOverrides(db: db, api: fakeApi(FakeAdapter(defaultHandler))),
+        retry: (_, _) => null,
+        child: const FactoryCarbonApp(),
+      ),
+    );
+    await waitFor(tester, find.byKey(const Key('intro-skip')));
+    await tester.tap(find.byKey(const Key('intro-skip')));
+    await tester.pump();
     await waitFor(tester, find.text('Set up your factory'));
 
     await tester.enterText(find.byKey(const Key('factory-name')), 'Rahman Knit');
@@ -73,10 +80,12 @@ void main() {
   testWidgets('review: low-confidence highlight, inline warnings, confirm gate, edits recorded', (tester) async {
     final db = memoryDb();
     final x = _extraction();
-    await tester.pumpWidget(testApp(
-      ReviewScreen(extraction: x, warnings: x.warnings, imageBytes: _png, extracted: x.bill),
-      overrides: testOverrides(db: db),
-    ));
+    await tester.pumpWidget(
+      testApp(
+        ReviewScreen(extraction: x, warnings: x.warnings, imageBytes: _png, extracted: x.bill),
+        overrides: testOverrides(db: db),
+      ),
+    );
     await settle(tester);
 
     expect(find.byType(InteractiveViewer), findsOneWidget);
@@ -113,10 +122,12 @@ void main() {
     final db = memoryDb();
     await tester.runAsync(() => DriftBillRepository(db).save(testBill(id: 'old', month: '2024-05')));
     final x = _extraction();
-    await tester.pumpWidget(testApp(
-      ReviewScreen(extraction: x, warnings: const [], imageBytes: null, extracted: x.bill),
-      overrides: testOverrides(db: db),
-    ));
+    await tester.pumpWidget(
+      testApp(
+        ReviewScreen(extraction: x, warnings: const [], imageBytes: null, extracted: x.bill),
+        overrides: testOverrides(db: db),
+      ),
+    );
     await settle(tester);
     await tapScrolled(tester, find.byKey(const Key('review-confirm')));
     await tapScrolled(tester, find.byKey(const Key('review-save')));
@@ -129,10 +140,12 @@ void main() {
 
   testWidgets('manual entry requires a bill type and valid month', (tester) async {
     final db = memoryDb();
-    await tester.pumpWidget(testApp(
-      const ReviewScreen(extraction: null, warnings: [], imageBytes: null, extracted: ExtractedBill.empty),
-      overrides: testOverrides(db: db),
-    ));
+    await tester.pumpWidget(
+      testApp(
+        const ReviewScreen(extraction: null, warnings: [], imageBytes: null, extracted: ExtractedBill.empty),
+        overrides: testOverrides(db: db),
+      ),
+    );
     await settle(tester);
     expect(find.text('Enter the values from your bill or receipt.'), findsOneWidget);
     await tapScrolled(tester, find.byKey(const Key('review-confirm')));
@@ -152,7 +165,12 @@ void main() {
       await DriftResultCacheRepository(db).put('carbon', {'input_hash': 'old', 'response': carbonJsonFixture()});
     });
     final adapter = FakeAdapter((o) => o.path == '/v1/carbon/calculate' ? jsonBody(carbonJsonFixture()) : defaultHandler(o));
-    await tester.pumpWidget(testApp(const Scaffold(body: CarbonView()), overrides: testOverrides(db: db, api: fakeApi(adapter))));
+    await tester.pumpWidget(
+      testApp(
+        const Scaffold(body: CarbonView()),
+        overrides: testOverrides(db: db, api: fakeApi(adapter)),
+      ),
+    );
     await waitFor(tester, find.byKey(const Key('factor-not-set')));
     expect(find.textContaining('grid electricity emission factor is not set'), findsOneWidget);
     expect(find.byKey(const Key('carbon-stale')), findsOneWidget);
@@ -171,27 +189,56 @@ void main() {
   testWidgets('waste view: insufficient data state and flagged message', (tester) async {
     final db = memoryDb();
     var response = <String, dynamic>{
-      'status': 'insufficient_data', 'method': null, 'confidence_label': null, 'month_count': 3, 'required_months': 6,
-      'months': <Object>[], 'flagged_months': <Object>[], 'avg_bdt_per_kwh': null, 'messages': <Object>[], 'limitations': <Object>[], 'model_summary': <String, Object>{},
+      'status': 'insufficient_data',
+      'method': null,
+      'confidence_label': null,
+      'month_count': 3,
+      'required_months': 6,
+      'months': <Object>[],
+      'flagged_months': <Object>[],
+      'avg_bdt_per_kwh': null,
+      'messages': <Object>[],
+      'limitations': <Object>[],
+      'model_summary': <String, Object>{},
     };
     final adapter = FakeAdapter((o) => jsonBody(response));
-    await tester.pumpWidget(testApp(const Scaffold(body: WasteView()), overrides: testOverrides(db: db, api: fakeApi(adapter))));
+    await tester.pumpWidget(
+      testApp(
+        const Scaffold(body: WasteView()),
+        overrides: testOverrides(db: db, api: fakeApi(adapter)),
+      ),
+    );
     await settle(tester);
     await tester.tap(find.byKey(const Key('waste-analyze')));
     await waitFor(tester, find.byKey(const Key('waste-insufficient')));
     expect(find.textContaining('Only 3 months'), findsOneWidget);
 
     response = {
-      'status': 'ok', 'method': 'ols_production', 'confidence_label': 'x', 'month_count': 6, 'required_months': 6,
+      'status': 'ok',
+      'method': 'ols_production',
+      'confidence_label': 'x',
+      'month_count': 6,
+      'required_months': 6,
       'months': [
         for (var i = 1; i <= 6; i++)
           {
-            'month': '2024-0$i', 'actual_kwh': i == 4 ? 118000.0 : 100000.0, 'production': 1000.0, 'expected_kwh': 100000.0,
-            'lower_kwh': 90000.0, 'upper_kwh': 110000.0, 'flagged': i == 4, 'excess_kwh': i == 4 ? 18000.0 : null,
-            'excess_pct': i == 4 ? 18.0 : null, 'excess_cost_bdt': i == 4 ? 189000.0 : null,
+            'month': '2024-0$i',
+            'actual_kwh': i == 4 ? 118000.0 : 100000.0,
+            'production': 1000.0,
+            'expected_kwh': 100000.0,
+            'lower_kwh': 90000.0,
+            'upper_kwh': 110000.0,
+            'flagged': i == 4,
+            'excess_kwh': i == 4 ? 18000.0 : null,
+            'excess_pct': i == 4 ? 18.0 : null,
+            'excess_cost_bdt': i == 4 ? 189000.0 : null,
           },
       ],
-      'flagged_months': ['2024-04'], 'avg_bdt_per_kwh': 10.5, 'messages': <Object>[], 'limitations': <Object>[], 'model_summary': <String, Object>{},
+      'flagged_months': ['2024-04'],
+      'avg_bdt_per_kwh': 10.5,
+      'messages': <Object>[],
+      'limitations': <Object>[],
+      'model_summary': <String, Object>{},
     };
     await tester.tap(find.byKey(const Key('waste-analyze')));
     await settle(tester);
@@ -233,11 +280,16 @@ void main() {
 
   testWidgets('synthetic data shows a banner and SYNTHETIC badges', (tester) async {
     final db = memoryDb();
-    await tester.pumpWidget(testApp(const BillsScreen(), overrides: [
-      ...testOverrides(db: db),
-      billsProvider.overrideWith((ref) => Stream.value([testBill(origin: DataOrigin.demo)])),
-      productionProvider.overrideWith((ref) => Stream.value(const <ProductionEntry>[])),
-    ]));
+    await tester.pumpWidget(
+      testApp(
+        const BillsScreen(),
+        overrides: [
+          ...testOverrides(db: db),
+          billsProvider.overrideWith((ref) => Stream.value([testBill(origin: DataOrigin.demo)])),
+          productionProvider.overrideWith((ref) => Stream.value(const <ProductionEntry>[])),
+        ],
+      ),
+    );
     await waitFor(tester, find.byKey(const Key('synthetic-banner')));
     expect(find.text('SYNTHETIC DATA'), findsOneWidget);
     await teardownDb(tester, db);
@@ -246,13 +298,71 @@ void main() {
   testWidgets('Bangla locale renders translated onboarding', (tester) async {
     final db = memoryDb();
     final settings = MemorySettingsStore()..localeCode = 'bn';
-    await tester.pumpWidget(ProviderScope(
-      overrides: testOverrides(db: db, settings: settings, api: fakeApi(FakeAdapter(defaultHandler))),
-      retry: (_, _) => null,
-      child: const FactoryCarbonApp(),
-    ));
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: testOverrides(db: db, settings: settings, api: fakeApi(FakeAdapter(defaultHandler))),
+        retry: (_, _) => null,
+        child: const FactoryCarbonApp(),
+      ),
+    );
+    await waitFor(tester, find.text('পরবর্তী'));
+    await tester.tap(find.byKey(const Key('intro-skip')));
+    await tester.pump();
     await waitFor(tester, find.text('আপনার কারখানা সেট আপ করুন'));
     await teardownDb(tester, db);
+  });
+
+  testWidgets('redaction: drag covers an area, undo removes it, result is burned in', (tester) async {
+    final white = img.Image(width: 300, height: 400);
+    img.fill(white, color: img.ColorRgb8(255, 255, 255));
+    final jpeg = Uint8List.fromList(img.encodeJpg(white));
+    Uint8List? result;
+    await tester.pumpWidget(
+      testApp(
+        Builder(
+          builder: (context) => Scaffold(
+            body: Center(
+              child: TextButton(
+                onPressed: () async => result = await Navigator.of(context).push<Uint8List>(
+                  MaterialPageRoute(
+                    builder: (_) => RedactScreen(imageBytes: jpeg, redactor: (b, x) async => applyRedactions(b, x)),
+                  ),
+                ),
+                child: const Text('open'),
+              ),
+            ),
+          ),
+        ),
+        overrides: testOverrides(db: memoryDb()),
+      ),
+    );
+    await tester.tap(find.text('open'));
+    await tester.pump(const Duration(milliseconds: 500));
+    await waitFor(tester, find.byKey(const Key('redact-canvas')));
+    for (var i = 0; i < 10; i++) {
+      await tester.pump(const Duration(milliseconds: 100)); // let the page transition finish
+    }
+    expect(find.text('No areas covered'), findsOneWidget);
+
+    final r = tester.getRect(find.byKey(const Key('redact-canvas')));
+    await tester.dragFrom(r.topLeft + Offset(r.width * 0.1, r.height * 0.1), Offset(r.width * 0.5, r.height * 0.2));
+    await tester.pump();
+    expect(find.text('1 area covered'), findsOneWidget);
+    await tester.tap(find.byKey(const Key('redact-undo')));
+    await tester.pump();
+    expect(find.text('No areas covered'), findsOneWidget);
+    await tester.dragFrom(r.topLeft + Offset(r.width * 0.1, r.height * 0.1), Offset(r.width * 0.5, r.height * 0.2));
+    await tester.pump();
+
+    await tester.tap(find.byKey(const Key('redact-done')));
+    for (var i = 0; i < 100 && result == null; i++) {
+      await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 50)));
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    expect(result, isNotNull);
+    final out = img.decodeJpg(result!)!;
+    expect(out.getPixel((300 * 0.3).round(), (400 * 0.2).round()).r, lessThan(30)); // covered
+    expect(out.getPixel(280, 380).r, greaterThan(225)); // untouched
   });
 
   test('carbon fixture round-trips through JSON', () {

@@ -165,7 +165,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get uploadNoticeBody =>
-      'বিল পড়ার জন্য কাটা ছবিটি আমাদের সার্ভারে এবং Google-এর Gemini API-তে পাঠানো হবে। ক্রপ করার সময় নাম, ঠিকানা, গ্রাহক/কনজিউমার নম্বর ও মিটার নম্বর কেটে বাদ দিন। আমাদের সার্ভারে ছবি সংরক্ষণ করা হয় না। Google-এর বিনামূল্যের সংস্করণে Google আপলোড তার পণ্য উন্নয়নে ব্যবহার করতে পারে এবং কর্মীরা তা দেখতে পারেন।';
+      'বিল পড়ার জন্য ছবিটি আমাদের সার্ভারে এবং Google-এর Gemini API-তে পাঠানো হবে। পাঠানোর আগে আপনি বিলটি ক্রপ করবেন এবং নাম, ঠিকানা, গ্রাহক/কনজিউমার নম্বর ও মিটার নম্বর কালো বক্স দিয়ে ঢেকে দেবেন। আমাদের সার্ভারে ছবি সংরক্ষণ করা হয় না। Google-এর বিনামূল্যের সংস্করণে Google আপলোড তার পণ্য উন্নয়নে ব্যবহার করতে পারে এবং কর্মীরা তা দেখতে পারেন।';
 
   @override
   String get uploadNoticeAccept => 'বুঝেছি, চালিয়ে যান';
@@ -194,10 +194,14 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String homeBillsCount(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$countটি বিল সংরক্ষিত',
+      other: '$countStringটি বিল সংরক্ষিত',
       zero: 'কোনো বিল সংরক্ষিত নেই',
     );
     return '$_temp0';
@@ -224,7 +228,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get cropReminder =>
-      'নাম, ঠিকানা, গ্রাহক/কনজিউমার নম্বর ও মিটার নম্বর কেটে বাদ দিন। ব্যবহৃত ইউনিট, টাকার পরিমাণ ও তারিখ রাখুন।';
+      'প্রথমে ছবিটি বিল পর্যন্ত কেটে নিন। পরের ধাপে বিলের ভেতরের নাম, ঠিকানা, গ্রাহক বা মিটার নম্বর ঢেকে দিতে পারবেন।';
 
   @override
   String get preparingImage => 'ছবি প্রস্তুত হচ্ছে…';
@@ -437,10 +441,14 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String importRowsReady(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count মাস ইমপোর্টের জন্য প্রস্তুত',
+      other: '$countString মাস ইমপোর্টের জন্য প্রস্তুত',
     );
     return '$_temp0';
   }
@@ -456,10 +464,14 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String importDone(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count মাস ইমপোর্ট হয়েছে',
+      other: '$countString মাস ইমপোর্ট হয়েছে',
     );
     return '$_temp0';
   }
@@ -741,10 +753,14 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String wasteFlaggedCount(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count মাস চিহ্নিত',
+      other: '$countString মাস চিহ্নিত',
       zero: 'কোনো মাস চিহ্নিত হয়নি',
     );
     return '$_temp0';
@@ -766,10 +782,14 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String solarPoints(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$countটি কোণ',
+      other: '$countStringটি কোণ',
     );
     return '$_temp0';
   }
@@ -1122,7 +1142,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get stepWaste => 'বিদ্যুৎ অপচয় যাচাই করুন';
 
   @override
-  String get homeStatMonths => 'তথ্যসহ মাস';
+  String get homeStatMonths => 'মাস';
 
   @override
   String get homeStatLatest => 'সর্বশেষ মাস';
@@ -1151,7 +1171,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get addBillScanHint =>
-      'ছবি তুলুন বা বেছে নিন। সংরক্ষণের আগে ব্যক্তিগত তথ্য কেটে বাদ দেবেন এবং প্রতিটি মান যাচাই করবেন।';
+      'ছবি তুলুন বা বেছে নিন। সংরক্ষণের আগে ব্যক্তিগত তথ্য ঢেকে দেবেন এবং প্রতিটি মান যাচাই করবেন।';
 
   @override
   String get solarMyLocation => 'কারখানার অবস্থানে যান';
@@ -1246,4 +1266,202 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get swNoPayback =>
       'বার্ষিক সাশ্রয় রক্ষণাবেক্ষণ খরচ পূরণ করে না, তাই পেব্যাক নেই।';
+
+  @override
+  String get introSkip => 'এড়িয়ে যান';
+
+  @override
+  String get introNext => 'পরবর্তী';
+
+  @override
+  String get introGetStarted => 'শুরু করুন';
+
+  @override
+  String get intro1Title => 'বিলের ছবি তুলুন, আমরা পড়ে নেব';
+
+  @override
+  String get intro1Body =>
+      'বিদ্যুৎ, গ্যাস বা ডিজেল বিলের ছবি তুলুন। AI সংখ্যাগুলো পড়ে নেয়, আর সংরক্ষণের আগে আপনি সেগুলো যাচাই করেন।';
+
+  @override
+  String get intro2Title => 'এক ট্যাপে কার্বন রিপোর্ট';
+
+  @override
+  String get intro2Body =>
+      'ক্রেতারা যে স্কোপ ১ + ২ কার্বন রিপোর্ট চান, তা PDF বা স্প্রেডশিট হিসেবে শেয়ার করুন।';
+
+  @override
+  String get intro3Title => 'অপচয় কমান, সোলারে যান';
+
+  @override
+  String get intro3Body =>
+      'অস্বাভাবিক বেশি বিদ্যুৎ ব্যবহারের মাস খুঁজে পান এবং ছাদে সোলার কত সাশ্রয় করতে পারে তা অনুমান করুন।';
+
+  @override
+  String get introPrivacyNote => 'আপনার তথ্য এই ফোনেই থাকে।';
+
+  @override
+  String get onboardingFormSubtitle =>
+      'রিপোর্টের জন্য কিছু তথ্য। পরে পরিবর্তন করতে পারবেন।';
+
+  @override
+  String get factoryCoordsHint =>
+      'ঐচ্ছিক। সোলার মানচিত্রে আপনার কারখানা দেখাতে ব্যবহৃত হয়।';
+
+  @override
+  String get homeGreetingMorning => 'শুভ সকাল';
+
+  @override
+  String get homeGreetingAfternoon => 'শুভ অপরাহ্ন';
+
+  @override
+  String get homeGreetingEvening => 'শুভ সন্ধ্যা';
+
+  @override
+  String get homeFootprint => 'কার্বন ফুটপ্রিন্ট';
+
+  @override
+  String get homeHeroEmpty => 'চলুন আপনার কারখানার জ্বালানি ও কার্বন মাপি।';
+
+  @override
+  String get homeScanTitle => 'বিল স্ক্যান করুন';
+
+  @override
+  String get homeScanSubtitle =>
+      'বিদ্যুৎ, গ্যাস বা ডিজেল বিলের ছবি তুলুন। সংখ্যাগুলো আমরা পড়ে দেব।';
+
+  @override
+  String get homeExplore => 'আপনি কী করতে চান?';
+
+  @override
+  String get tileBillsSub => 'সংরক্ষিত বিল দেখুন ও সম্পাদনা করুন';
+
+  @override
+  String get tileImportSub => 'স্প্রেডশিট থেকে পুরোনো মাস যোগ করুন';
+
+  @override
+  String get tileProductionSub => 'তীব্রতার জন্য মাসিক উৎপাদন';
+
+  @override
+  String get tileCarbonSub => 'স্কোপ ১ + ২ রিপোর্ট ও PDF';
+
+  @override
+  String get tileWasteSub => 'অস্বাভাবিক বিদ্যুৎ ব্যবহার খুঁজুন';
+
+  @override
+  String get tileSolarSub => 'ছাদে সোলারের অনুমান';
+
+  @override
+  String get connOfflineTitle => 'সার্ভারের সাথে সংযোগ নেই';
+
+  @override
+  String get connOfflineBody =>
+      'বিল পড়া, রিপোর্ট ও সোলারের জন্য সার্ভার প্রয়োজন। আপনার সংরক্ষিত তথ্য এই ফোনে নিরাপদ আছে।';
+
+  @override
+  String get connOnline => 'সার্ভার সংযুক্ত';
+
+  @override
+  String get connChecking => 'সংযোগ পরীক্ষা হচ্ছে…';
+
+  @override
+  String get connReadingOn => 'বিল পড়া প্রস্তুত';
+
+  @override
+  String get uploadStepSend => 'ছবি পাঠানো হচ্ছে';
+
+  @override
+  String get uploadStepRead => 'AI বিলটি পড়ছে';
+
+  @override
+  String get uploadStepReview => 'আপনি প্রতিটি মান যাচাই করবেন';
+
+  @override
+  String get addBillTipsTitle => 'ভালো ছবির জন্য পরামর্শ';
+
+  @override
+  String get addBillTip1 => 'বিলটি সমান জায়গায় ভালো আলোতে রাখুন';
+
+  @override
+  String get addBillTip2 => 'পুরো বিলটি ছবির মধ্যে রাখুন';
+
+  @override
+  String get addBillTip3 => 'নাম, ঠিকানা ও হিসাব নম্বর ঢেকে দিন';
+
+  @override
+  String get addBillOr => 'অথবা';
+
+  @override
+  String get billsSubtitle => 'আপনার সব জ্বালানি বিল এক জায়গায়';
+
+  @override
+  String get reportsSubtitle => 'আপনার কার্বন ফুটপ্রিন্ট ও বিদ্যুৎ অপচয়';
+
+  @override
+  String get solarSubtitle => 'আপনার কারখানার ছাদে সোলারের অনুমান';
+
+  @override
+  String get settingsSubtitle => 'ভাষা, সার্ভার, গোপনীয়তা ও আপনার তথ্য';
+
+  @override
+  String get solarHowTitle => 'কীভাবে কাজ করে';
+
+  @override
+  String get solarHow1 => 'মানচিত্রে ছাদ আঁকুন';
+
+  @override
+  String get solarHow2 => 'অনুমানগুলো দেখে নিন';
+
+  @override
+  String get solarHow3 => 'আকার, উৎপাদন ও পেব্যাক দেখুন';
+
+  @override
+  String get wasteAllGoodTitle => 'সব ঠিক আছে';
+
+  @override
+  String get wasteAttentionTitle => 'মনোযোগ প্রয়োজন';
+
+  @override
+  String get carbonScopeSplit => 'স্কোপ ১ (জ্বালানি) বনাম স্কোপ ২ (বিদ্যুৎ)';
+
+  @override
+  String get reviewAiRead => 'AI দিয়ে পড়া হয়েছে';
+
+  @override
+  String get reviewManualBadge => 'হাতে লেখা';
+
+  @override
+  String get redactTitle => 'ব্যক্তিগত তথ্য ঢেকে দিন';
+
+  @override
+  String get redactHint =>
+      'নাম, ঠিকানা, গ্রাহক ও মিটার নম্বরের ওপর আঙুল টেনে দিন। প্রতিটি কালো বক্সে ঢেকে যাবে, আর শুধু ঢাকা ছবিটিই পাঠানো হবে।';
+
+  @override
+  String get redactKeepVisible => 'ইউনিট, টাকার পরিমাণ ও তারিখ দৃশ্যমান রাখুন।';
+
+  @override
+  String get redactNothing =>
+      'ছবিতে কোনো ব্যক্তিগত তথ্য নেই? সরাসরি এগিয়ে যান।';
+
+  @override
+  String get redactSend => 'বিলটি পড়ুন';
+
+  @override
+  String get redactPreparing => 'তথ্য ঢাকা হচ্ছে…';
+
+  @override
+  String redactAreas(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countStringটি অংশ ঢাকা হয়েছে',
+      zero: 'কোনো অংশ ঢাকা হয়নি',
+    );
+    return '$_temp0';
+  }
 }
