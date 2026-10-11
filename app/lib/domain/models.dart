@@ -173,6 +173,47 @@ class ProductionEntry {
   bool get isSynthetic => origin == DataOrigin.demo;
 }
 
+/// An energy-saving action from the action plan: planned (no [doneMonth]) or done.
+class EnergyAction {
+  const EnergyAction({
+    required this.id,
+    required this.code,
+    this.title = '',
+    this.doneMonth,
+    this.costBdt,
+    this.note = '',
+    required this.origin,
+    required this.updatedAt,
+  });
+
+  final String id;
+
+  /// Catalog code (e.g. fix_air_leaks), or 'custom' with a typed [title].
+  final String code;
+  final String title;
+
+  /// Month the action was completed (YYYY-MM); null while it is only planned.
+  final String? doneMonth;
+  final double? costBdt;
+  final String note;
+  final DataOrigin origin;
+  final DateTime updatedAt;
+
+  bool get done => doneMonth != null;
+  bool get isSynthetic => origin == DataOrigin.demo;
+
+  EnergyAction copyWith({String? doneMonth, bool clearDone = false, double? costBdt, String? note}) => EnergyAction(
+        id: id,
+        code: code,
+        title: title,
+        doneMonth: clearDone ? null : (doneMonth ?? this.doneMonth),
+        costBdt: costBdt ?? this.costBdt,
+        note: note ?? this.note,
+        origin: origin,
+        updatedAt: DateTime.now(),
+      );
+}
+
 class LatLon {
   const LatLon(this.lat, this.lon);
   final double lat;

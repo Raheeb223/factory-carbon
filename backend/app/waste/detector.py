@@ -1,4 +1,8 @@
-"""Electricity waste / anomaly detector (spec 6.3).
+"""Electricity anomaly detector (spec 6.3).
+
+A flagged month is an anomaly with an estimated excess cost, not proven waste: the
+manager checks production, working hours and other causes first (see INSPECTIONS).
+The baseline is transparent: expected kWh = a + b x units produced.
 
 - >= 6 months with both kWh and production: OLS kWh ~ production, leave-one-out 95%
   prediction interval per month; months above the upper bound are flagged.
@@ -15,7 +19,7 @@ from calendar import month_name
 import numpy as np
 import statsmodels.api as sm
 
-from app.schemas import WasteAnalyzeRequest, WasteAnalyzeResponse, WasteMonthResult
+from app.schemas import Inspection, WasteAnalyzeRequest, WasteAnalyzeResponse, WasteMonthResult
 
 MIN_MONTHS = 6
 ALPHA = 0.05
@@ -32,7 +36,36 @@ LIMITATIONS = [
 ]
 CONFIDENCE_OLS = "Expected use is based on the production level (regression on production)."
 CONFIDENCE_MAD = "Lower confidence, no production data: compared with the factory's typical month."
-CHECK_HINT = "Check compressors, idle machines and generator changeover."
+CHECK_HINT = "This is an anomaly, not proven waste: first check production, working hours and other causes."
+
+# Practical checks, most likely first. The first one rules out legitimate reasons.
+INSPECTIONS = [
+    Inspection(
+        code="confirm_cause",
+        title="Rule out normal reasons first",
+        detail="Compare with production records, overtime and extra shifts, new machines, and hot weather (fans, AC) for that month.",
+    ),
+    Inspection(
+        code="compressed_air",
+        title="Compressors and air leaks",
+        detail="During a break, with machines stopped, listen for hissing at hoses, couplings and guns. Check the compressor still loads and unloads; lower the pressure setting if it is higher than machines need.",
+    ),
+    Inspection(
+        code="idle_machines",
+        title="Idle machines, lights and fans",
+        detail="Walk the floor at lunch, after the last shift and on holidays. Note sewing machines, irons, lights, fans and AC left on with nobody using them.",
+    ),
+    Inspection(
+        code="boiler_steam",
+        title="Boiler and steam",
+        detail="Look for steam leaks, failed steam traps and missing pipe insulation; check that condensate goes back to the boiler.",
+    ),
+    Inspection(
+        code="generator",
+        title="Generator use",
+        detail="Check the generator log: hours run while grid power was available, and late changeover back to the grid.",
+    ),
+]
 
 
 def _label(month: str) -> str:
@@ -138,6 +171,7 @@ def analyze(req: WasteAnalyzeRequest) -> WasteAnalyzeResponse:
     for m, (expected, lower, upper) in zip(used, preds, strict=True):
         actual = float(m.kwh or 0)
         flagged = actual > upper
+        prod = m.production if m.production and m.production > 0 else None
         excess = actual - expected if flagged else None
         pct = excess / expected * 100.0 if flagged and expected > 0 and excess is not None else None
         cost = excess * price if excess is not None and price is not None else None
@@ -153,18 +187,22 @@ def analyze(req: WasteAnalyzeRequest) -> WasteAnalyzeResponse:
                 excess_kwh=None if excess is None else round(excess, 2),
                 excess_pct=None if pct is None else round(pct, 1),
                 excess_cost_bdt=None if cost is None else round(cost, 0),
+                kwh_per_unit=None if prod is None else round(actual / prod, 6),
+                expected_kwh_per_unit=None if prod is None or method != "ols_production" else round(expected / prod, 6),
             )
         )
         if flagged and excess is not None:
             basis = "for the units produced" if method == "ols_production" else "compared with a typical month"
-            cost_part = f", about Tk {_fmt(cost)}" if cost is not None else " (cost unknown: no bill amounts)"
+            cost_part = f", estimated extra cost about Tk {_fmt(cost)}" if cost is not None else " (cost unknown: no bill amounts)"
             pct_part = f"about {pct:.0f}% more" if pct is not None and math.isfinite(pct) else "more"
             messages.append(
-                f"{_label(m.month)} used {pct_part} electricity than expected {basis}; "
+                f"Anomaly in {_label(m.month)}: {pct_part} electricity than expected {basis}; "
                 f"about {_fmt(excess)} kWh{cost_part}. {CHECK_HINT}"
             )
 
     flagged_months = [r.month for r in results if r.flagged]
+    normal_intensity = [r.kwh_per_unit for r in results if not r.flagged and r.kwh_per_unit is not None]
+    baseline_intensity = float(np.median(normal_intensity)) if normal_intensity else None
     if not flagged_months:
         messages.append("No month used clearly more electricity than expected.")
     skipped = len(with_kwh) - len(used)
@@ -185,5 +223,7 @@ def analyze(req: WasteAnalyzeRequest) -> WasteAnalyzeResponse:
         messages=messages,
         limitations=LIMITATIONS,
         model_summary={k: (None if v is None else round(v, 6)) for k, v in summary.items()},
+        baseline_kwh_per_unit=None if baseline_intensity is None else round(baseline_intensity, 6),
+        inspections=INSPECTIONS if flagged_months else [],
     )
 

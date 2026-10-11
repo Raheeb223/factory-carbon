@@ -7,7 +7,9 @@ import 'package:factory_carbon/domain/api_models.dart';
 import 'package:factory_carbon/domain/demo_data.dart';
 import 'package:factory_carbon/domain/history_csv.dart';
 import 'package:factory_carbon/domain/image_prep.dart';
+import 'package:factory_carbon/domain/impact.dart';
 import 'package:factory_carbon/domain/models.dart';
+import 'package:factory_carbon/domain/private_text.dart';
 import 'package:factory_carbon/domain/requests.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image/image.dart' as img;
@@ -201,6 +203,121 @@ void main() {
       expect(d.getPixel(300, 160).r, greaterThan(225)); // outside: still white
       final untouched = Uint8List.fromList([1, 2, 3]);
       expect(identical(applyRedactions(untouched, const []), untouched), isTrue); // no boxes: no re-encode
+    });
+  });
+
+  group('measured savings', () {
+    // 6 months at 0.5 kWh/unit, then an action in 2024-07, then 0.45 kWh/unit with
+    // 20% more production: the extra output is not counted as extra use.
+    final bills = <Bill>[];
+    final production = <ProductionEntry>[];
+    void month(String m, double units, double kwhPerUnit) {
+      bills.add(testBill(id: m, month: m, units: units * kwhPerUnit, amount: units * kwhPerUnit * 10));
+      production.add(ProductionEntry(id: m, month: m, unitsProduced: units, origin: DataOrigin.manual, updatedAt: DateTime(2024)));
+    }
+
+    for (var i = 1; i <= 6; i++) {
+      month('2024-0$i', 10000, 0.5);
+    }
+    month('2024-07', 10000, 0.6); // action month: left out
+    month('2024-08', 12000, 0.45);
+    month('2024-09', 12000, 0.45);
+
+    test('production-adjusted before/after with Tk and CO2', () {
+      final r = measureSince('2024-07', bills: bills, production: production, gridKgPerKwh: 0.62);
+      expect(r.status, ImpactStatus.measured);
+      expect(r.baselineKwhPerUnit, closeTo(0.5, 1e-9));
+      expect(r.monthsBefore, 6);
+      expect(r.monthsAfter, 2);
+      expect(r.settled, isFalse); // fewer than 3 months after: early result
+      expect(r.savedKwh, closeTo(2 * 12000 * 0.05, 1e-6)); // 1,200 kWh
+      expect(r.savedBdt, closeTo(12000, 1e-6)); // Tk 10/kWh
+      expect(r.savedCo2Kg, closeTo(744, 1e-6));
+      expect(r.changePct, closeTo(-10, 1e-9));
+    });
+
+    test('statuses: planned, too early, not enough history, no production', () {
+      expect(measureSince(null, bills: bills, production: production).status, ImpactStatus.planned);
+      expect(measureSince('2024-09', bills: bills, production: production).status, ImpactStatus.tooEarly);
+      expect(measureSince('2024-03', bills: bills, production: production).status, ImpactStatus.noBaseline);
+      expect(measureSince('2024-07', bills: bills, production: const []).status, ImpactStatus.noProduction);
+      expect(
+        firstDoneMonth([
+          EnergyAction(id: 'a', code: 'led_lighting', doneMonth: '2024-08', origin: DataOrigin.manual, updatedAt: DateTime(2024)),
+          EnergyAction(id: 'b', code: 'fix_air_leaks', doneMonth: '2024-05', origin: DataOrigin.manual, updatedAt: DateTime(2024)),
+          EnergyAction(id: 'c', code: 'servo_motors', origin: DataOrigin.manual, updatedAt: DateTime(2024)),
+        ]),
+        '2024-05',
+      );
+    });
+
+    test('bundled demo data has a done action with measurable savings', () {
+      final demo = parseDemoData(File('assets/demo/demo_data.json').readAsStringSync(), newId: () => 'x');
+      final done = demo.actions.where((a) => a.done).single;
+      final production = [for (final (m, u) in demo.production) ProductionEntry(id: m, month: m, unitsProduced: u, origin: DataOrigin.demo, updatedAt: DateTime(2024))];
+      final r = measureSince(done.doneMonth, bills: demo.bills, production: production, gridKgPerKwh: 0.62);
+      expect(r.status, ImpactStatus.measured);
+      expect(r.savedKwh, greaterThan(0));
+      expect(r.changePct!, lessThan(-3));
+    });
+  });
+
+  group('automatic name hiding', () {
+    test('names and addresses are private; values, labels and misread Bangla are not', () {
+      for (final t in ['MD. ROIS UDDIN', 'MD', 'MD ABDUL JALIL', 'Consumer Name: Karim', 'House 12, Road 5', 'FLAT NO-B/3', 'DHAKA-', 'Rahima Begum', 'Anwar Kabir']) {
+        expect(looksPrivate(t), isTrue, reason: t);
+      }
+      for (final t in ['1097', 'Aug-26', '16054.45', 'Units Consumed: 12,450 kWh', 'Total Amount Payable', 'Bill Month', 'faer', 'jsteto', 'podpebd', 'C6 / 42', 'x', 'LT-E (Industrial)', 'Tariff: LT-E (Industrial)', 'LT-E (INDUSTRIAL)']) {
+        expect(looksPrivate(t), isFalse, reason: t);
+      }
+    });
+
+    // Lines the phone's text reader found on a real DPDC bill (boxes as fractions).
+    const dpdc = [
+      FoundText('MD', 0.07, 0.166, 0.098, 0.178),
+      FoundText('ROIS DDIN', 0.117, 0.163, 0.223, 0.176),
+      FoundText('MD ABDUL JAL IL', 0.072, 0.19, 0.219, 0.202),
+      FoundText('ESKATON CARDEN', 0.1, 0.201, 0.251, 0.213),
+      FoundText('AT NO-B/3', 0.091, 0.213, 0.184, 0.223),
+      FoundText('FLA', 0.07, 0.218, 0.098, 0.226),
+      FoundText('DHAK-', 0.077, 0.223, 0.133, 0.236),
+      FoundText('T-A 11 05', 0.076, 0.248, 0.179, 0.264),
+      FoundText('faer', 0.453, 0.132, 0.475, 0.145),
+      FoundText('Aug-6', 0.422, 0.166, 0.489, 0.182),
+      FoundText('ADESH PLEPy', 0.249, 0.308, 0.331, 0.343), // bank stamp over a value
+      FoundText('tts. 95', 0.274, 0.332, 0.364, 0.346),
+      FoundText('1097', 0.507, 0.281, 0.551, 0.297),
+      FoundText('16054., 45', 0.269, 0.446, 0.357, 0.459),
+    ];
+
+    bool covers(RedactBox b, FoundText t) {
+      final x = (t.left + t.right) / 2;
+      final y = (t.top + t.bottom) / 2;
+      return x >= b.left && x <= b.right && y >= b.top && y <= b.bottom;
+    }
+
+    bool touches(RedactBox b, FoundText t) => b.left < t.right && t.left < b.right && b.top < t.bottom && t.top < b.bottom;
+
+    test('the name and address block of a real bill becomes one box; no value is touched', () {
+      final boxes = privateBoxes(dpdc);
+      expect(boxes, hasLength(1));
+      for (final t in dpdc.take(7)) {
+        expect(covers(boxes.single, t), isTrue, reason: '${t.text} (incl. "AT NO-B/3", which alone looks like a value)');
+      }
+      for (final t in dpdc.skip(7)) {
+        expect(touches(boxes.single, t), isFalse, reason: t.text);
+      }
+    });
+
+    test('a block box that would hide a value falls back to one box per line', () {
+      const lines = [
+        FoundText('MD KARIM', 0.1, 0.10, 0.3, 0.12),
+        FoundText('1097', 0.12, 0.125, 0.2, 0.135), // sits inside the block
+        FoundText('MIRPUR', 0.1, 0.14, 0.3, 0.16),
+      ];
+      final boxes = privateBoxes(lines);
+      expect(boxes, hasLength(2));
+      expect(boxes.any((b) => touches(b, lines[1])), isFalse);
     });
   });
 }

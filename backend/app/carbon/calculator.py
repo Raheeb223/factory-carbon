@@ -36,6 +36,8 @@ METHODOLOGY = [
     "Intensity = total tCO2e / units produced x 1,000, only for months with complete data and production.",
     "Months without data are shown as empty (null), never as zero.",
     "Only quantities from bills confirmed by the user, manual entries and imported history are used.",
+    "Bill photos are read by AI (Google Gemini); every value is shown to the factory manager, who checks or corrects it before it is saved. Unconfirmed AI output is never used. The report lists each entry and how it was entered.",
+    "The Bangladesh grid factor covers CO2 only; the diesel and natural gas factors are CO2e (CO2 + CH4 + N2O). Totals are reported as tCO2e.",
 ]
 
 

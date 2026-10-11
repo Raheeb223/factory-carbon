@@ -24,7 +24,7 @@ from app.schemas import (
 )
 from app.settings import ConfigValue, EmissionFactors, SolarDefaults
 
-DISCLAIMER = "Pre-feasibility estimate. Structural load, shading and electrical design need a professional assessment."
+DISCLAIMER = "Estimate only (pre-feasibility). Real savings depend on the installed system, its cost, the tariff and how much solar power the factory uses. Structural load, shading and electrical design need a professional assessment."
 DAYS_IN_MONTH = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 
 
@@ -33,6 +33,7 @@ class ResolvedParams:
     usable_roof_fraction: float
     m2_per_kwp: float
     performance_ratio: float
+    shading_loss: float
     degradation_per_year: float
     capex_bdt_per_kwp: float | None
     om_fraction_of_capex_per_year: float | None
@@ -41,6 +42,9 @@ class ResolvedParams:
     net_metering: bool
     analysis_years: int
     used: list[SolarParamUsed]
+    roof_structure: str = "unknown"
+    shading_entered: bool = False
+    price_from_bills: bool = False
 
 
 def _pick(name: str, override: float | None, cv: ConfigValue) -> tuple[float | None, SolarParamUsed]:
@@ -66,6 +70,7 @@ def resolve_params(o: SolarParamOverrides, d: SolarDefaults, consumption: list[C
     usable = pick("usable_roof_fraction", o.usable_roof_fraction, d.usable_roof_fraction)
     m2 = pick("m2_per_kwp", o.m2_per_kwp, d.m2_per_kwp)
     pr = pick("performance_ratio", o.performance_ratio, d.performance_ratio)
+    shading = pick("shading_loss", o.shading_loss, d.shading_loss)
     deg = pick("degradation_per_year", o.degradation_per_year, d.degradation_per_year)
     capex = pick("capex_bdt_per_kwp", o.capex_bdt_per_kwp, d.capex_bdt_per_kwp)
     om = pick("om_fraction_of_capex_per_year", o.om_fraction_of_capex_per_year, d.om_fraction_of_capex_per_year)
@@ -82,9 +87,14 @@ def resolve_params(o: SolarParamOverrides, d: SolarDefaults, consumption: list[C
     net = o.net_metering if o.net_metering is not None else d.net_metering
     used.append(SolarParamUsed(name="net_metering", value=net, unit="bool", origin="override" if o.net_metering is not None else "default", status=None, source="entered by user" if o.net_metering is not None else "solar_defaults.yaml"))
 
-    if usable is None or m2 is None or pr is None or deg is None or years is None:
+    if usable is None or m2 is None or pr is None or deg is None or years is None or shading is None:
         raise ValueError("solar defaults are incomplete")
-    return ResolvedParams(usable, m2, pr, deg, capex, om, price, export, net, int(years), used)
+    return ResolvedParams(
+        usable, m2, pr, shading, deg, capex, om, price, export, net, int(years), used,
+        roof_structure=o.roof_structure or "unknown",
+        shading_entered=o.shading_loss is not None,
+        price_from_bills=o.electricity_price_bdt_per_kwh is None and price is not None,
+    )
 
 
 def _w(code: str, message: str, value: float | None = None) -> SolarWarning:
@@ -120,7 +130,14 @@ def estimate(
     warnings: list[SolarWarning] = []
     usable_area = area_m2 * params.usable_roof_fraction
     kwp = usable_area / params.m2_per_kwp
-    gen = [kwp * psh * days * params.performance_ratio for psh, days in zip(psh_monthly, DAYS_IN_MONTH, strict=True)]
+    sun = params.performance_ratio * (1.0 - params.shading_loss)
+    gen = [kwp * psh * days * sun for psh, days in zip(psh_monthly, DAYS_IN_MONTH, strict=True)]
+    if not params.shading_entered:
+        warnings.append(_w("shading_not_assessed", "Shading was not entered, so no shading loss is assumed. Shade from tanks, trees or buildings lowers generation."))
+    if params.roof_structure == "needs_work":
+        warnings.append(_w("structure_needs_work", "The roof needs structural work before panels can be installed; add that cost to the installation cost."))
+    elif params.roof_structure != "ok":
+        warnings.append(_w("structure_unknown", "Roof strength is not checked yet. An engineer must confirm the roof can carry the panels."))
     annual_gen = sum(gen)
 
     cons, cons_warnings = typical_year_consumption(consumption)
@@ -202,6 +219,8 @@ def _financials(
         warnings.append(_w("export_price_missing", "Net metering is on but no export price is set; exported energy is valued at zero."))
         export_price = 0.0
     warnings.append(_w("financial_assumptions", "Financials assume a constant electricity price (no tariff escalation) and no financing cost."))
+    if p.price_from_bills:
+        warnings.append(_w("tariff_average_price", "Savings use the average bill price per kWh, which includes demand charge and VAT. Solar mainly cuts the energy charge, so real savings can be lower; enter the energy charge rate for a closer estimate."))
 
     capex = kwp * p.capex_bdt_per_kwp
     om = capex * om_frac

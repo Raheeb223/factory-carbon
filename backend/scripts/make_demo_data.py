@@ -19,6 +19,10 @@ from pathlib import Path
 START_YEAR, START_MONTH = 2023, 1
 N_MONTHS = 24
 ANOMALY_INDEXES = {9: 0.25, 19: 0.20}  # month index -> extra kWh fraction
+# A demo energy-saving action: compressed-air leaks fixed in month index 20 (2024-09),
+# after which electricity per unit produced is 8% lower. Lets the app show measured savings.
+ACTION_INDEX = 20
+ACTION_SAVING = 0.08
 
 
 @dataclass
@@ -42,6 +46,7 @@ class DemoData:
     production_unit_label: str = "pieces"
     anomaly_months: list[str] = field(default_factory=list)
     months: list[DemoMonth] = field(default_factory=list)
+    actions: list[dict[str, object]] = field(default_factory=list)
 
 
 def _month(i: int) -> str:
@@ -60,6 +65,8 @@ def make_demo_data(seed: int = 42) -> DemoData:
         if anomaly:
             kwh *= 1.0 + ANOMALY_INDEXES[i]
             data.anomaly_months.append(_month(i))
+        if i > ACTION_INDEX:
+            kwh *= 1.0 - ACTION_SAVING
         kwh = round(kwh)
         diesel = round(rng.uniform(1_500, 3_000))
         gas = round(rng.uniform(20_000, 30_000))
@@ -76,6 +83,10 @@ def make_demo_data(seed: int = 42) -> DemoData:
                 injected_anomaly=anomaly,
             )
         )
+    data.actions = [
+        {"code": "fix_air_leaks", "done_month": _month(ACTION_INDEX), "cost_bdt": 45_000},
+        {"code": "servo_motors", "done_month": None, "cost_bdt": None},
+    ]
     return data
 
 

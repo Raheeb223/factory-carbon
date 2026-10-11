@@ -48,21 +48,21 @@
   "factoryLocationLabel": "Location (city, district)",
   "factoryLatLabel": "Latitude (optional)",
   "factoryLonLabel": "Longitude (optional)",
-  "productionUnitLabel": "Production unit (e.g. pieces)",
+  "productionUnitLabel": "How do you count what you make?",
   "privacyTitle": "Your data and privacy",
-  "privacyBody": "• Your factory profile, bills, production and reports are stored only on this phone.\n• When you scan a bill, the cropped photo is sent to our server and to Google's Gemini API to read the values. Crop out names, addresses and consumer or meter numbers first.\n• Our server does not store your photos or data. Google handles uploads under its Gemini API terms: if the server uses Google's free tier, Google may use uploads to improve its products and people at Google may review them.\n• Carbon, waste, solar and PDF calculations send the needed numbers to our server; nothing is stored there.",
+  "privacyBody": "• Your factory profile, bills, production and reports are stored only on this phone.\n• When you scan a bill, the photo is sent to our server and to Google's Gemini API to read the values. Before sending, the phone hides printed names and addresses with black boxes; you check them and can cover more.\n• Our server does not store your photos or data. Google handles uploads under its Gemini API terms: if the server uses Google's free tier, Google may use uploads to improve its products and people at Google may review them.\n• Carbon, waste, solar and PDF calculations send the needed numbers to our server; nothing is stored there.",
   "privacyAcknowledge": "I have read and understand how my data is handled",
   "privacyMustAcknowledge": "Please confirm you have read the privacy notice.",
   "onboardingStart": "Start",
   "uploadNoticeTitle": "Before your first upload",
-  "uploadNoticeBody": "The photo will be sent to our server and to Google's Gemini API to read the bill. Before sending, you crop the bill and cover names, addresses, consumer and meter numbers with black boxes. Photos are not stored on our server. On Google's free tier, Google may use uploads to improve its products and people may review them.",
+  "uploadNoticeBody": "The photo will be sent to our server and to Google's Gemini API to read the bill. Before sending, the phone hides printed names and addresses with black boxes, and you can cover anything else. Photos are not stored on our server. On Google's free tier, Google may use uploads to improve its products and people may review them.",
   "uploadNoticeAccept": "I understand, continue",
   "homeLatestReport": "Latest carbon report",
   "homeNoReport": "No report yet. Add bills or import history, then open Reports.",
   "homeQuickActions": "Quick actions",
   "homeImportHistory": "Import history (CSV)",
   "homeProduction": "Production",
-  "homeWaste": "Electricity waste check",
+  "homeWaste": "Unusual electricity use",
   "homeCarbon": "Carbon report",
   "homeBillsCount": "{count, plural, =0{No bills saved} =1{1 bill saved} other{{count} bills saved}}",
   "@homeBillsCount": {
@@ -78,8 +78,8 @@
   "addBillGallery": "Choose from gallery",
   "addBillManual": "Enter manually (no image)",
   "addBillManualHint": "For diesel receipts, unmetered gas, or when a photo cannot be read.",
-  "cropTitle": "Crop the bill",
-  "cropReminder": "First trim the photo to the bill. In the next step you can cover any names, addresses, consumer or meter numbers that are inside it.",
+  "cropTitle": "Cut the edges? (optional)",
+  "cropReminder": "You do not need to cut out your name: names and addresses are hidden automatically in the next step. Cut only if the photo shows a lot of table or floor around the bill.",
   "preparingImage": "Preparing image…",
   "uploadProgress": "Uploading {percent}%",
   "@uploadProgress": {
@@ -160,7 +160,7 @@
   "productionTitle": "Production",
   "productionEmpty": "No production data yet.",
   "productionMonth": "Month",
-  "productionUnits": "Units produced ({unit})",
+  "productionUnits": "How many {unit} did you make?",
   "@productionUnits": {
     "placeholders": {
       "unit": {
@@ -294,7 +294,7 @@
       }
     }
   },
-  "tonnesCo2e": "{value} tCO2e",
+  "tonnesCo2e": "{value} t CO₂e",
   "@tonnesCo2e": {
     "placeholders": {
       "value": {
@@ -351,7 +351,7 @@
       }
     }
   },
-  "exportPdf": "Export PDF",
+  "exportPdf": "Draft report (PDF)",
   "exportCsv": "Export CSV",
   "exportRaw": "Export raw data (CSV)",
   "exportNeedsResult": "Update the report first.",
@@ -376,7 +376,7 @@
   "notePlaceholderFactors": "Unverified (PLACEHOLDER) emission factors are in use. Verify them before any real submission.",
   "noteIncompleteTotals": "Totals include months with missing sources or factors, so they understate the true footprint.",
   "noteNoData": "No confirmed bills or production data.",
-  "wasteTitle": "Electricity waste check",
+  "wasteTitle": "Unusual electricity use",
   "wasteAnalyze": "Check now",
   "wasteInsufficient": "Only {count} months of electricity data. At least {required} months are needed.",
   "@wasteInsufficient": {
@@ -395,7 +395,7 @@
   "wasteActual": "Actual",
   "wasteExpected": "Expected",
   "wasteBand": "Normal range (95%)",
-  "wasteFlagMessage": "{month} used about {pct}% more electricity than expected for the units produced; about {kwh} kWh{cost}. Check compressors, idle machines and generator changeover.",
+  "wasteFlagMessage": "Anomaly in {month}: about {pct}% more electricity than expected for the units produced; about {kwh} kWh{cost}. This is not proven waste: first check production, working hours and other causes.",
   "@wasteFlagMessage": {
     "placeholders": {
       "month": {
@@ -412,7 +412,7 @@
       }
     }
   },
-  "wasteFlagMessageMad": "{month} used about {pct}% more electricity than a typical month; about {kwh} kWh{cost}. Check compressors, idle machines and generator changeover.",
+  "wasteFlagMessageMad": "Anomaly in {month}: about {pct}% more electricity than a typical month; about {kwh} kWh{cost}. This is not proven waste: first check production, working hours and other causes.",
   "@wasteFlagMessageMad": {
     "placeholders": {
       "month": {
@@ -429,7 +429,7 @@
       }
     }
   },
-  "wasteCostPart": ", about Tk {amount}",
+  "wasteCostPart": ", estimated extra cost about Tk {amount}",
   "@wasteCostPart": {
     "placeholders": {
       "amount": {
@@ -511,7 +511,7 @@
   "solarPlanName": "Plan name",
   "solarPlanSaved": "Plan saved",
   "solarNotes": "Notes",
-  "solarDisclaimer": "Pre-feasibility estimate. Structural load, shading and electrical design need a professional assessment.",
+  "solarDisclaimer": "Estimate only. Real savings depend on the installed system, its cost, the tariff, shading and how much solar power the factory uses. Roof strength and electrical design need a professional check.",
   "valueYears": "{value} years",
   "@valueYears": {
     "placeholders": {
@@ -623,7 +623,7 @@
   "stepAddData": "Add a bill or import past months",
   "stepProduction": "Enter monthly production",
   "stepReport": "Create your carbon report",
-  "stepWaste": "Check for electricity waste",
+  "stepWaste": "Check for unusual electricity use",
   "homeStatMonths": "Months",
   "homeStatLatest": "Latest month",
   "homeTryDemo": "Just looking around? Load synthetic demo data to see every feature.",
@@ -695,8 +695,8 @@
   "tileBillsSub": "See and edit saved bills",
   "tileImportSub": "Add past months from a spreadsheet",
   "tileProductionSub": "Monthly output for intensity",
-  "tileCarbonSub": "Scope 1 + 2 report and PDF",
-  "tileWasteSub": "Find unusual electricity use",
+  "tileCarbonSub": "Draft Scope 1 + 2 report and PDF",
+  "tileWasteSub": "Months that used more than expected for the output",
   "tileSolarSub": "Rooftop solar estimate",
   "connOfflineTitle": "Not connected to the server",
   "connOfflineBody": "Bill reading, reports and solar need the server. Your saved data is safe on this phone.",
@@ -709,10 +709,10 @@
   "addBillTipsTitle": "Tips for a good photo",
   "addBillTip1": "Lay the bill flat in good light",
   "addBillTip2": "Fit the whole bill in the frame",
-  "addBillTip3": "Cover names, addresses and account numbers",
+  "addBillTip3": "Names and addresses are hidden automatically",
   "addBillOr": "or",
   "billsSubtitle": "All your energy bills in one place",
-  "reportsSubtitle": "Your carbon footprint and electricity waste",
+  "reportsSubtitle": "Carbon footprint, unusual use and your savings",
   "solarSubtitle": "Estimate rooftop solar for your factory",
   "settingsSubtitle": "Language, server, privacy and your data",
   "solarHowTitle": "How it works",
@@ -720,12 +720,12 @@
   "solarHow2": "Check the assumptions",
   "solarHow3": "See size, output and payback",
   "wasteAllGoodTitle": "All good",
-  "wasteAttentionTitle": "Needs attention",
+  "wasteAttentionTitle": "Unusual months found",
   "carbonScopeSplit": "Scope 1 (fuel) vs Scope 2 (electricity)",
   "reviewAiRead": "Read by AI",
   "reviewManualBadge": "Manual entry",
   "redactTitle": "Hide private details",
-  "redactHint": "Drag your finger over names, addresses, consumer and meter numbers. Each one is covered with a black box, and only the covered photo is sent.",
+  "redactHint": "Check the photo. To hide anything else (like the consumer or meter number), drag your finger over it. Tap a black box to remove it.",
   "redactKeepVisible": "Keep units, amounts and dates visible.",
   "redactNothing": "Nothing private on the photo? Just continue.",
   "redactSend": "Read this bill",
@@ -738,5 +738,280 @@
         "format": "decimalPattern"
       }
     }
-  }
+  },
+  "productionUnitHelp": "Just tap one. You write how many you made each month later, on the Production page.",
+  "unitPieces": "pieces",
+  "unitDozens": "dozens",
+  "unitKg": "kg",
+  "unitMeters": "meters",
+  "unitOther": "Other",
+  "unitOtherHint": "Type your unit, e.g. sets",
+  "cropYes": "Cut edges",
+  "cropSkip": "No, continue",
+  "redactScanning": "Looking for names and addresses…",
+  "redactAutoFound": "{count, plural, =1{✓ 1 name/address area hidden automatically} other{✓ {count} name/address areas hidden automatically}}",
+  "@redactAutoFound": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "redactAutoNone": "No printed names found. If you see a name, drag your finger over it.",
+  "co2Kg": "= {kg} kg of CO₂ gas",
+  "@co2Kg": {
+    "placeholders": {
+      "kg": {
+        "type": "String"
+      }
+    }
+  },
+  "co2Trees": "About {trees} trees would need a whole year to soak this up.",
+  "@co2Trees": {
+    "placeholders": {
+      "trees": {
+        "type": "String"
+      }
+    }
+  },
+  "co2WhatTitle": "What does this number mean?",
+  "co2WhatBody": "When your factory uses electricity, gas or diesel, carbon dioxide (CO₂) gas goes into the air. This gas makes the earth hotter. The number shows how much your factory caused.\n\n• t = tonne. 1 tonne = 1,000 kg.\n• CO₂e means \"CO₂ equivalent\": other warming gases are counted as the same amount of CO₂.\n• Scope 2 = from the grid electricity you buy. Power plants burn gas and oil to make it.\n• Scope 1 = from fuel your factory burns itself: diesel generator, gas boiler.\n\nHow it is calculated: units on the bill × emission factor. Example: 1,000 kWh × 0.62 kg per kWh = 620 kg = 0.62 t CO₂e.\n\nForeign buyers ask for this number. Lower is better: saving electricity or using solar brings it down.",
+  "co2Explain": "What does this mean?",
+  "tutorialTitle": "How to use",
+  "tutorialListen": "Listen",
+  "tutorialStop": "Stop",
+  "tutorialNoVoice": "This phone cannot speak this language yet. Install the voice in Settings › Text-to-speech.",
+  "tutorialStep": "Step {n} of {total}",
+  "@tutorialStep": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "tut1Title": "Take a photo of the bill",
+  "tut1Body": "Tap the big + button, then the camera. Use your electricity, gas or diesel bill.",
+  "tut2Title": "Your name stays hidden",
+  "tut2Body": "Black boxes cover names and addresses by themselves. Then tap \"Read this bill\".",
+  "tut3Title": "Check the numbers",
+  "tut3Body": "The app reads the units and the taka. If they match your bill, tap Save.",
+  "tut4Title": "Write how much you made",
+  "tut4Body": "Every month, write how many pieces your factory made, on the Production page.",
+  "tut5Title": "Get your carbon report",
+  "tut5Body": "See how much pollution your factory makes, and send the PDF to your buyer.",
+  "tut6Title": "Save money",
+  "tut6Body": "A red warning means electricity was wasted that month. The sun page shows how much solar panels can save.",
+  "homeHowTo": "How to use",
+  "wastePerUnit": "Electricity per {unit}: {actual} kWh (expected {expected})",
+  "@wastePerUnit": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "actual": {
+        "type": "String"
+      },
+      "expected": {
+        "type": "String"
+      }
+    }
+  },
+  "wasteBaseline": "Normal months: {value} kWh per {unit}",
+  "@wasteBaseline": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "wasteChecksTitle": "What to check",
+  "wasteChecksIntro": "Go through these in order. Add the fix to your action plan; the app then measures the saving from your next bills.",
+  "paramShading": "Shading loss (fraction, e.g. 0.1 = 10%)",
+  "paramShadingHint": "Sunlight lost to water tanks, trees or nearby buildings. Empty = no shading.",
+  "paramRoofStructure": "Can the roof carry panels?",
+  "roofUnknown": "Not checked",
+  "roofOk": "Engineer: yes",
+  "roofNeedsWork": "Needs work",
+  "swShadingNotAssessed": "Shading was not entered, so no shading loss is assumed. Shade from tanks, trees or buildings lowers generation.",
+  "swStructureUnknown": "Roof strength is not checked yet. An engineer must confirm the roof can carry the panels.",
+  "swStructureNeedsWork": "The roof needs structural work first; add that cost to the investment.",
+  "swTariffAverage": "Savings use your average bill price per kWh, which includes demand charge and VAT. Solar mainly cuts the energy charge, so real savings can be lower. Enter the energy charge rate for a closer estimate.",
+  "tabCarbon": "Carbon",
+  "tabUnusual": "Unusual use",
+  "tabImpact": "Savings",
+  "impactTitle": "Actions and savings",
+  "tileImpactSub": "Your action plan and measured savings",
+  "impactIntro": "Pick an action below, do it, then mark it done. The app compares your electricity per unit before and after, from your own bills, so you see real savings, not guesses.",
+  "impactNothingDone": "When you finish an action, tap \"Mark as done\". Savings are measured from the next months' bills.",
+  "impactTooEarly": "Add the bills for the months after the action to see the result.",
+  "impactNoBaseline": "At least 3 months of bills before the action are needed to compare.",
+  "impactNeedProduction": "Add monthly production so savings are measured fairly (more output may need more electricity).",
+  "impactSince": "Measured savings since {month}",
+  "@impactSince": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "impactTkSaved": "Tk {amount} saved",
+  "@impactTkSaved": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "impactKwhSaved": "{kwh} kWh saved",
+  "@impactKwhSaved": {
+    "placeholders": {
+      "kwh": {
+        "type": "String"
+      }
+    }
+  },
+  "impactKwhLine": "{kwh} kWh less electricity",
+  "@impactKwhLine": {
+    "placeholders": {
+      "kwh": {
+        "type": "String"
+      }
+    }
+  },
+  "impactIntensityLine": "Electricity per unit produced: {pct}% compared with before",
+  "@impactIntensityLine": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "impactMeasuredMonths": "{count, plural, =1{Measured over 1 month} other{Measured over {count} months}}",
+  "@impactMeasuredMonths": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "impactEarly": "{count, plural, =1{Early result: 1 month so far} other{Early result: {count} months so far}}",
+  "@impactEarly": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "impactCo2NeedsReport": "Update the carbon report to see the CO₂ saved.",
+  "impactCaveat": "Production-adjusted, from your own bills. Weather, product mix or other changes can also play a part.",
+  "impactChartTitle": "Electricity per {unit} (kWh)",
+  "@impactChartTitle": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "impactBefore": "Before",
+  "impactAfter": "After",
+  "impactBaseline": "Average before",
+  "impactMethod": "Baseline = kWh per unit in up to 12 months before the first action. Saving each month = baseline × units produced − actual kWh. The action month is left out.",
+  "impactCommunityTitle": "Why it matters beyond the factory",
+  "impactCommunityBody": "Less electricity means power plants burn less gas and oil: cleaner air for the families around the factory and more power left on the grid for homes and hospitals. Money saved can go to wages and safer workplaces.",
+  "actionPlanTitle": "My action plan",
+  "actionPlanEmpty": "No actions yet. Add one from the suggestions below.",
+  "actionSuggestions": "Suggested actions",
+  "actionAddToPlan": "Add to plan",
+  "actionAddOwn": "Own action",
+  "actionAdded": "Added to your action plan",
+  "actionAlreadyInPlan": "Already in your action plan",
+  "actionPlanned": "Planned",
+  "actionDoneIn": "Done in {month}",
+  "@actionDoneIn": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "actionMarkDone": "Mark as done",
+  "actionUndoDone": "Mark as not done",
+  "actionRemove": "Remove",
+  "actionCostTitle": "What did it cost? (optional)",
+  "actionCostLabel": "Cost",
+  "actionCostHint": "Used to show when the action pays for itself.",
+  "actionSkip": "Skip",
+  "actionCustomTitle": "Your own action",
+  "actionCustomHint": "e.g. Repair the dyeing machine motor",
+  "actionResult": "Electricity per {unit}: {pct}% ({before} → {after} kWh)",
+  "@actionResult": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "pct": {
+        "type": "String"
+      },
+      "before": {
+        "type": "String"
+      },
+      "after": {
+        "type": "String"
+      }
+    }
+  },
+  "actionPayback": "Cost Tk {cost}: pays for itself in about {months} months",
+  "@actionPayback": {
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      },
+      "months": {
+        "type": "String"
+      }
+    }
+  },
+  "actFixAirLeaks": "Fix compressed-air leaks",
+  "actFixAirLeaksHow": "During a break, listen for hissing at hoses, couplings and air guns; tag and repair each leak.",
+  "actSwitchOffIdle": "Switch off idle machines, lights and fans",
+  "actSwitchOffIdleHow": "Give one person per floor the job of switching off at lunch, after the last shift and on holidays.",
+  "actLowerAirPressure": "Lower the compressor pressure",
+  "actLowerAirPressureHow": "Set the pressure to what the machines actually need; every extra bar costs electricity.",
+  "actSteamLeaks": "Fix steam leaks and insulate pipes",
+  "actSteamLeaksHow": "Repair leaks and failed steam traps, insulate hot pipes and valves, return condensate to the boiler.",
+  "actGeneratorHours": "Run the generator only in power cuts",
+  "actGeneratorHoursHow": "Switch back to the grid as soon as power returns; keep a log of generator hours.",
+  "actLedLighting": "Change to LED lights",
+  "actLedLightingHow": "Replace tube lights and bulbs with LED, starting with lights that are on the longest.",
+  "actServoMotors": "Fit servo motors on sewing machines",
+  "actServoMotorsHow": "Clutch motors run all the time; servo motors only run while sewing.",
+  "actPowerFactor": "Fix the power factor",
+  "actPowerFactorHow": "If the bill shows a power-factor penalty, have an electrician check or add a capacitor bank.",
+  "actRooftopSolar": "Install rooftop solar",
+  "actRooftopSolarHow": "Use the Solar page for an estimate, then get quotes and an engineer's roof check.",
+  "inspConfirmCause": "Rule out normal reasons first",
+  "inspConfirmCauseHow": "Compare with production records, overtime and extra shifts, new machines, and hot weather (fans, AC).",
+  "inspCompressedAir": "Compressors and air leaks",
+  "inspCompressedAirHow": "With machines stopped, listen for hissing at hoses and couplings. Check the compressor still loads and unloads, and is not set higher than needed.",
+  "inspIdleMachines": "Idle machines, lights and fans",
+  "inspIdleMachinesHow": "Walk the floor at lunch, after the last shift and on holidays. Note what is left on with nobody using it.",
+  "inspBoilerSteam": "Boiler and steam",
+  "inspBoilerSteamHow": "Look for steam leaks, failed steam traps and bare hot pipes; check condensate goes back to the boiler.",
+  "inspGenerator": "Generator use",
+  "inspGeneratorHow": "Check the generator log for hours run while grid power was available, and late changeover back to the grid.",
+  "factorGases": "Covers: {gases}",
+  "@factorGases": {
+    "placeholders": {
+      "gases": {
+        "type": "String"
+      }
+    }
+  },
+  "draftReportNote": "Draft emissions report. It lists every bill and how it was entered, the reporting period, factors and sources. Check its method and format with your buyer before sending it as official."
 }

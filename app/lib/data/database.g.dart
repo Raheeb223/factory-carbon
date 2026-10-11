@@ -3081,6 +3081,605 @@ class CachedResultsCompanion extends UpdateCompanion<CachedResultRow> {
   }
 }
 
+class $EnergyActionsTable extends EnergyActions
+    with TableInfo<$EnergyActionsTable, EnergyActionRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $EnergyActionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _deletedMeta = const VerificationMeta(
+    'deleted',
+  );
+  @override
+  late final GeneratedColumn<bool> deleted = GeneratedColumn<bool>(
+    'deleted',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("deleted" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _codeMeta = const VerificationMeta('code');
+  @override
+  late final GeneratedColumn<String> code = GeneratedColumn<String>(
+    'code',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _doneMonthMeta = const VerificationMeta(
+    'doneMonth',
+  );
+  @override
+  late final GeneratedColumn<String> doneMonth = GeneratedColumn<String>(
+    'done_month',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _costBdtMeta = const VerificationMeta(
+    'costBdt',
+  );
+  @override
+  late final GeneratedColumn<double> costBdt = GeneratedColumn<double>(
+    'cost_bdt',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _originMeta = const VerificationMeta('origin');
+  @override
+  late final GeneratedColumn<String> origin = GeneratedColumn<String>(
+    'origin',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    createdAt,
+    updatedAt,
+    deleted,
+    code,
+    title,
+    doneMonth,
+    costBdt,
+    note,
+    origin,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'energy_actions';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<EnergyActionRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('deleted')) {
+      context.handle(
+        _deletedMeta,
+        deleted.isAcceptableOrUnknown(data['deleted']!, _deletedMeta),
+      );
+    }
+    if (data.containsKey('code')) {
+      context.handle(
+        _codeMeta,
+        code.isAcceptableOrUnknown(data['code']!, _codeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_codeMeta);
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    }
+    if (data.containsKey('done_month')) {
+      context.handle(
+        _doneMonthMeta,
+        doneMonth.isAcceptableOrUnknown(data['done_month']!, _doneMonthMeta),
+      );
+    }
+    if (data.containsKey('cost_bdt')) {
+      context.handle(
+        _costBdtMeta,
+        costBdt.isAcceptableOrUnknown(data['cost_bdt']!, _costBdtMeta),
+      );
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    if (data.containsKey('origin')) {
+      context.handle(
+        _originMeta,
+        origin.isAcceptableOrUnknown(data['origin']!, _originMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_originMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  EnergyActionRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return EnergyActionRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      deleted: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}deleted'],
+      )!,
+      code: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}code'],
+      )!,
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      doneMonth: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}done_month'],
+      ),
+      costBdt: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}cost_bdt'],
+      ),
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      )!,
+      origin: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}origin'],
+      )!,
+    );
+  }
+
+  @override
+  $EnergyActionsTable createAlias(String alias) {
+    return $EnergyActionsTable(attachedDatabase, alias);
+  }
+}
+
+class EnergyActionRow extends DataClass implements Insertable<EnergyActionRow> {
+  final String id;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final bool deleted;
+  final String code;
+  final String title;
+  final String? doneMonth;
+  final double? costBdt;
+  final String note;
+  final String origin;
+  const EnergyActionRow({
+    required this.id,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.deleted,
+    required this.code,
+    required this.title,
+    this.doneMonth,
+    this.costBdt,
+    required this.note,
+    required this.origin,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    map['deleted'] = Variable<bool>(deleted);
+    map['code'] = Variable<String>(code);
+    map['title'] = Variable<String>(title);
+    if (!nullToAbsent || doneMonth != null) {
+      map['done_month'] = Variable<String>(doneMonth);
+    }
+    if (!nullToAbsent || costBdt != null) {
+      map['cost_bdt'] = Variable<double>(costBdt);
+    }
+    map['note'] = Variable<String>(note);
+    map['origin'] = Variable<String>(origin);
+    return map;
+  }
+
+  EnergyActionsCompanion toCompanion(bool nullToAbsent) {
+    return EnergyActionsCompanion(
+      id: Value(id),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      deleted: Value(deleted),
+      code: Value(code),
+      title: Value(title),
+      doneMonth: doneMonth == null && nullToAbsent
+          ? const Value.absent()
+          : Value(doneMonth),
+      costBdt: costBdt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(costBdt),
+      note: Value(note),
+      origin: Value(origin),
+    );
+  }
+
+  factory EnergyActionRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return EnergyActionRow(
+      id: serializer.fromJson<String>(json['id']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      deleted: serializer.fromJson<bool>(json['deleted']),
+      code: serializer.fromJson<String>(json['code']),
+      title: serializer.fromJson<String>(json['title']),
+      doneMonth: serializer.fromJson<String?>(json['doneMonth']),
+      costBdt: serializer.fromJson<double?>(json['costBdt']),
+      note: serializer.fromJson<String>(json['note']),
+      origin: serializer.fromJson<String>(json['origin']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'deleted': serializer.toJson<bool>(deleted),
+      'code': serializer.toJson<String>(code),
+      'title': serializer.toJson<String>(title),
+      'doneMonth': serializer.toJson<String?>(doneMonth),
+      'costBdt': serializer.toJson<double?>(costBdt),
+      'note': serializer.toJson<String>(note),
+      'origin': serializer.toJson<String>(origin),
+    };
+  }
+
+  EnergyActionRow copyWith({
+    String? id,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    bool? deleted,
+    String? code,
+    String? title,
+    Value<String?> doneMonth = const Value.absent(),
+    Value<double?> costBdt = const Value.absent(),
+    String? note,
+    String? origin,
+  }) => EnergyActionRow(
+    id: id ?? this.id,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    deleted: deleted ?? this.deleted,
+    code: code ?? this.code,
+    title: title ?? this.title,
+    doneMonth: doneMonth.present ? doneMonth.value : this.doneMonth,
+    costBdt: costBdt.present ? costBdt.value : this.costBdt,
+    note: note ?? this.note,
+    origin: origin ?? this.origin,
+  );
+  EnergyActionRow copyWithCompanion(EnergyActionsCompanion data) {
+    return EnergyActionRow(
+      id: data.id.present ? data.id.value : this.id,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deleted: data.deleted.present ? data.deleted.value : this.deleted,
+      code: data.code.present ? data.code.value : this.code,
+      title: data.title.present ? data.title.value : this.title,
+      doneMonth: data.doneMonth.present ? data.doneMonth.value : this.doneMonth,
+      costBdt: data.costBdt.present ? data.costBdt.value : this.costBdt,
+      note: data.note.present ? data.note.value : this.note,
+      origin: data.origin.present ? data.origin.value : this.origin,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('EnergyActionRow(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deleted: $deleted, ')
+          ..write('code: $code, ')
+          ..write('title: $title, ')
+          ..write('doneMonth: $doneMonth, ')
+          ..write('costBdt: $costBdt, ')
+          ..write('note: $note, ')
+          ..write('origin: $origin')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    createdAt,
+    updatedAt,
+    deleted,
+    code,
+    title,
+    doneMonth,
+    costBdt,
+    note,
+    origin,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is EnergyActionRow &&
+          other.id == this.id &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.deleted == this.deleted &&
+          other.code == this.code &&
+          other.title == this.title &&
+          other.doneMonth == this.doneMonth &&
+          other.costBdt == this.costBdt &&
+          other.note == this.note &&
+          other.origin == this.origin);
+}
+
+class EnergyActionsCompanion extends UpdateCompanion<EnergyActionRow> {
+  final Value<String> id;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<bool> deleted;
+  final Value<String> code;
+  final Value<String> title;
+  final Value<String?> doneMonth;
+  final Value<double?> costBdt;
+  final Value<String> note;
+  final Value<String> origin;
+  final Value<int> rowid;
+  const EnergyActionsCompanion({
+    this.id = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deleted = const Value.absent(),
+    this.code = const Value.absent(),
+    this.title = const Value.absent(),
+    this.doneMonth = const Value.absent(),
+    this.costBdt = const Value.absent(),
+    this.note = const Value.absent(),
+    this.origin = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  EnergyActionsCompanion.insert({
+    required String id,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    this.deleted = const Value.absent(),
+    required String code,
+    this.title = const Value.absent(),
+    this.doneMonth = const Value.absent(),
+    this.costBdt = const Value.absent(),
+    this.note = const Value.absent(),
+    required String origin,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt),
+       code = Value(code),
+       origin = Value(origin);
+  static Insertable<EnergyActionRow> custom({
+    Expression<String>? id,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+    Expression<bool>? deleted,
+    Expression<String>? code,
+    Expression<String>? title,
+    Expression<String>? doneMonth,
+    Expression<double>? costBdt,
+    Expression<String>? note,
+    Expression<String>? origin,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deleted != null) 'deleted': deleted,
+      if (code != null) 'code': code,
+      if (title != null) 'title': title,
+      if (doneMonth != null) 'done_month': doneMonth,
+      if (costBdt != null) 'cost_bdt': costBdt,
+      if (note != null) 'note': note,
+      if (origin != null) 'origin': origin,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  EnergyActionsCompanion copyWith({
+    Value<String>? id,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<bool>? deleted,
+    Value<String>? code,
+    Value<String>? title,
+    Value<String?>? doneMonth,
+    Value<double?>? costBdt,
+    Value<String>? note,
+    Value<String>? origin,
+    Value<int>? rowid,
+  }) {
+    return EnergyActionsCompanion(
+      id: id ?? this.id,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deleted: deleted ?? this.deleted,
+      code: code ?? this.code,
+      title: title ?? this.title,
+      doneMonth: doneMonth ?? this.doneMonth,
+      costBdt: costBdt ?? this.costBdt,
+      note: note ?? this.note,
+      origin: origin ?? this.origin,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (deleted.present) {
+      map['deleted'] = Variable<bool>(deleted.value);
+    }
+    if (code.present) {
+      map['code'] = Variable<String>(code.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (doneMonth.present) {
+      map['done_month'] = Variable<String>(doneMonth.value);
+    }
+    if (costBdt.present) {
+      map['cost_bdt'] = Variable<double>(costBdt.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (origin.present) {
+      map['origin'] = Variable<String>(origin.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('EnergyActionsCompanion(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deleted: $deleted, ')
+          ..write('code: $code, ')
+          ..write('title: $title, ')
+          ..write('doneMonth: $doneMonth, ')
+          ..write('costBdt: $costBdt, ')
+          ..write('note: $note, ')
+          ..write('origin: $origin, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -3092,6 +3691,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $ProductionEntriesTable(this);
   late final $SolarPlansTable solarPlans = $SolarPlansTable(this);
   late final $CachedResultsTable cachedResults = $CachedResultsTable(this);
+  late final $EnergyActionsTable energyActions = $EnergyActionsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3102,6 +3702,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     productionEntries,
     solarPlans,
     cachedResults,
+    energyActions,
   ];
 }
 
@@ -4646,6 +5247,310 @@ typedef $$CachedResultsTableProcessedTableManager =
       CachedResultRow,
       PrefetchHooks Function()
     >;
+typedef $$EnergyActionsTableCreateCompanionBuilder =
+    EnergyActionsCompanion Function({
+      required String id,
+      required DateTime createdAt,
+      required DateTime updatedAt,
+      Value<bool> deleted,
+      required String code,
+      Value<String> title,
+      Value<String?> doneMonth,
+      Value<double?> costBdt,
+      Value<String> note,
+      required String origin,
+      Value<int> rowid,
+    });
+typedef $$EnergyActionsTableUpdateCompanionBuilder =
+    EnergyActionsCompanion Function({
+      Value<String> id,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<bool> deleted,
+      Value<String> code,
+      Value<String> title,
+      Value<String?> doneMonth,
+      Value<double?> costBdt,
+      Value<String> note,
+      Value<String> origin,
+      Value<int> rowid,
+    });
+
+class $$EnergyActionsTableFilterComposer
+    extends Composer<_$AppDatabase, $EnergyActionsTable> {
+  $$EnergyActionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get deleted => $composableBuilder(
+    column: $table.deleted,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get code => $composableBuilder(
+    column: $table.code,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get doneMonth => $composableBuilder(
+    column: $table.doneMonth,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get costBdt => $composableBuilder(
+    column: $table.costBdt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get origin => $composableBuilder(
+    column: $table.origin,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$EnergyActionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $EnergyActionsTable> {
+  $$EnergyActionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get deleted => $composableBuilder(
+    column: $table.deleted,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get code => $composableBuilder(
+    column: $table.code,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get doneMonth => $composableBuilder(
+    column: $table.doneMonth,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get costBdt => $composableBuilder(
+    column: $table.costBdt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get origin => $composableBuilder(
+    column: $table.origin,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$EnergyActionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $EnergyActionsTable> {
+  $$EnergyActionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<bool> get deleted =>
+      $composableBuilder(column: $table.deleted, builder: (column) => column);
+
+  GeneratedColumn<String> get code =>
+      $composableBuilder(column: $table.code, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get doneMonth =>
+      $composableBuilder(column: $table.doneMonth, builder: (column) => column);
+
+  GeneratedColumn<double> get costBdt =>
+      $composableBuilder(column: $table.costBdt, builder: (column) => column);
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+
+  GeneratedColumn<String> get origin =>
+      $composableBuilder(column: $table.origin, builder: (column) => column);
+}
+
+class $$EnergyActionsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $EnergyActionsTable,
+          EnergyActionRow,
+          $$EnergyActionsTableFilterComposer,
+          $$EnergyActionsTableOrderingComposer,
+          $$EnergyActionsTableAnnotationComposer,
+          $$EnergyActionsTableCreateCompanionBuilder,
+          $$EnergyActionsTableUpdateCompanionBuilder,
+          (
+            EnergyActionRow,
+            BaseReferences<_$AppDatabase, $EnergyActionsTable, EnergyActionRow>,
+          ),
+          EnergyActionRow,
+          PrefetchHooks Function()
+        > {
+  $$EnergyActionsTableTableManager(_$AppDatabase db, $EnergyActionsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$EnergyActionsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$EnergyActionsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$EnergyActionsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<bool> deleted = const Value.absent(),
+                Value<String> code = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<String?> doneMonth = const Value.absent(),
+                Value<double?> costBdt = const Value.absent(),
+                Value<String> note = const Value.absent(),
+                Value<String> origin = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => EnergyActionsCompanion(
+                id: id,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deleted: deleted,
+                code: code,
+                title: title,
+                doneMonth: doneMonth,
+                costBdt: costBdt,
+                note: note,
+                origin: origin,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required DateTime createdAt,
+                required DateTime updatedAt,
+                Value<bool> deleted = const Value.absent(),
+                required String code,
+                Value<String> title = const Value.absent(),
+                Value<String?> doneMonth = const Value.absent(),
+                Value<double?> costBdt = const Value.absent(),
+                Value<String> note = const Value.absent(),
+                required String origin,
+                Value<int> rowid = const Value.absent(),
+              }) => EnergyActionsCompanion.insert(
+                id: id,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deleted: deleted,
+                code: code,
+                title: title,
+                doneMonth: doneMonth,
+                costBdt: costBdt,
+                note: note,
+                origin: origin,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$EnergyActionsTable, EnergyActionRow>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $EnergyActionsTable,
+                    EnergyActionRow
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$EnergyActionsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $EnergyActionsTable,
+      EnergyActionRow,
+      $$EnergyActionsTableFilterComposer,
+      $$EnergyActionsTableOrderingComposer,
+      $$EnergyActionsTableAnnotationComposer,
+      $$EnergyActionsTableCreateCompanionBuilder,
+      $$EnergyActionsTableUpdateCompanionBuilder,
+      (
+        EnergyActionRow,
+        BaseReferences<_$AppDatabase, $EnergyActionsTable, EnergyActionRow>,
+      ),
+      EnergyActionRow,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -4660,4 +5565,6 @@ class $AppDatabaseManager {
       $$SolarPlansTableTableManager(_db, _db.solarPlans);
   $$CachedResultsTableTableManager get cachedResults =>
       $$CachedResultsTableTableManager(_db, _db.cachedResults);
+  $$EnergyActionsTableTableManager get energyActions =>
+      $$EnergyActionsTableTableManager(_db, _db.energyActions);
 }

@@ -6,15 +6,21 @@ import 'package:flutter/material.dart';
 
 import '../../core/l10n/gen/app_localizations.dart';
 import '../../domain/image_prep.dart';
+import '../../domain/private_text.dart';
 import '../../widgets/common.dart';
 import '../../widgets/ui.dart';
+import 'text_finder.dart';
 
-/// Lets the user black out names, addresses and account/meter numbers that cannot be
-/// cropped away because they sit between the values we need. The boxes are burned
+/// Covers names and addresses before the photo is sent. Text on the photo is read on
+/// the phone ([finder]) and name/address lines get black boxes automatically; the user
+/// checks them, taps a box to remove it, or drags to cover more. The boxes are burned
 /// into the pixels on the phone; only the covered photo is returned (and sent).
 class RedactScreen extends StatefulWidget {
-  const RedactScreen({super.key, required this.imageBytes, this.redactor});
+  const RedactScreen({super.key, required this.imageBytes, this.redactor, this.finder});
   final Uint8List imageBytes;
+
+  /// Finds names/addresses automatically (none when null).
+  final TextFinder? finder;
 
   /// Test hook: burns the boxes in (defaults to a background isolate).
   final Future<Uint8List> Function(Uint8List bytes, List<RedactBox> boxes)? redactor;
@@ -29,6 +35,10 @@ class _RedactScreenState extends State<RedactScreen> {
   Offset? _start;
   Offset? _current;
   bool _busy = false;
+  bool _scanning = false;
+
+  /// Boxes added automatically (null until the scan finished or when there is no finder).
+  int? _autoCount;
 
   @override
   void initState() {
@@ -39,8 +49,35 @@ class _RedactScreenState extends State<RedactScreen> {
   Future<void> _readSize() async {
     final ui.Image image = await decodeImageFromList(widget.imageBytes);
     if (!mounted) return;
-    setState(() => _imageSize = Size(image.width.toDouble(), image.height.toDouble()));
+    final width = image.width;
+    final height = image.height;
+    setState(() {
+      _imageSize = Size(width.toDouble(), height.toDouble());
+      _scanning = widget.finder != null;
+    });
     image.dispose();
+    final finder = widget.finder;
+    if (finder == null) return;
+    var found = <RedactBox>[];
+    try {
+      found = privateBoxes(await finder.lines(widget.imageBytes, width: width, height: height));
+    } catch (e, st) {
+      debugPrint('Finding names failed: $e\n$st'); // the user can still cover them by hand
+    }
+    if (!mounted) return;
+    setState(() {
+      _scanning = false;
+      _autoCount = found.length;
+      _boxes.insertAll(0, found);
+    });
+  }
+
+  /// A tap on a black box removes it (e.g. one that hides a value we need).
+  void _tap(Offset at, Size size) {
+    final x = at.dx / size.width;
+    final y = at.dy / size.height;
+    final i = _boxes.lastIndexWhere((b) => x >= b.left && x <= b.right && y >= b.top && y <= b.bottom);
+    if (i >= 0) setState(() => _boxes.removeAt(i));
   }
 
   /// Normalised (0..1) box from two points inside a [size]-sized drawing area.
@@ -121,6 +158,19 @@ class _RedactScreenState extends State<RedactScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          if (_scanning)
+                            Row(children: [
+                              const SizedBox(width: 14, height: 14, child: CircularProgressIndicator(strokeWidth: 2)),
+                              const SizedBox(width: 8),
+                              Expanded(child: Text(l.redactScanning, style: t.bodySmall?.copyWith(fontWeight: FontWeight.w700))),
+                            ])
+                          else if (_autoCount != null)
+                            Text(
+                              key: const Key('redact-auto'),
+                              _autoCount! > 0 ? l.redactAutoFound(_autoCount!) : l.redactAutoNone,
+                              style: t.bodySmall?.copyWith(fontWeight: FontWeight.w700, color: _autoCount! > 0 ? const Color(0xFF16A34A) : null),
+                            ),
+                          if (_scanning || _autoCount != null) const SizedBox(height: 2),
                           Text(l.redactHint, style: t.bodySmall?.copyWith(height: 1.35)),
                           const SizedBox(height: 2),
                           Text(l.redactKeepVisible, style: t.bodySmall?.copyWith(fontWeight: FontWeight.w700)),
@@ -151,6 +201,7 @@ class _RedactScreenState extends State<RedactScreen> {
                                   onPanStart: _busy ? null : (d) => setState(() => _start = _current = d.localPosition),
                                   onPanUpdate: _busy ? null : (d) => setState(() => _current = d.localPosition),
                                   onPanEnd: _busy ? null : (_) => _finishDrag(area),
+                                  onTapUp: _busy ? null : (d) => _tap(d.localPosition, area),
                                   child: CustomPaint(
                                     foregroundPainter: _BoxesPainter(_boxes, live, scheme.primary),
                                     child: Image.memory(widget.imageBytes, fit: BoxFit.fill, gaplessPlayback: true),
@@ -184,7 +235,7 @@ class _RedactScreenState extends State<RedactScreen> {
                   FilledButton.icon(
                     key: const Key('redact-done'),
                     style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(54)),
-                    onPressed: _busy || size == null ? null : _done,
+                    onPressed: _busy || _scanning || size == null ? null : _done,
                     icon: _busy
                         ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                         : const Icon(Icons.document_scanner_rounded),

@@ -243,7 +243,7 @@ void main() {
     await tester.tap(find.byKey(const Key('waste-analyze')));
     await settle(tester);
     await _scrollTo(tester, find.byKey(const Key('waste-flag-2024-04')), delta: 200);
-    expect(find.textContaining('April 2024 used about 18% more electricity than expected for the units produced'), findsOneWidget);
+    expect(find.textContaining('Anomaly in April 2024: about 18% more electricity than expected for the units produced'), findsOneWidget);
     expect(find.textContaining('about Tk 189,000'), findsOneWidget);
     await teardownDb(tester, db);
   });

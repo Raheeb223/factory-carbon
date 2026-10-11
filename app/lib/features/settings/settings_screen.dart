@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../tutorial/tutorial_screen.dart';
 import '../../core/format.dart';
 import '../../core/l10n/gen/app_localizations.dart';
 import '../../core/theme.dart';
@@ -79,6 +80,15 @@ class SettingsScreen extends ConsumerWidget {
             child: ListView(padding: const EdgeInsets.fromLTRB(16, 0, 16, 32), children: [
               SectionHeader(l.settingsLanguage, padding: const EdgeInsets.fromLTRB(6, 18, 6, 8)),
               SoftCard(margin: EdgeInsets.zero, child: const LanguageSwitch(key: Key('language'))),
+              group(l.tutorialTitle, [
+                tile(
+                  key: const Key('settings-howto'),
+                  icon: Icons.school_rounded,
+                  color: FeatureColors.bills,
+                  title: l.homeHowTo,
+                  onTap: () => push(TutorialScreen(onDone: () => Navigator.of(context).pop())),
+                ),
+              ]),
               group(l.settingsFactory, [
                 tile(
                   icon: Icons.factory_rounded,

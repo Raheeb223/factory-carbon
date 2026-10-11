@@ -15,12 +15,15 @@ import 'package:factory_carbon/data/providers.dart';
 import 'package:factory_carbon/data/settings_store.dart';
 import 'package:factory_carbon/domain/models.dart';
 import 'package:factory_carbon/features/add_bill/redact_screen.dart';
+import 'package:factory_carbon/features/add_bill/text_finder.dart';
 import 'package:factory_carbon/features/add_bill/upload_screen.dart';
 import 'package:factory_carbon/features/carbon/carbon_screen.dart';
 import 'package:factory_carbon/features/export/export_service.dart';
 import 'package:factory_carbon/features/home/home_shell.dart';
+import 'package:factory_carbon/features/impact/impact_screen.dart';
 import 'package:factory_carbon/features/solar/solar_params_screen.dart';
 import 'package:factory_carbon/features/solar/solar_result_screen.dart';
+import 'package:factory_carbon/features/waste/waste_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -42,6 +45,8 @@ Uint8List syntheticBill() {
 
   line('DHAKA POWER DISTRIBUTION CO. (SAMPLE)', font: img.arial48, gap: 90);
   line('ELECTRICITY BILL - SYNTHETIC TEST DOCUMENT', gap: 80);
+  line('Consumer Name: MD. KARIM UDDIN', gap: 40);
+  line('Address: House 12, Road 5, Gazipur', gap: 70);
   line('Bill Month: May 2024');
   line('Billing Period: 01-05-2024 to 31-05-2024');
   line('Tariff: LT-E (Industrial)');
@@ -115,11 +120,15 @@ void main() {
     await shot(tester, '02_intro_2');
     await tester.tap(find.byKey(const Key('intro-next')));
     await shot(tester, '03_intro_3');
-    await tester.tap(find.byKey(const Key('intro-next')));
+    for (var i = 0; i < 4; i++) {
+      await tester.tap(find.byKey(const Key('intro-next')));
+      await pumpFor(tester, const Duration(milliseconds: 600));
+    }
 
     await pumpUntil(tester, find.byKey(const Key('factory-name')));
     await tester.enterText(find.byKey(const Key('factory-name')), 'Rahman Knit Ltd');
     await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tapVisible(tester, find.byKey(const Key('unit-dozens')));
     await shot(tester, '04_setup');
     await tapVisible(tester, find.byKey(const Key('privacy-ack')));
     await tapVisible(tester, find.byKey(const Key('onboarding-save')));
@@ -137,15 +146,18 @@ void main() {
     // Camera/crop are native screens; inject the prepared photo exactly where the flow hands it
     // over: to the "hide private details" step, then on to upload (as AddBillScreen does).
     final nav = Navigator.of(tester.element(find.byKey(const Key('add-camera'))));
-    final covered = nav.push<Uint8List>(MaterialPageRoute(builder: (_) => RedactScreen(imageBytes: syntheticBill())));
-    await pumpUntil(tester, find.byKey(const Key('redact-canvas')));
-    await pumpFor(tester, const Duration(seconds: 1));
+    final covered = nav.push<Uint8List>(MaterialPageRoute(builder: (_) => RedactScreen(imageBytes: syntheticBill(), finder: MlKitTextFinder())));
+    await pumpUntil(tester, find.byKey(const Key('redact-auto')));
+    // The phone's text reader found the consumer name/address and covered it by itself.
+    final auto = tester.widget<Text>(find.byKey(const Key('redact-auto'))).data!;
+    expect(auto, isNot(en.redactAutoNone), reason: 'name/address not found automatically');
     await shot(tester, '07a_redact');
-    // Cover the company header line (top ~3-8% of the bill), as a user would cover a name.
+    // Also cover the company header line (top ~3-8% of the bill) by hand.
+    final before = RegExp(r'\d+').firstMatch(auto)!.group(0)!;
     final canvas = tester.getRect(find.byKey(const Key('redact-canvas')));
     await tester.dragFrom(canvas.topLeft + Offset(canvas.width * 0.03, canvas.height * 0.025), Offset(canvas.width * 0.9, canvas.height * 0.06));
     await pumpFor(tester, const Duration(milliseconds: 500));
-    expect(find.text(en.redactAreas(1)), findsOneWidget);
+    expect(find.text(en.redactAreas(int.parse(before) + 1)), findsOneWidget);
     await shot(tester, '07b_redacted');
     await tester.tap(find.byKey(const Key('redact-done')));
     final bytes = await covered;
@@ -222,6 +234,13 @@ void main() {
     await tester.tap(find.byKey(const Key('carbon-refresh')));
     await pumpUntil(tester, find.text(en.carbonTotal), timeout: const Duration(seconds: 60));
     await shot(tester, '12_carbon');
+    // Plain-words explanation of the tCO2e number.
+    expect(find.byKey(const Key('co2-kg')), findsOneWidget);
+    await tester.tap(find.byKey(const Key('co2-explain')));
+    await pumpUntil(tester, find.byKey(const Key('co2-sheet')));
+    await shot(tester, '12b_co2_explained');
+    Navigator.of(tester.element(find.byKey(const Key('co2-sheet')))).pop();
+    await pumpFor(tester, const Duration(milliseconds: 800));
     final carbonList = find.descendant(of: find.byType(CarbonView), matching: find.byType(Scrollable)).first;
     await tester.scrollUntilVisible(find.byKey(const Key('export-pdf')), 300, scrollable: carbonList);
     await shot(tester, '13_carbon_scrolled');
@@ -232,13 +251,30 @@ void main() {
 
     // Waste check.
     await openTab(tester, en.navReports);
-    await tester.tap(find.descendant(of: find.byType(TabBar), matching: find.text(en.wasteTitle)));
+    await tester.tap(find.descendant(of: find.byType(TabBar), matching: find.text(en.tabUnusual)));
     await pumpFor(tester, const Duration(milliseconds: 800));
     await tester.tap(find.byKey(const Key('waste-analyze')));
     await pumpUntil(tester, find.byWidgetPredicate((w) => w is Text && (w.data == en.wasteAttentionTitle || w.data == en.wasteAllGoodTitle)),
         timeout: const Duration(seconds: 60));
     expect(find.text(en.wasteAttentionTitle), findsOneWidget, reason: 'demo data has injected anomalies');
     await shot(tester, '15_waste');
+    // Practical checks for the flagged months; one tap puts the fix on the action plan.
+    final wasteList = find.descendant(of: find.byType(WasteView), matching: find.byType(Scrollable)).first;
+    await tester.scrollUntilVisible(find.byKey(const Key('waste-plan-idle_machines')), 300, scrollable: wasteList);
+    await shot(tester, '15b_waste_checks');
+    await tapVisible(tester, find.byKey(const Key('waste-plan-idle_machines')));
+    await pumpFor(tester, const Duration(seconds: 1));
+
+    // Savings tab: the demo's air-leak fix (2024-09) is measured from later bills.
+    await tester.tap(find.descendant(of: find.byType(TabBar), matching: find.text(en.tabImpact)));
+    await pumpUntil(tester, find.byKey(const Key('impact-hero')));
+    await pumpFor(tester, const Duration(seconds: 1));
+    expect(find.textContaining(en.impactSince('').trim()), findsOneWidget, reason: 'demo action measured');
+    expect(find.byKey(const Key('action-switch_off_idle')), findsOneWidget, reason: 'added from the checklist');
+    await shot(tester, '15c_impact');
+    final impactList = find.descendant(of: find.byType(ImpactView), matching: find.byType(Scrollable)).first;
+    await tester.scrollUntilVisible(find.byKey(const Key('action-fix_air_leaks')), 300, scrollable: impactList);
+    await shot(tester, '15d_action_plan');
 
     // PDF report bytes from the backend (the share sheet itself is a system screen).
     final container = ProviderScope.containerOf(tester.element(find.byType(HomeShell)));

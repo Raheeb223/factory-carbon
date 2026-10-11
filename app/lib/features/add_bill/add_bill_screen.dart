@@ -12,6 +12,7 @@ import '../../widgets/ui.dart';
 import 'image_service.dart';
 import 'redact_screen.dart';
 import 'review_screen.dart';
+import 'text_finder.dart';
 import 'upload_screen.dart';
 
 /// Step 1 of spec 8.2: capture or pick an image (or go manual), then crop.
@@ -52,35 +53,38 @@ class _AddBillScreenState extends ConsumerState<AddBillScreen> {
     final picked = await images.pick(camera: camera);
     if (picked == null || !mounted) return;
 
-    // Reminder before the native crop UI, which cannot show long text.
-    final proceed = await showDialog<bool>(
+    // Cropping is optional: names are hidden automatically in the next step.
+    final wantsCrop = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         icon: const Icon(Icons.crop),
         title: Text(l.cropTitle),
         content: Text(l.cropReminder),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l.actionCancel)),
-          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: Text(l.actionContinue)),
+          TextButton(key: const Key('crop-yes'), onPressed: () => Navigator.pop(ctx, true), child: Text(l.cropYes)),
+          FilledButton(key: const Key('crop-skip'), onPressed: () => Navigator.pop(ctx, false), child: Text(l.cropSkip)),
         ],
       ),
     );
-    if (proceed != true || !mounted) {
-      await images.deleteTemp([picked]);
+    if (wantsCrop == null || !mounted) {
+      await images.deleteTemp([picked]); // dialog dismissed: nothing is uploaded
       return;
     }
-    final cropped = await images.crop(picked, title: l.cropTitle, toolbarColor: Theme.of(context).colorScheme.primary);
-    if (cropped == null || !mounted) {
-      await images.deleteTemp([picked]); // crop cancelled: nothing is uploaded
-      return;
+    String? cropped;
+    if (wantsCrop) {
+      cropped = await images.crop(picked, title: l.cropTitle, toolbarColor: Theme.of(context).colorScheme.primary);
+      if (cropped == null || !mounted) {
+        await images.deleteTemp([picked]); // crop cancelled: nothing is uploaded
+        return;
+      }
     }
     setState(() => _busy = true);
     try {
-      final bytes = await images.loadPreparedAndDeleteTemp([picked, cropped]);
+      final bytes = await images.loadPreparedAndDeleteTemp([picked, ?cropped]);
       if (!mounted) return;
       setState(() => _busy = false);
-      // Cover details that cropping cannot remove (they sit between the values we need).
-      final covered = await Navigator.of(context).push<Uint8List>(MaterialPageRoute(builder: (_) => RedactScreen(imageBytes: bytes)));
+      // Names/addresses are covered automatically there; the user checks and can cover more.
+      final covered = await Navigator.of(context).push<Uint8List>(MaterialPageRoute(builder: (_) => RedactScreen(imageBytes: bytes, finder: ref.read(textFinderProvider))));
       if (covered == null || !mounted) return; // backed out: nothing is uploaded
       await Navigator.of(context).pushReplacement(MaterialPageRoute<void>(builder: (_) => UploadScreen(imageBytes: covered)));
     } catch (e) {

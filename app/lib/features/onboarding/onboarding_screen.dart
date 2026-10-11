@@ -4,13 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/format.dart';
 import '../../core/l10n/gen/app_localizations.dart';
-import '../../core/theme.dart';
 import '../../data/drift_repositories.dart';
 import '../../data/providers.dart';
 import '../../domain/models.dart';
 import '../../widgets/inputs.dart';
 import '../../widgets/language_switch.dart';
 import '../../widgets/ui.dart';
+import '../tutorial/tutorial_screen.dart';
 
 /// First-run welcome slides, then the factory profile + privacy acknowledgement (spec 8.1).
 /// With [existing] it edits the profile (privacy already acknowledged).
@@ -28,7 +28,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   late final _location = TextEditingController(text: widget.existing?.location ?? '');
   late final _lat = TextEditingController(text: widget.existing?.lat?.toString() ?? '');
   late final _lon = TextEditingController(text: widget.existing?.lon?.toString() ?? '');
-  late final _unit = TextEditingController(text: widget.existing?.productionUnitLabel ?? 'pieces');
+  late String _unitChoice = _initialChoice(widget.existing?.productionUnitLabel);
+  late final _unit = TextEditingController(text: _unitChoice == 'other' ? widget.existing!.productionUnitLabel : '');
   late bool _ack = widget.existing != null;
   late bool _intro = widget.existing == null;
   bool _ackError = false;
@@ -40,6 +41,18 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       c.dispose();
     }
     super.dispose();
+  }
+
+  static String _initialChoice(String? stored) {
+    final s = stored?.trim().toLowerCase() ?? '';
+    if (s.isEmpty) return 'pieces';
+    return productionUnitChoices.contains(s) ? s : 'other';
+  }
+
+  String get _unitValue {
+    if (_unitChoice != 'other') return _unitChoice;
+    final typed = _unit.text.trim();
+    return typed.isEmpty ? 'pieces' : typed;
   }
 
   String? _coord(String? v, double limit, String message) {
@@ -64,7 +77,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             location: _location.text.trim(),
             lat: parseNumber(_lat.text),
             lon: parseNumber(_lon.text),
-            productionUnitLabel: _unit.text.trim().isEmpty ? 'pieces' : _unit.text.trim(),
+            productionUnitLabel: _unitValue,
             privacyAcknowledgedAt: existing?.privacyAcknowledgedAt ?? DateTime.now(),
           ),
         );
@@ -75,7 +88,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_intro) return _IntroSlides(onDone: () => setState(() => _intro = false));
+    if (_intro) return TutorialScreen(firstRun: true, onDone: () => setState(() => _intro = false));
     final l = AppLocalizations.of(context);
     final editing = widget.existing != null;
     final t = Theme.of(context).textTheme;
@@ -100,9 +113,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             decoration: InputDecoration(labelText: l.factoryLocationLabel, prefixIcon: const Icon(Icons.place_outlined)),
           ),
           const SizedBox(height: 14),
-          TextFormField(
-            controller: _unit,
-            decoration: InputDecoration(labelText: l.productionUnitLabel, prefixIcon: const Icon(Icons.inventory_2_outlined)),
+          _UnitPicker(
+            choice: _unitChoice,
+            other: _unit,
+            onChanged: (v) => setState(() => _unitChoice = v),
           ),
           const SizedBox(height: 14),
           TextFormField(
@@ -233,252 +247,66 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 }
 
-/// Language toggle styled for use on a gradient.
-
-class _Slide {
-  const _Slide(this.icon, this.orbit, this.title, this.body);
-  final IconData icon;
-  final List<(IconData, Color)> orbit;
-  final String title;
-  final String body;
-}
-
-class _IntroSlides extends StatefulWidget {
-  const _IntroSlides({required this.onDone});
-  final VoidCallback onDone;
-
-  @override
-  State<_IntroSlides> createState() => _IntroSlidesState();
-}
-
-class _IntroSlidesState extends State<_IntroSlides> {
-  final _page = PageController();
-  int _index = 0;
-
-  @override
-  void dispose() {
-    _page.dispose();
-    super.dispose();
-  }
+/// "How do you count what you make?": one tap on a chip instead of typing a unit.
+/// "Other" opens an empty box for a unit that is not listed.
+class _UnitPicker extends StatelessWidget {
+  const _UnitPicker({required this.choice, required this.other, required this.onChanged});
+  final String choice;
+  final TextEditingController other;
+  final ValueChanged<String> onChanged;
 
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final t = Theme.of(context).textTheme;
-    final slides = [
-      _Slide(
-        Icons.document_scanner_rounded,
-        const [
-          (Icons.bolt_rounded, FeatureColors.bills),
-          (Icons.local_fire_department_rounded, FeatureColors.waste),
-          (Icons.local_gas_station_rounded, FeatureColors.production),
-        ],
-        l.intro1Title,
-        l.intro1Body,
-      ),
-      _Slide(
-        Icons.eco_rounded,
-        const [
-          (Icons.picture_as_pdf_rounded, FeatureColors.waste),
-          (Icons.bar_chart_rounded, FeatureColors.bills),
-          (Icons.table_chart_rounded, FeatureColors.carbon),
-        ],
-        l.intro2Title,
-        l.intro2Body,
-      ),
-      _Slide(
-        Icons.solar_power_rounded,
-        const [
-          (Icons.trending_down_rounded, FeatureColors.carbon),
-          (Icons.wb_sunny_rounded, FeatureColors.solar),
-          (Icons.savings_rounded, FeatureColors.production),
-        ],
-        l.intro3Title,
-        l.intro3Body,
-      ),
+    final scheme = Theme.of(context).colorScheme;
+    String cap(String s) => s.isEmpty ? s : s[0].toUpperCase() + s.substring(1);
+    final options = [
+      for (final c in productionUnitChoices) (c, cap(unitLabel(l, c))),
+      ('other', l.unitOther),
     ];
-    final last = _index == slides.length - 1;
-
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light,
-      child: Scaffold(
-        body: Container(
-          decoration: const BoxDecoration(gradient: BrandGradients.primary),
-          child: SafeArea(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 8, 8, 0),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 36,
-                        height: 36,
-                        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(11)),
-                        child: const Icon(Icons.eco_rounded, color: Color(0xFF0F766E), size: 22),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Text(
-                          l.appTitle,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 16),
-                        ),
-                      ),
-                      const LanguagePill(),
-                      TextButton(
-                        key: const Key('intro-skip'),
-                        onPressed: widget.onDone,
-                        child: Text(l.introSkip, style: const TextStyle(color: Colors.white)),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: PageView.builder(
-                    controller: _page,
-                    itemCount: slides.length,
-                    onPageChanged: (i) => setState(() => _index = i),
-                    itemBuilder: (context, i) {
-                      final s = slides[i];
-                      return LayoutBuilder(
-                        builder: (context, c) {
-                          final art = (c.maxHeight * 0.48).clamp(160.0, 300.0);
-                          return SingleChildScrollView(
-                            padding: const EdgeInsets.symmetric(horizontal: 28),
-                            child: ConstrainedBox(
-                              constraints: BoxConstraints(minHeight: c.maxHeight),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  _Art(size: art, icon: s.icon, orbit: s.orbit),
-                                  const SizedBox(height: 28),
-                                  Text(
-                                    s.title,
-                                    textAlign: TextAlign.center,
-                                    style: t.headlineSmall?.copyWith(color: Colors.white, fontWeight: FontWeight.w800),
-                                  ),
-                                  const SizedBox(height: 12),
-                                  Text(
-                                    s.body,
-                                    textAlign: TextAlign.center,
-                                    style: t.bodyLarge?.copyWith(color: Colors.white.withValues(alpha: 0.9), height: 1.45),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      for (var i = 0; i < slides.length; i++)
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 250),
-                          margin: const EdgeInsets.symmetric(horizontal: 4),
-                          width: i == _index ? 26 : 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: i == _index ? 1 : 0.4),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 8, 24, 20),
-                  child: Column(
-                    children: [
-                      FilledButton(
-                        key: const Key('intro-next'),
-                        style: FilledButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: const Color(0xFF0F766E),
-                          minimumSize: const Size.fromHeight(56),
-                        ),
-                        onPressed: () => last ? widget.onDone() : _page.nextPage(duration: const Duration(milliseconds: 350), curve: Curves.easeOutCubic),
-                        child: Text(last ? l.introGetStarted : l.introNext),
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.lock_outline_rounded, size: 14, color: Colors.white.withValues(alpha: 0.8)),
-                          const SizedBox(width: 6),
-                          Text(l.introPrivacyNote, style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 12.5)),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(Icons.inventory_2_outlined, color: scheme.onSurfaceVariant),
+            const SizedBox(width: 12),
+            Expanded(child: Text(l.productionUnitLabel, style: t.titleSmall)),
+          ],
         ),
-      ),
-    );
-  }
-}
-
-/// Illustration: a big white disc with the main icon and three orbiting chips.
-class _Art extends StatelessWidget {
-  const _Art({required this.size, required this.icon, required this.orbit});
-  final double size;
-  final IconData icon;
-  final List<(IconData, Color)> orbit;
-
-  @override
-  Widget build(BuildContext context) {
-    final chip = size * 0.24;
-    Widget orbitChip((IconData, Color) o) => Container(
-      width: chip,
-      height: chip,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(chip * 0.3),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.15), blurRadius: 12, offset: const Offset(0, 6))],
-      ),
-      child: Icon(o.$1, color: o.$2, size: chip * 0.55),
-    );
-    return SizedBox(
-      width: size,
-      height: size,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Container(
-            width: size,
-            height: size,
-            decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white.withValues(alpha: 0.08)),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            for (final (value, label) in options)
+              ChoiceChip(
+                key: Key('unit-$value'),
+                label: Text(label),
+                selected: choice == value,
+                showCheckmark: true,
+                onSelected: (_) => onChanged(value),
+                labelStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+              ),
+          ],
+        ),
+        if (choice == 'other') ...[
+          const SizedBox(height: 10),
+          TextFormField(
+            key: const Key('unit-other-text'),
+            controller: other,
+            autofocus: true,
+            maxLength: 40,
+            decoration: InputDecoration(hintText: l.unitOtherHint, counterText: ''),
           ),
-          Container(
-            width: size * 0.78,
-            height: size * 0.78,
-            decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white.withValues(alpha: 0.12)),
-          ),
-          Container(
-            width: size * 0.54,
-            height: size * 0.54,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-              boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.18), blurRadius: 24, offset: const Offset(0, 10))],
-            ),
-            child: Icon(icon, size: size * 0.28, color: const Color(0xFF0F766E)),
-          ),
-          Positioned(left: size * 0.02, top: size * 0.16, child: orbitChip(orbit[0])),
-          Positioned(right: size * 0.0, top: size * 0.30, child: orbitChip(orbit[1])),
-          Positioned(left: size * 0.16, bottom: size * 0.02, child: orbitChip(orbit[2])),
         ],
-      ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(4, 8, 4, 0),
+          child: Text(l.productionUnitHelp, style: t.bodySmall?.copyWith(color: scheme.onSurfaceVariant)),
+        ),
+      ],
     );
   }
 }

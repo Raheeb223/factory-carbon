@@ -29,6 +29,7 @@ class _SolarParamsScreenState extends ConsumerState<SolarParamsScreen> {
     'usable_roof_fraction',
     'm2_per_kwp',
     'performance_ratio',
+    'shading_loss',
     'degradation_per_year',
     'capex_bdt_per_kwp',
     'om_fraction_of_capex_per_year',
@@ -39,6 +40,7 @@ class _SolarParamsScreenState extends ConsumerState<SolarParamsScreen> {
     for (final k in [..._keys, 'psh']) k: TextEditingController(text: _initial(k)),
   };
   bool? _netMetering;
+  String _structure = 'unknown';
   bool _busy = false;
   Object? _error;
 
@@ -53,6 +55,7 @@ class _SolarParamsScreenState extends ConsumerState<SolarParamsScreen> {
   void initState() {
     super.initState();
     _netMetering = (widget.plan?.params['params'] as Map<String, dynamic>?)?['net_metering'] as bool?;
+    _structure = (widget.plan?.params['params'] as Map<String, dynamic>?)?['roof_structure'] as String? ?? 'unknown';
   }
 
   @override
@@ -68,6 +71,7 @@ class _SolarParamsScreenState extends ConsumerState<SolarParamsScreen> {
       for (final k in _keys)
         if (parseNumber(_c[k]!.text) != null) k: parseNumber(_c[k]!.text),
       'net_metering': ?_netMetering,
+      'roof_structure': _structure,
     };
     return {
       'polygon': [for (final p in widget.polygon) p.toJson()],
@@ -103,6 +107,7 @@ class _SolarParamsScreenState extends ConsumerState<SolarParamsScreen> {
     final n = parseNumber(v);
     if (n == null) return l.invalidNumber;
     if (n < 0) return l.invalidNonNegative;
+    if (key == 'shading_loss' && n >= 0.9) return l.invalidFraction;
     if (const {'usable_roof_fraction', 'performance_ratio', 'degradation_per_year', 'om_fraction_of_capex_per_year'}.contains(key) && n > 1) {
       return l.invalidFraction;
     }
@@ -119,6 +124,7 @@ class _SolarParamsScreenState extends ConsumerState<SolarParamsScreen> {
       'usable_roof_fraction': l.paramUsableRoof,
       'm2_per_kwp': l.paramM2PerKwp,
       'performance_ratio': l.paramPerformanceRatio,
+      'shading_loss': l.paramShading,
       'degradation_per_year': l.paramDegradation,
       'capex_bdt_per_kwp': l.paramCapex,
       'om_fraction_of_capex_per_year': l.paramOm,
@@ -146,6 +152,8 @@ class _SolarParamsScreenState extends ConsumerState<SolarParamsScreen> {
                   labelText: labels[k],
                   helperText: k == 'electricity_price_bdt_per_kwh'
                       ? l.paramPriceHint
+                      : k == 'shading_loss'
+                      ? l.paramShadingHint
                       : (d?.param(k)?.number == null ? null : l.paramDefault(fmt.number(d!.param(k)!.number, decimals: d.param(k)!.number! < 1 ? 3 : 0))),
                   suffixIcon: d?.param(k)?.isPlaceholder == true && d?.param(k)?.number != null
                       ? const Padding(padding: EdgeInsets.all(8), child: UnverifiedBadge())
@@ -159,6 +167,20 @@ class _SolarParamsScreenState extends ConsumerState<SolarParamsScreen> {
             inputFormatters: numberInput,
             validator: (v) => _validate('psh', v, l),
             decoration: InputDecoration(labelText: l.paramPsh, helperText: l.paramPshHint),
+          ),
+          const SizedBox(height: 14),
+          Text(l.paramRoofStructure, style: Theme.of(context).textTheme.titleSmall),
+          const SizedBox(height: 8),
+          SegmentedButton<String>(
+            key: const Key('roof-structure'),
+            showSelectedIcon: false,
+            segments: [
+              ButtonSegment(value: 'unknown', label: Text(l.roofUnknown)),
+              ButtonSegment(value: 'ok', label: Text(l.roofOk)),
+              ButtonSegment(value: 'needs_work', label: Text(l.roofNeedsWork)),
+            ],
+            selected: {_structure},
+            onSelectionChanged: (s) => setState(() => _structure = s.first),
           ),
           SwitchListTile(
             title: Text(l.paramNetMetering),

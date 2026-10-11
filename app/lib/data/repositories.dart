@@ -29,6 +29,14 @@ abstract interface class ProductionRepository {
   Future<void> deleteByOrigin(DataOrigin origin);
 }
 
+abstract interface class ActionRepository {
+  Stream<List<EnergyAction>> watchAll();
+  Future<List<EnergyAction>> all();
+  Future<void> save(EnergyAction action);
+  Future<void> softDelete(String id);
+  Future<void> deleteByOrigin(DataOrigin origin);
+}
+
 abstract interface class SolarPlanRepository {
   Stream<List<SolarPlan>> watchAll();
   Future<void> save(SolarPlan plan);

@@ -75,6 +75,8 @@ class ConfigValue(BaseModel):
     year: int | None = None
     status: FactorStatus
     notes: str | None = None
+    # Which gases the factor covers, e.g. "CO2 only" or "CO2e (CO2 + CH4 + N2O)".
+    gases: str | None = None
 
     @property
     def is_set(self) -> bool:
@@ -98,6 +100,7 @@ class SolarDefaults(BaseModel):
     usable_roof_fraction: ConfigValue
     m2_per_kwp: ConfigValue
     performance_ratio: ConfigValue
+    shading_loss: ConfigValue
     degradation_per_year: ConfigValue
     capex_bdt_per_kwp: ConfigValue
     om_fraction_of_capex_per_year: ConfigValue
@@ -112,6 +115,7 @@ class SolarDefaults(BaseModel):
             "usable_roof_fraction": self.usable_roof_fraction,
             "m2_per_kwp": self.m2_per_kwp,
             "performance_ratio": self.performance_ratio,
+            "shading_loss": self.shading_loss,
             "degradation_per_year": self.degradation_per_year,
             "capex_bdt_per_kwp": self.capex_bdt_per_kwp,
             "om_fraction_of_capex_per_year": self.om_fraction_of_capex_per_year,

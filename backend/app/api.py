@@ -167,7 +167,7 @@ def solar_estimate(req: SolarEstimateRequest, svc: ServicesDep) -> SolarEstimate
 )
 def report_pdf(req: ReportPdfRequest, svc: ServicesDep) -> Response:
     carbon = calculate(req.carbon, svc.config.emission_factors)
-    pdf = build_pdf(req.factory, carbon, req.solar, synthetic=req.contains_synthetic_data)
+    pdf = build_pdf(req.factory, carbon, req.solar, synthetic=req.contains_synthetic_data, bills=req.carbon.bills)
     return Response(content=pdf, media_type="application/pdf", headers={"Content-Disposition": 'attachment; filename="ghg-report.pdf"'})
 
 

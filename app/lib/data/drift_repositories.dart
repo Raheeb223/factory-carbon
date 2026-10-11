@@ -178,6 +178,55 @@ class DriftProductionRepository implements ProductionRepository {
   Future<void> deleteByOrigin(DataOrigin origin) => (_db.delete(_db.productionEntries)..where((t) => t.origin.equals(origin.wire))).go();
 }
 
+class DriftActionRepository implements ActionRepository {
+  DriftActionRepository(this._db);
+  final AppDatabase _db;
+
+  EnergyAction _map(EnergyActionRow r) => EnergyAction(
+        id: r.id,
+        code: r.code,
+        title: r.title,
+        doneMonth: r.doneMonth,
+        costBdt: r.costBdt,
+        note: r.note,
+        origin: DataOrigin.parse(r.origin),
+        updatedAt: r.updatedAt,
+      );
+
+  SimpleSelectStatement<$EnergyActionsTable, EnergyActionRow> get _active =>
+      _db.select(_db.energyActions)..where((t) => t.deleted.equals(false))..orderBy([(t) => OrderingTerm.asc(t.createdAt)]);
+
+  @override
+  Stream<List<EnergyAction>> watchAll() => _active.watch().map((rows) => rows.map(_map).toList());
+
+  @override
+  Future<List<EnergyAction>> all() async => (await _active.get()).map(_map).toList();
+
+  @override
+  Future<void> save(EnergyAction a) async {
+    final now = DateTime.now();
+    final existing = await (_db.select(_db.energyActions)..where((t) => t.id.equals(a.id))).getSingleOrNull();
+    await _db.into(_db.energyActions).insertOnConflictUpdate(EnergyActionsCompanion.insert(
+          id: a.id,
+          createdAt: existing?.createdAt ?? now,
+          updatedAt: now,
+          code: a.code,
+          title: Value(a.title),
+          doneMonth: Value(a.doneMonth),
+          costBdt: Value(a.costBdt),
+          note: Value(a.note),
+          origin: a.origin.wire,
+        ));
+  }
+
+  @override
+  Future<void> softDelete(String id) => (_db.update(_db.energyActions)..where((t) => t.id.equals(id)))
+      .write(EnergyActionsCompanion(deleted: const Value(true), updatedAt: Value(DateTime.now())));
+
+  @override
+  Future<void> deleteByOrigin(DataOrigin origin) => (_db.delete(_db.energyActions)..where((t) => t.origin.equals(origin.wire))).go();
+}
+
 class DriftSolarPlanRepository implements SolarPlanRepository {
   DriftSolarPlanRepository(this._db);
   final AppDatabase _db;

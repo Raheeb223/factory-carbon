@@ -72,3 +72,21 @@ def test_pdf_handles_empty_data() -> None:
     r = c.post("/v1/report/pdf", headers=AUTH, json={"factory": {"name": "X"}, "carbon": {"bills": []}})
     assert r.status_code == 200
     assert r.content.startswith(b"%PDF")
+
+
+def test_pdf_is_a_traceable_draft() -> None:
+    bills = _bills()
+    bills[0] |= {"origin": "bill_image", "user_edited_fields": ["consumed_units"], "confirmed_at": "2026-10-11T08:00:00Z"}
+    bills[1] |= {"origin": "manual"}
+    c, _ = make_client()
+    r = c.post("/v1/report/pdf", headers=AUTH, json=_payload(carbon={"bills": bills, "production_unit_label": "pieces"}))
+    assert r.status_code == 200, r.text
+    text = " ".join(" ".join(_pages(r.content)).split())
+    assert "Draft Greenhouse Gas Emissions Report" in text
+    assert "not yet been validated against the buyer" in text
+    assert "Reporting period" in text and "Emission sources included" in text
+    assert "direct emissions" in text and "purchased grid electricity" in text
+    assert "CO2 only" in text and "CO2e (CO2 + CH4 + N2O" in text  # gases per factor
+    assert "Source data (audit trail)" in text
+    assert "manager corrected: consumed units" in text and "Typed in by manager" in text
+    assert "2026-10-11" in text

@@ -242,8 +242,8 @@
     {
       "month": "2024-10",
       "production_units": 457000.0,
-      "electricity_kwh": 168356,
-      "electricity_cost_bdt": 1767738.0,
+      "electricity_kwh": 154888,
+      "electricity_cost_bdt": 1626324.0,
       "diesel_litres": 2996,
       "diesel_cost_bdt": 317576.0,
       "gas_m3": 25095,
@@ -253,8 +253,8 @@
     {
       "month": "2024-11",
       "production_units": 462400.0,
-      "electricity_kwh": 168268,
-      "electricity_cost_bdt": 1766814.0,
+      "electricity_kwh": 154807,
+      "electricity_cost_bdt": 1625473.5,
       "diesel_litres": 1664,
       "diesel_cost_bdt": 176384.0,
       "gas_m3": 26274,
@@ -264,13 +264,25 @@
     {
       "month": "2024-12",
       "production_units": 496500.0,
-      "electricity_kwh": 183021,
-      "electricity_cost_bdt": 1921720.5,
+      "electricity_kwh": 168380,
+      "electricity_cost_bdt": 1767990.0,
       "diesel_litres": 1595,
       "diesel_cost_bdt": 169070.0,
       "gas_m3": 23816,
       "gas_cost_bdt": 714480.0,
       "injected_anomaly": false
+    }
+  ],
+  "actions": [
+    {
+      "code": "fix_air_leaks",
+      "done_month": "2024-09",
+      "cost_bdt": 45000
+    },
+    {
+      "code": "servo_motors",
+      "done_month": null,
+      "cost_bdt": null
     }
   ]
 }

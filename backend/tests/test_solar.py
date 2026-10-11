@@ -195,3 +195,27 @@ def test_defaults_endpoint() -> None:
     assert names["m2_per_kwp"]["value"] == 7
     assert names["performance_ratio"]["value"] == 0.78
     assert body["net_metering"] is False
+
+
+def test_spec_example_avoided_co2_81_5_t() -> None:
+    # 100 kWp x 4.5 h x 365 d x 0.8 = 131,400 kWh; x 0.62 kg/kWh = 81.5 t, when all of it
+    # displaces grid electricity (consumption above generation every month).
+    cons = [ConsumptionMonth(month=f"2024-{m:02d}", kwh=50_000) for m in range(1, 13)]
+    r = run(1000, 4.5, SolarParamOverrides(usable_roof_fraction=0.7, m2_per_kwp=7, performance_ratio=0.8), cons)
+    assert r.co2_avoided_t_per_year == pytest.approx(81.47, abs=0.01)
+
+
+def test_shading_structure_and_tariff_caveats() -> None:
+    base = SolarParamOverrides(usable_roof_fraction=0.7, m2_per_kwp=7, performance_ratio=0.8)
+    plain = run(1000, 4.5, base)
+    codes = {w.code for w in plain.warnings}
+    assert {"shading_not_assessed", "structure_unknown"} <= codes
+    shaded = run(1000, 4.5, base.model_copy(update={"shading_loss": 0.1, "roof_structure": "ok"}))
+    assert shaded.annual_generation_kwh == pytest.approx(plain.annual_generation_kwh * 0.9, rel=1e-6)
+    assert not {"shading_not_assessed", "structure_unknown", "structure_needs_work"} & {w.code for w in shaded.warnings}
+    weak = run(1000, 4.5, base.model_copy(update={"roof_structure": "needs_work"}))
+    assert "structure_needs_work" in {w.code for w in weak.warnings}
+    cons = [ConsumptionMonth(month=f"2024-{m:02d}", kwh=50_000, cost_bdt=500_000) for m in range(1, 13)]
+    priced = run(1000, 4.5, base.model_copy(update={"capex_bdt_per_kwp": 50_000}), cons)
+    assert "tariff_average_price" in {w.code for w in priced.warnings}
+    assert "Estimate only" in priced.disclaimer

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import '../../core/l10n/gen/app_localizations.dart';
 import '../../widgets/common.dart';
 import '../../widgets/ui.dart';
+import '../impact/impact_screen.dart';
 import '../waste/waste_screen.dart';
 import 'carbon_screen.dart';
 
@@ -16,15 +17,15 @@ class ReportsScreen extends StatelessWidget {
     final primary = Theme.of(context).colorScheme.primary;
     Widget tab(IconData icon, String text) => Tab(
           child: Row(mainAxisSize: MainAxisSize.min, children: [
-            Icon(icon, size: 18),
-            const SizedBox(width: 6),
+            Icon(icon, size: 16),
+            const SizedBox(width: 4),
             Flexible(child: Text(text, overflow: TextOverflow.ellipsis)),
           ]),
         );
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: DefaultTabController(
-        length: 2,
+        length: 3,
         child: Scaffold(
           body: Column(children: [
             PageHero(
@@ -39,12 +40,13 @@ class ReportsScreen extends StatelessWidget {
                   indicator: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(11)),
                   labelColor: primary,
                   unselectedLabelColor: Colors.white,
-                  tabs: [tab(Icons.co2_rounded, l.carbonTitle), tab(Icons.bolt_rounded, l.wasteTitle)],
+                  labelPadding: const EdgeInsets.symmetric(horizontal: 4),
+                  tabs: [tab(Icons.co2_rounded, l.tabCarbon), tab(Icons.bolt_rounded, l.tabUnusual), tab(Icons.savings_rounded, l.tabImpact)],
                 ),
               ),
             ),
             const SyntheticBanner(),
-            const Expanded(child: TabBarView(children: [CarbonView(), WasteView()])),
+            const Expanded(child: TabBarView(children: [CarbonView(), WasteView(), ImpactView()])),
           ]),
         ),
       ),
