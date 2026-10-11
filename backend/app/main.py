@@ -13,6 +13,7 @@ from collections.abc import Awaitable, Callable
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse, Response
+from pydantic import ValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.api import Services, router
@@ -117,4 +118,12 @@ def create_app(services: Services | None = None) -> FastAPI:
 def create_default_app() -> FastAPI:
     """Entry point: `uvicorn --factory app.main:create_default_app`."""
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
+    try:
+        settings = get_settings()
+    except ValidationError as e:
+        # Name the bad env vars but never echo their values (they may be secrets).
+        bad = ", ".join(str(err["loc"][0]).upper() for err in e.errors() if err.get("loc"))
+        logger.error("Invalid environment variable(s): %s. Check their values in the host's settings.", bad)
+        raise SystemExit(1) from None
+    logger.info("Starting: gemini_configured=%s app_token_set=%s", settings.gemini_configured, bool(settings.app_token and settings.app_token.get_secret_value()))
     return create_app()
