@@ -15,7 +15,7 @@ services:
     healthCheckPath: /livez
     envVars:
       - key: APP_TOKEN
-        generateValue: true   # copy it from the dashboard into the app (Settings > Server connection)
+        sync: false           # same value as APP_TOKEN in app/env/prod.json
       - key: GEMINI_API_KEY
         sync: false           # you are asked for it when creating the Blueprint
       - key: GEMINI_MODEL
