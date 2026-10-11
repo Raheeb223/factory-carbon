@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/format.dart';
 import '../../core/l10n/gen/app_localizations.dart';
 import '../../core/theme.dart';
-import '../../data/providers.dart';
 import '../../domain/api_models.dart';
 import '../../widgets/common.dart';
 import '../../widgets/ui.dart';
@@ -99,7 +98,6 @@ class WasteView extends ConsumerWidget {
     final cached = ref.watch(wasteResultProvider);
     final analyze = ref.read(wasteControllerProvider.notifier).analyze;
     final r = cached?.result;
-    final unit = unitLabel(l, ref.watch(factoryProvider).value?.productionUnitLabel);
 
     return ListView(padding: const EdgeInsets.fromLTRB(16, 14, 16, 32), children: [
       Row(children: [
@@ -222,7 +220,7 @@ class WasteView extends ConsumerWidget {
                     if (m.kwhPerUnit != null && m.expectedKwhPerUnit != null) ...[
                       const SizedBox(height: 6),
                       Text(
-                        l.wastePerUnit(unit, fmt.number(m.kwhPerUnit, decimals: 3), fmt.number(m.expectedKwhPerUnit, decimals: 3)),
+                        l.wastePerUnit(fmt.number(m.kwhPerUnit, decimals: 3), fmt.number(m.expectedKwhPerUnit, decimals: 3)),
                         style: const TextStyle(fontWeight: FontWeight.w700),
                       ),
                     ],
@@ -233,7 +231,7 @@ class WasteView extends ConsumerWidget {
         if (r.baselineKwhPerUnit != null)
           Padding(
             padding: const EdgeInsets.fromLTRB(4, 4, 4, 0),
-            child: Text(l.wasteBaseline(fmt.number(r.baselineKwhPerUnit, decimals: 3), unit), style: tt.bodySmall),
+            child: Text(l.wasteBaseline(fmt.number(r.baselineKwhPerUnit, decimals: 3)), style: tt.bodySmall),
           ),
         if (r.inspections.isNotEmpty)
           SoftCard(

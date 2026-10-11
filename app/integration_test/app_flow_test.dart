@@ -270,11 +270,12 @@ void main() {
     await pumpUntil(tester, find.byKey(const Key('impact-hero')));
     await pumpFor(tester, const Duration(seconds: 1));
     expect(find.textContaining(en.impactSince('').trim()), findsOneWidget, reason: 'demo action measured');
-    expect(find.byKey(const Key('action-switch_off_idle')), findsOneWidget, reason: 'added from the checklist');
     await shot(tester, '15c_impact');
     final impactList = find.descendant(of: find.byType(ImpactView), matching: find.byType(Scrollable)).first;
     await tester.scrollUntilVisible(find.byKey(const Key('action-fix_air_leaks')), 300, scrollable: impactList);
     await shot(tester, '15d_action_plan');
+    // The fix added from the checklist is on the plan (lists build lazily: scroll to it).
+    await tester.scrollUntilVisible(find.byKey(const Key('action-switch_off_idle')), 300, scrollable: impactList);
 
     // PDF report bytes from the backend (the share sheet itself is a system screen).
     final container = ProviderScope.containerOf(tester.element(find.byType(HomeShell)));

@@ -1067,7 +1067,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get limitationsBody =>
-      '• শুধু ইউটিলিটি বিল থেকে স্কোপ ১ ও ২। স্কোপ ৩ নেই; হাতে না লিখলে কয়লা, বায়োমাস বা অন্য জ্বালানি অন্তর্ভুক্ত নয়।\n• বিল পড়ার নির্ভুলতা মাত্র কয়েকটি নমুনা বিলে মাপা হয়েছে। সবসময় মান যাচাই করুন।\n• অপচয় যাচাই উৎপাদনের বিপরীতে পরিসংখ্যানগত ব্যতিক্রম চিহ্নিত করে; কারণ শনাক্ত করতে পারে না।\n• সোলার ফলাফল শুধু প্রাক-সম্ভাব্যতা অনুমান।\n• নির্গমন ফ্যাক্টর প্রকাশিত সরকারি উৎস থেকে নেওয়া (উৎস ও সাল রিপোর্টে দেওয়া আছে); নতুন সংস্করণ প্রকাশ হলে হালনাগাদ করুন এবং ক্রেতার নিয়মের সাথে মিলিয়ে নিন।\n• অ্যাপ টোকেন দুর্বল সুরক্ষা, শুধু ডেমোর জন্য যথেষ্ট।';
+      '• শুধু ইউটিলিটি বিল থেকে স্কোপ ১ ও ২। স্কোপ ৩ নেই; হাতে না লিখলে কয়লা, বায়োমাস বা অন্য জ্বালানি নেই।\n• ক্রেতার চাহিদার সাথে পদ্ধতি ও ফরম্যাট মিলিয়ে না নেওয়া পর্যন্ত নির্গমন রিপোর্টটি খসড়া।\n• বিল পড়ার নির্ভুলতা মাত্র কয়েকটি নমুনা বিলে মাপা হয়েছে। সবসময় মান যাচাই করুন।\n• শুধু ইংরেজি অক্ষরে ছাপানো নাম নিজে থেকে ঢাকা হয়। হাতে লেখা বা বাংলা নাম নিজে ঢেকে দিন।\n• অস্বাভাবিক ব্যবহারের যাচাই উৎপাদনের তুলনায় পরিসংখ্যানগত ব্যতিক্রম দেখায়; কারণ বলতে পারে না এবং অপচয় প্রমাণ করে না।\n• মাপা সাশ্রয় কাজের আগে ও পরে পুরো কারখানার তুলনা; আবহাওয়া, পণ্যের ধরন বা অন্য পরিবর্তনেরও ভূমিকা থাকতে পারে।\n• সোলারের ফল শুধু অনুমান।\n• নির্গমন গুণক প্রকাশিত সরকারি উৎস থেকে নেওয়া (রিপোর্টে উৎস ও বছরসহ দেখানো)। নতুন সংস্করণ এলে হালনাগাদ করুন এবং ক্রেতার নিয়মের সাথে মিলিয়ে নিন।\n• অ্যাপ টোকেন দুর্বল সুরক্ষা, শুধু ডেমোর জন্য যথেষ্ট।';
 
   @override
   String get demoNeedsEmpty =>
@@ -1595,13 +1595,13 @@ class AppLocalizationsBn extends AppLocalizations {
   String get homeHowTo => 'কীভাবে ব্যবহার করবেন';
 
   @override
-  String wastePerUnit(String unit, String actual, String expected) {
-    return 'প্রতি $unit-এ বিদ্যুৎ: $actual kWh (প্রত্যাশিত $expected)';
+  String wastePerUnit(String actual, String expected) {
+    return 'প্রতি ইউনিট উৎপাদনে kWh: $actual (প্রত্যাশিত $expected)';
   }
 
   @override
-  String wasteBaseline(String value, String unit) {
-    return 'সাধারণ মাসে: প্রতি $unit-এ $value kWh';
+  String wasteBaseline(String value) {
+    return 'সাধারণ মাসে: প্রতি ইউনিট উৎপাদনে $value kWh';
   }
 
   @override
@@ -1734,9 +1734,7 @@ class AppLocalizationsBn extends AppLocalizations {
       'উৎপাদন অনুযায়ী সমন্বয় করা, আপনার নিজের বিল থেকে। আবহাওয়া, পণ্যের ধরন বা অন্য পরিবর্তনেরও ভূমিকা থাকতে পারে।';
 
   @override
-  String impactChartTitle(String unit) {
-    return 'প্রতি $unit-এ বিদ্যুৎ (kWh)';
-  }
+  String get impactChartTitle => 'প্রতি মাসে, প্রতি ইউনিট উৎপাদনে kWh';
 
   @override
   String get impactBefore => 'আগে';
@@ -1816,8 +1814,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get actionCustomHint => 'যেমন: ডাইং মেশিনের মোটর মেরামত';
 
   @override
-  String actionResult(String unit, String pct, String before, String after) {
-    return 'প্রতি $unit-এ বিদ্যুৎ: $pct% ($before → $after kWh)';
+  String actionResult(String pct, String before, String after) {
+    return 'প্রতি ইউনিট উৎপাদনে kWh: $pct% ($before → $after)';
   }
 
   @override
@@ -1931,4 +1929,9 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get draftReportNote =>
       'খসড়া নির্গমন রিপোর্ট। এতে প্রতিটি বিল ও তা কীভাবে লেখা হয়েছে, রিপোর্টের সময়কাল, গুণক ও উৎস আছে। আনুষ্ঠানিকভাবে পাঠানোর আগে ক্রেতার সাথে পদ্ধতি ও ফরম্যাট মিলিয়ে নিন।';
+
+  @override
+  String actionPaybackUnderMonth(String cost) {
+    return 'খরচ $cost টাকা: এক মাসের কম সময়ে উঠে এসেছে';
+  }
 }
