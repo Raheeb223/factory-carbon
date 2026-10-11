@@ -1,0 +1,23 @@
+# Sanity bands for server-side validation of extracted bills (spec 6.1).
+# These only produce WARNINGS shown on the review screen; they never block a bill.
+# They are deliberately wide plausibility checks, not tariffs or prices.
+
+notes: >-
+  Bands are wide sanity checks chosen by the developer, not official tariffs.
+  Adjust when real bills show legitimate values outside them.
+
+period_days:
+  min: 25
+  max: 35
+
+# Upper sanity ceiling for consumed units on one bill, per unit.
+units_ceiling:
+  kWh: 5000000
+  m3: 3000000
+  litre: 500000
+
+# Plausible BDT per unit, per bill type (warning if outside).
+bdt_per_unit:
+  electricity: {min: 2, max: 30}
+  gas: {min: 5, max: 150}
+  diesel: {min: 50, max: 250}

@@ -1,0 +1,58 @@
+# Emission factors used by the carbon calculator (spec 6.2).
+#
+# Every entry has: value, unit, source, year, status (verified | PLACEHOLDER).
+# "verified" here means: the value was checked against the primary published
+# document named in `source` (see `notes` for the date and exact reference).
+# Re-check when a newer edition is published, and confirm the buyer accepts it.
+
+grid_electricity:
+  value: 0.62
+  unit: kg_CO2e_per_kWh
+  source: >-
+    Department of Environment, Government of Bangladesh (Article 6 Designated National
+    Authority), letter "Grid Emission Factor (GEF) for Bangladesh", Ref.
+    22.02.0000.063.61.009.23-37, 23 January 2025: 0.62 tCO2/MWh for FY 2020-21 and
+    FY 2021-22 (0.61 for FY 2019-20). Methodology: Bangladesh First Biennial Update
+    Report to the UNFCCC (2023).
+  year: 2022
+  status: verified
+  notes: >-
+    Checked 2026-10-11 against the signed letter hosted by the Department of
+    Environment (objectstorage .../office-doe/2024/12/ea2411221c1f4ff49805bb7ac39c66fa.pdf).
+    0.62 tCO2/MWh = 0.62 kg/kWh. The official factor covers CO2 only (CH4 and N2O from
+    generation are not included; their share is small). It is the national grid factor
+    published for carbon-market use; use the same value for location-based Scope 2
+    unless a buyer prescribes another dataset. Replace when DoE publishes a newer year.
+
+diesel:
+  value: 2.66155
+  unit: kg_CO2e_per_litre
+  source: >-
+    UK Government (DESNZ) Greenhouse Gas Conversion Factors for Company Reporting 2025,
+    flat file v1, Scope 1 > Fuels > Liquid fuels > "Diesel (100% mineral diesel)",
+    litres, kg CO2e (CO2 2.62818 + CH4 0.00029 + N2O 0.03308; GWP100 from IPCC AR5).
+  year: 2025
+  status: verified
+  notes: >-
+    Checked 2026-10-11 against the official GOV.UK spreadsheet
+    (ghg-conversion-factors-2025-flat-format.xlsx, row ID 1_101_1012_8_1).
+    "100% mineral" is used because diesel sold in Bangladesh has no biodiesel blend.
+    Cross-check: an IPCC 2006 default derivation (74,100 kg CO2/TJ, NCV 43.0 TJ/Gg,
+    density 0.84 kg/L) gives 2.685 kg CO2e/L, within 1%.
+
+natural_gas:
+  value: 2.06672
+  unit: kg_CO2e_per_m3
+  source: >-
+    UK Government (DESNZ) Greenhouse Gas Conversion Factors for Company Reporting 2025,
+    flat file v1, Scope 1 > Fuels > Gaseous fuels > "Natural gas", cubic metres,
+    kg CO2e (CO2 2.0627 + CH4 0.00307 + N2O 0.00095; GWP100 from IPCC AR5).
+  year: 2025
+  status: verified
+  notes: >-
+    Checked 2026-10-11 against the official GOV.UK spreadsheet (row ID 1_100_1004_1_1).
+    The DESNZ factor reflects UK pipeline gas. Bangladesh gas is ~97% methane with a
+    reported gross calorific value around 1,030 BTU/scf (~38.4 MJ/m3), close to UK gas;
+    an IPCC-default derivation for Bangladesh gas gives ~1.91-1.94 kg CO2e/m3 (5-8% lower).
+    Switch to a Bangladesh-specific factor if Petrobangla/Titas publish an official
+    calorific value or a buyer requires it.

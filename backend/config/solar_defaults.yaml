@@ -1,0 +1,69 @@
+# Solar pre-feasibility defaults (spec 6.4). Every value can be overridden per request.
+# The four engineering rules of thumb were specified by the project owner in SPEC.md 6.4
+# and are therefore marked verified. Costs have no default: they must come from a quote.
+
+usable_roof_fraction:
+  value: 0.6
+  unit: fraction
+  source: "Specified by project owner, SPEC.md 6.4 (factory roofs have tanks, HVAC, skylights, shading; 0.7 is optimistic)"
+  year: null
+  status: verified
+
+m2_per_kwp:
+  value: 7
+  unit: m2_per_kWp
+  source: "Specified by project owner, SPEC.md 6.4 rule of thumb for crystalline modules incl. spacing"
+  year: null
+  status: verified
+
+performance_ratio:
+  value: 0.78
+  unit: fraction
+  source: "Specified by project owner, SPEC.md 6.4 rule of thumb (inverter, temperature, soiling, wiring losses)"
+  year: null
+  status: verified
+
+degradation_per_year:
+  value: 0.005
+  unit: fraction_per_year
+  source: "Specified by project owner, SPEC.md 6.4 rule of thumb"
+  year: null
+  status: verified
+
+capex_bdt_per_kwp:
+  value: null
+  unit: BDT_per_kWp
+  source: ""
+  year: null
+  status: PLACEHOLDER
+  notes: "No default. Financials are only produced when the caller provides capex."
+
+om_fraction_of_capex_per_year:
+  value: null
+  unit: fraction_of_capex_per_year
+  source: ""
+  year: null
+  status: PLACEHOLDER
+  notes: "No default. If not provided, O&M cost is excluded and a warning is returned."
+
+export_price_bdt_per_kwh:
+  value: null
+  unit: BDT_per_kWh
+  source: ""
+  year: null
+  status: PLACEHOLDER
+  notes: "Only used when net_metering is true. Unset means exported energy earns nothing."
+
+analysis_years:
+  value: 25
+  unit: years
+  source: "Project spec 6.4"
+  year: null
+  status: verified
+
+# If false, self-consumption is capped at the factory's actual monthly consumption.
+net_metering: false
+
+# Polygon sanity limits (m2). Smaller polygons are rejected as too small to assess.
+min_polygon_area_m2: 20
+max_polygon_area_m2: 500000

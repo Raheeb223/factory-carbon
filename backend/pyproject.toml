@@ -1,0 +1,23 @@
+[project]
+name = "factory-carbon-backend"
+version = "0.1.0"
+description = "Stateless FastAPI backend for the Factory Energy & Carbon app"
+requires-python = ">=3.11"
+# Runtime dependencies are pinned in requirements.txt (dev extras in requirements-dev.txt).
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = [
+    # Starlette's TestClient suggests httpx2; harmless for tests.
+    "ignore:Using `httpx` with `starlette.testclient` is deprecated:DeprecationWarning",
+]
+
+[tool.ruff]
+line-length = 140
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
