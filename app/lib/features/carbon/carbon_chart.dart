@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../core/format.dart';
 import '../../core/theme.dart';
 import '../../domain/api_models.dart';
+import '../waste/waste_chart.dart' show edgeLabel;
 
 /// Stacked monthly tCO2e by source. Months without data draw no bar (never zero).
 class CarbonMonthlyChart extends StatelessWidget {
@@ -18,6 +19,7 @@ class CarbonMonthlyChart extends StatelessWidget {
     return SizedBox(
       height: 220,
       child: BarChart(BarChartData(
+        minY: 0,
         maxY: maxY == 0 ? 1 : maxY * 1.15,
         alignment: BarChartAlignment.spaceAround,
         gridData: const FlGridData(drawVerticalLine: false),
@@ -34,7 +36,7 @@ class CarbonMonthlyChart extends StatelessWidget {
           topTitles: const AxisTitles(),
           rightTitles: const AxisTitles(),
           leftTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: true, reservedSize: 40, getTitlesWidget: (v, meta) => SideTitleWidget(meta: meta, child: Text(fmt.number(v, decimals: v < 10 ? 1 : 0), style: const TextStyle(fontSize: 10)))),
+            sideTitles: SideTitles(showTitles: true, reservedSize: 40, getTitlesWidget: (v, meta) => edgeLabel(v, meta) ? const SizedBox.shrink() : SideTitleWidget(meta: meta, child: Text(fmt.number(v, decimals: v < 10 ? 1 : 0), style: const TextStyle(fontSize: 10)))),
           ),
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(

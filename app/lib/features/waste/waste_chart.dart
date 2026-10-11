@@ -60,7 +60,7 @@ class WasteChart extends StatelessWidget {
           topTitles: const AxisTitles(),
           rightTitles: const AxisTitles(),
           leftTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: true, reservedSize: 44, getTitlesWidget: (v, meta) => SideTitleWidget(meta: meta, child: Text('${fmt.number(v / 1000)}k', style: const TextStyle(fontSize: 10)))),
+            sideTitles: SideTitles(showTitles: true, reservedSize: 44, getTitlesWidget: (v, meta) => edgeLabel(v, meta) ? const SizedBox.shrink() : SideTitleWidget(meta: meta, child: Text('${fmt.number(v / 1000)}k', style: const TextStyle(fontSize: 10)))),
           ),
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
@@ -78,4 +78,12 @@ class WasteChart extends StatelessWidget {
       )),
     );
   }
+}
+
+/// fl_chart always labels the axis min and max; hide them when they fall between
+/// regular ticks so they do not overlap a neighbouring label.
+bool edgeLabel(double v, TitleMeta meta) {
+  if (v != meta.min && v != meta.max) return false;
+  final step = meta.appliedInterval;
+  return step > 0 && (v / step - (v / step).round()).abs() > 1e-6;
 }

@@ -166,7 +166,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get uploadNoticeBody =>
-      'The cropped photo will be sent to our server and to Google\'s Gemini API to read the bill. Hide names, addresses, consumer and meter numbers in the crop step. Photos are not stored on our server. On Google\'s free tier, Google may use uploads to improve its products and people may review them.';
+      'The photo will be sent to our server and to Google\'s Gemini API to read the bill. Before sending, you crop the bill and cover names, addresses, consumer and meter numbers with black boxes. Photos are not stored on our server. On Google\'s free tier, Google may use uploads to improve its products and people may review them.';
 
   @override
   String get uploadNoticeAccept => 'I understand, continue';
@@ -195,10 +195,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String homeBillsCount(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count bills saved',
+      other: '$countString bills saved',
       one: '1 bill saved',
       zero: 'No bills saved',
     );
@@ -226,7 +230,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cropReminder =>
-      'Cut out names, addresses, consumer and meter numbers. Keep consumed units, amounts and dates.';
+      'First trim the photo to the bill. In the next step you can cover any names, addresses, consumer or meter numbers that are inside it.';
 
   @override
   String get preparingImage => 'Preparing image…';
@@ -439,10 +443,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String importRowsReady(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count months ready to import',
+      other: '$countString months ready to import',
       one: '1 month ready to import',
     );
     return '$_temp0';
@@ -459,10 +467,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String importDone(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count months imported',
+      other: '$countString months imported',
       one: '1 month imported',
     );
     return '$_temp0';
@@ -744,10 +756,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String wasteFlaggedCount(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count months flagged',
+      other: '$countString months flagged',
       one: '1 month flagged',
       zero: 'No months flagged',
     );
@@ -769,10 +785,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String solarPoints(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count corners',
+      other: '$countString corners',
       one: '1 corner',
     );
     return '$_temp0';
@@ -1127,7 +1147,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get stepWaste => 'Check for electricity waste';
 
   @override
-  String get homeStatMonths => 'Months with data';
+  String get homeStatMonths => 'Months';
 
   @override
   String get homeStatLatest => 'Latest month';
@@ -1156,7 +1176,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addBillScanHint =>
-      'Take or choose a photo. You will crop out personal details and check every value before saving.';
+      'Take or choose a photo. You will hide personal details and check every value before saving.';
 
   @override
   String get solarMyLocation => 'Go to factory location';
@@ -1251,4 +1271,203 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get swNoPayback =>
       'Yearly savings do not cover maintenance, so there is no payback.';
+
+  @override
+  String get introSkip => 'Skip';
+
+  @override
+  String get introNext => 'Next';
+
+  @override
+  String get introGetStarted => 'Get started';
+
+  @override
+  String get intro1Title => 'Snap a bill. We read it.';
+
+  @override
+  String get intro1Body =>
+      'Take a photo of your electricity, gas or diesel bill. AI reads the numbers, and you check them before anything is saved.';
+
+  @override
+  String get intro2Title => 'Carbon report in one tap';
+
+  @override
+  String get intro2Body =>
+      'Get the Scope 1 + 2 carbon report your buyers ask for, ready to share as PDF or spreadsheet.';
+
+  @override
+  String get intro3Title => 'Cut waste. Go solar.';
+
+  @override
+  String get intro3Body =>
+      'Spot months with unusually high electricity use, and estimate what rooftop solar could save you.';
+
+  @override
+  String get introPrivacyNote => 'Your data stays on this phone.';
+
+  @override
+  String get onboardingFormSubtitle =>
+      'A few details for your reports. You can change them later.';
+
+  @override
+  String get factoryCoordsHint =>
+      'Optional. Used to centre the solar map on your factory.';
+
+  @override
+  String get homeGreetingMorning => 'Good morning';
+
+  @override
+  String get homeGreetingAfternoon => 'Good afternoon';
+
+  @override
+  String get homeGreetingEvening => 'Good evening';
+
+  @override
+  String get homeFootprint => 'Carbon footprint';
+
+  @override
+  String get homeHeroEmpty =>
+      'Let\'s measure your factory\'s energy and carbon.';
+
+  @override
+  String get homeScanTitle => 'Scan a bill';
+
+  @override
+  String get homeScanSubtitle =>
+      'Take a photo of an electricity, gas or diesel bill. We read the numbers for you.';
+
+  @override
+  String get homeExplore => 'What would you like to do?';
+
+  @override
+  String get tileBillsSub => 'See and edit saved bills';
+
+  @override
+  String get tileImportSub => 'Add past months from a spreadsheet';
+
+  @override
+  String get tileProductionSub => 'Monthly output for intensity';
+
+  @override
+  String get tileCarbonSub => 'Scope 1 + 2 report and PDF';
+
+  @override
+  String get tileWasteSub => 'Find unusual electricity use';
+
+  @override
+  String get tileSolarSub => 'Rooftop solar estimate';
+
+  @override
+  String get connOfflineTitle => 'Not connected to the server';
+
+  @override
+  String get connOfflineBody =>
+      'Bill reading, reports and solar need the server. Your saved data is safe on this phone.';
+
+  @override
+  String get connOnline => 'Server connected';
+
+  @override
+  String get connChecking => 'Checking connection…';
+
+  @override
+  String get connReadingOn => 'Bill reading ready';
+
+  @override
+  String get uploadStepSend => 'Sending the photo';
+
+  @override
+  String get uploadStepRead => 'AI is reading the bill';
+
+  @override
+  String get uploadStepReview => 'You check every value';
+
+  @override
+  String get addBillTipsTitle => 'Tips for a good photo';
+
+  @override
+  String get addBillTip1 => 'Lay the bill flat in good light';
+
+  @override
+  String get addBillTip2 => 'Fit the whole bill in the frame';
+
+  @override
+  String get addBillTip3 => 'Cover names, addresses and account numbers';
+
+  @override
+  String get addBillOr => 'or';
+
+  @override
+  String get billsSubtitle => 'All your energy bills in one place';
+
+  @override
+  String get reportsSubtitle => 'Your carbon footprint and electricity waste';
+
+  @override
+  String get solarSubtitle => 'Estimate rooftop solar for your factory';
+
+  @override
+  String get settingsSubtitle => 'Language, server, privacy and your data';
+
+  @override
+  String get solarHowTitle => 'How it works';
+
+  @override
+  String get solarHow1 => 'Draw your roof on the map';
+
+  @override
+  String get solarHow2 => 'Check the assumptions';
+
+  @override
+  String get solarHow3 => 'See size, output and payback';
+
+  @override
+  String get wasteAllGoodTitle => 'All good';
+
+  @override
+  String get wasteAttentionTitle => 'Needs attention';
+
+  @override
+  String get carbonScopeSplit => 'Scope 1 (fuel) vs Scope 2 (electricity)';
+
+  @override
+  String get reviewAiRead => 'Read by AI';
+
+  @override
+  String get reviewManualBadge => 'Manual entry';
+
+  @override
+  String get redactTitle => 'Hide private details';
+
+  @override
+  String get redactHint =>
+      'Drag your finger over names, addresses, consumer and meter numbers. Each one is covered with a black box, and only the covered photo is sent.';
+
+  @override
+  String get redactKeepVisible => 'Keep units, amounts and dates visible.';
+
+  @override
+  String get redactNothing => 'Nothing private on the photo? Just continue.';
+
+  @override
+  String get redactSend => 'Read this bill';
+
+  @override
+  String get redactPreparing => 'Covering the details…';
+
+  @override
+  String redactAreas(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString areas covered',
+      one: '1 area covered',
+      zero: 'No areas covered',
+    );
+    return '$_temp0';
+  }
 }

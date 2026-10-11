@@ -11,22 +11,17 @@ import '../../data/providers.dart';
 import '../../domain/api_models.dart';
 import '../../domain/models.dart';
 import '../../domain/requests.dart';
+import '../../core/theme.dart';
 import '../../widgets/common.dart';
 import '../../widgets/inputs.dart';
 import '../../widgets/month_picker.dart';
+import '../../widgets/ui.dart';
 import 'image_service.dart';
 
 /// Mandatory human review (spec 3, 8.2). Extracted values are only stored after the
 /// user ticks the confirmation box. Also used for manual entry and for editing.
 class ReviewScreen extends ConsumerStatefulWidget {
-  const ReviewScreen({
-    super.key,
-    required this.extraction,
-    required this.warnings,
-    required this.imageBytes,
-    required this.extracted,
-    this.existing,
-  });
+  const ReviewScreen({super.key, required this.extraction, required this.warnings, required this.imageBytes, required this.extracted, this.existing});
 
   final ExtractBillResult? extraction;
   final List<ExtractionWarning> warnings;
@@ -90,24 +85,21 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
   String? _text(TextEditingController c) => c.text.trim().isEmpty ? null : c.text.trim();
 
   Map<String, Object?> _values() => {
-        'bill_type': _type.name,
-        'utility_name': _text(_utility),
-        'billing_month': _month,
-        'period_start': _iso(_start),
-        'period_end': _iso(_end),
-        'consumed_units': parseNumber(_units.text),
-        'unit': _unit?.wire,
-        'total_amount_bdt': parseNumber(_amount.text),
-        'tariff_code': _text(_tariff),
-        'sanctioned_load_kw': parseNumber(_load.text),
-      };
+    'bill_type': _type.name,
+    'utility_name': _text(_utility),
+    'billing_month': _month,
+    'period_start': _iso(_start),
+    'period_end': _iso(_end),
+    'consumed_units': parseNumber(_units.text),
+    'unit': _unit?.wire,
+    'total_amount_bdt': parseNumber(_amount.text),
+    'tariff_code': _text(_tariff),
+    'sanctioned_load_kw': parseNumber(_load.text),
+  };
 
-  bool _lowConfidence(String field) =>
-      (widget.existing?.fieldConfidence ?? widget.extracted.fieldConfidence)[field] == 'low';
+  bool _lowConfidence(String field) => (widget.existing?.fieldConfidence ?? widget.extracted.fieldConfidence)[field] == 'low';
 
-  List<String> _warningsFor(AppLocalizations l, String field) => [
-        for (final w in widget.warnings.where((w) => w.field == field)) _warningText(l, w),
-      ];
+  List<String> _warningsFor(AppLocalizations l, String field) => [for (final w in widget.warnings.where((w) => w.field == field)) _warningText(l, w)];
 
   String _warningText(AppLocalizations l, ExtractionWarning w) {
     if (l.localeName.startsWith('en')) return w.message; // server text carries specific numbers
@@ -209,30 +201,54 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
       child: Container(
         key: Key('field-$field'),
         decoration: low
-            ? BoxDecoration(color: Colors.amber.withValues(alpha: 0.18), borderRadius: BorderRadius.circular(6), border: Border.all(color: Colors.amber.shade700))
+            ? BoxDecoration(
+                color: Colors.amber.withValues(alpha: 0.16),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.amber.shade700),
+              )
             : null,
-        padding: low ? const EdgeInsets.all(6) : EdgeInsets.zero,
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          child,
-          if (low)
-            Padding(
-              padding: const EdgeInsets.only(top: 4),
-              child: Row(children: [
-                Icon(Icons.visibility_outlined, size: 14, color: Colors.amber.shade900),
-                const SizedBox(width: 4),
-                Expanded(child: Text(l.lowConfidence, key: Key('low-$field'), style: TextStyle(fontSize: 12, color: Colors.amber.shade900))),
-              ]),
-            ),
-          for (final w in warnings)
-            Padding(
-              padding: const EdgeInsets.only(top: 4),
-              child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Icon(Icons.warning_amber_rounded, size: 14, color: scheme.error),
-                const SizedBox(width: 4),
-                Expanded(child: Text(w, key: Key('warn-$field'), style: TextStyle(fontSize: 12, color: scheme.error))),
-              ]),
-            ),
-        ]),
+        padding: low ? const EdgeInsets.all(8) : EdgeInsets.zero,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            child,
+            if (low)
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Row(
+                  children: [
+                    Icon(Icons.visibility_outlined, size: 14, color: Colors.amber.shade900),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(
+                        l.lowConfidence,
+                        key: Key('low-$field'),
+                        style: TextStyle(fontSize: 12, color: Colors.amber.shade900),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            for (final w in warnings)
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(Icons.warning_amber_rounded, size: 14, color: scheme.error),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(
+                        w,
+                        key: Key('warn-$field'),
+                        style: TextStyle(fontSize: 12, color: scheme.error),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -255,7 +271,9 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
         child: InputDecorator(
           decoration: InputDecoration(
             labelText: label,
-            suffixIcon: value == null ? const Icon(Icons.calendar_today, size: 18) : IconButton(icon: const Icon(Icons.clear, size: 18), onPressed: () => onChanged(null)),
+            suffixIcon: value == null
+                ? const Icon(Icons.calendar_today, size: 18)
+                : IconButton(icon: const Icon(Icons.clear, size: 18), onPressed: () => onChanged(null)),
           ),
           child: Text(value == null ? l.notSet : fmt.date(value)),
         ),
@@ -270,27 +288,40 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
         ? Image.memory(bytes, fit: BoxFit.contain)
         : (path != null && File(path).existsSync() ? Image.file(File(path), fit: BoxFit.contain) : null);
     if (img == null) return null;
-    return Container(
-      height: 280,
-      color: Colors.black,
-      child: Stack(children: [
-        Positioned.fill(child: InteractiveViewer(minScale: 1, maxScale: 6, child: Center(child: img))),
-        Positioned(
-          right: 8,
-          bottom: 8,
-          child: IgnorePointer(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(12)),
-              child: Row(mainAxisSize: MainAxisSize.min, children: [
-                const Icon(Icons.pinch_outlined, size: 14, color: Colors.white),
-                const SizedBox(width: 4),
-                Text(AppLocalizations.of(context).reviewImageHint, style: const TextStyle(color: Colors.white, fontSize: 12)),
-              ]),
-            ),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(22),
+        child: Container(
+          height: 280,
+          color: const Color(0xFF0B1220),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: InteractiveViewer(minScale: 1, maxScale: 6, child: Center(child: img)),
+              ),
+              Positioned(
+                right: 8,
+                bottom: 8,
+                child: IgnorePointer(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(12)),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.pinch_outlined, size: 14, color: Colors.white),
+                        const SizedBox(width: 4),
+                        Text(AppLocalizations.of(context).reviewImageHint, style: const TextStyle(color: Colors.white, fontSize: 12)),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
-      ]),
+      ),
     );
   }
 
@@ -312,147 +343,195 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
       appBar: AppBar(title: Text(isEdit ? l.editBillTitle : l.reviewTitle)),
       body: Form(
         key: _form,
-        child: ListView(children: [
-          ?image,
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-              Text(widget.extraction != null ? l.reviewIntro : l.reviewManualIntro),
-              const SizedBox(height: 16),
-              Text(l.reviewMainSection, style: Theme.of(context).textTheme.titleSmall),
-              const SizedBox(height: 8),
-              _wrap(
-                'bill_type',
-                DropdownButtonFormField<BillType>(
-                  key: const Key('input-bill_type'),
-                  initialValue: _type,
-                  decoration: InputDecoration(labelText: l.fieldBillType),
-                  items: [for (final t in BillType.values) DropdownMenuItem(value: t, child: Text(billTypeLabel(l, t)))],
-                  validator: (v) => v == null || v == BillType.unknown ? l.selectBillType : null,
-                  onChanged: (v) => setState(() {
-                    _type = v ?? BillType.unknown;
-                    _unit = _type.canonicalUnit ?? _unit;
-                  }),
-                ),
-              ),
-              _wrap(
-                'billing_month',
-                MonthFormField(
-                  key: const Key('input-billing_month'),
-                  label: l.fieldBillingMonth,
-                  initialValue: _month,
-                  onChanged: (v) => setState(() => _month = v),
-                  validator: (v) => isValidMonth(v) ? null : l.invalidMonth,
-                ),
-              ),
-              Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Expanded(
-                  flex: 3,
-                  child: _wrap(
-                    'consumed_units',
-                    TextFormField(
-                      key: const Key('input-consumed_units'),
-                      controller: _units,
-                      decoration: InputDecoration(labelText: l.fieldConsumedUnits),
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                      inputFormatters: numberInput,
-                      validator: (v) => required(v) ?? optionalNumber(v),
+        child: ListView(
+          children: [
+            ?image,
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
+                    children: [
+                      widget.extraction != null
+                          ? StatusPill(text: l.reviewAiRead, color: FeatureColors.bills, icon: Icons.auto_awesome_rounded)
+                          : StatusPill(text: isEdit ? l.editBillTitle : l.reviewManualBadge, color: FeatureColors.production, icon: Icons.edit_note_rounded),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Text(widget.extraction != null ? l.reviewIntro : l.reviewManualIntro, style: Theme.of(context).textTheme.bodyMedium?.copyWith(height: 1.4)),
+                  const SizedBox(height: 12),
+                  SoftCard(
+                    padding: const EdgeInsets.fromLTRB(14, 16, 14, 4),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(l.reviewMainSection, style: Theme.of(context).textTheme.titleSmall),
+                        const SizedBox(height: 12),
+                        _wrap(
+                          'bill_type',
+                          DropdownButtonFormField<BillType>(
+                            key: const Key('input-bill_type'),
+                            initialValue: _type,
+                            decoration: InputDecoration(labelText: l.fieldBillType),
+                            items: [for (final t in BillType.values) DropdownMenuItem(value: t, child: Text(billTypeLabel(l, t)))],
+                            validator: (v) => v == null || v == BillType.unknown ? l.selectBillType : null,
+                            onChanged: (v) => setState(() {
+                              _type = v ?? BillType.unknown;
+                              _unit = _type.canonicalUnit ?? _unit;
+                            }),
+                          ),
+                        ),
+                        _wrap(
+                          'billing_month',
+                          MonthFormField(
+                            key: const Key('input-billing_month'),
+                            label: l.fieldBillingMonth,
+                            initialValue: _month,
+                            onChanged: (v) => setState(() => _month = v),
+                            validator: (v) => isValidMonth(v) ? null : l.invalidMonth,
+                          ),
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              flex: 3,
+                              child: _wrap(
+                                'consumed_units',
+                                TextFormField(
+                                  key: const Key('input-consumed_units'),
+                                  controller: _units,
+                                  decoration: InputDecoration(labelText: l.fieldConsumedUnits),
+                                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                  inputFormatters: numberInput,
+                                  validator: (v) => required(v) ?? optionalNumber(v),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              flex: 2,
+                              child: _wrap(
+                                'unit',
+                                DropdownButtonFormField<EnergyUnit>(
+                                  key: const Key('input-unit'),
+                                  initialValue: _unit,
+                                  decoration: InputDecoration(labelText: l.fieldUnit),
+                                  items: [for (final u in EnergyUnit.values) DropdownMenuItem(value: u, child: Text(u.wire))],
+                                  validator: (v) {
+                                    if (v == null) return l.fieldRequired;
+                                    final expected = _type.canonicalUnit;
+                                    return expected != null && v != expected ? l.unitMismatch(expected.wire) : null;
+                                  },
+                                  onChanged: (v) => setState(() => _unit = v),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        _wrap(
+                          'total_amount_bdt',
+                          TextFormField(
+                            key: const Key('input-total_amount_bdt'),
+                            controller: _amount,
+                            decoration: InputDecoration(labelText: l.fieldTotalAmount, prefixText: '৳ '),
+                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                            inputFormatters: numberInput,
+                            validator: optionalNumber,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  flex: 2,
-                  child: _wrap(
-                    'unit',
-                    DropdownButtonFormField<EnergyUnit>(
-                      key: const Key('input-unit'),
-                      initialValue: _unit,
-                      decoration: InputDecoration(labelText: l.fieldUnit),
-                      items: [for (final u in EnergyUnit.values) DropdownMenuItem(value: u, child: Text(u.wire))],
-                      validator: (v) {
-                        if (v == null) return l.fieldRequired;
-                        final expected = _type.canonicalUnit;
-                        return expected != null && v != expected ? l.unitMismatch(expected.wire) : null;
-                      },
-                      onChanged: (v) => setState(() => _unit = v),
+                  Card(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    clipBehavior: Clip.antiAlias,
+                    child: ExpansionTile(
+                      key: const Key('more-details'),
+                      maintainState: true,
+                      initiallyExpanded: _detailsNeedAttention(),
+                      title: Text(l.reviewMoreDetails),
+                      childrenPadding: const EdgeInsets.fromLTRB(12, 0, 12, 4),
+                      children: [
+                        _wrap(
+                          'utility_name',
+                          TextFormField(
+                            controller: _utility,
+                            decoration: InputDecoration(labelText: l.fieldUtilityName),
+                          ),
+                        ),
+                        _dateField('period_start', l.fieldPeriodStart, _start, (d) => setState(() => _start = d)),
+                        _dateField('period_end', l.fieldPeriodEnd, _end, (d) => setState(() => _end = d)),
+                        _wrap(
+                          'tariff_code',
+                          TextFormField(
+                            controller: _tariff,
+                            decoration: InputDecoration(labelText: l.fieldTariffCode),
+                          ),
+                        ),
+                        _wrap(
+                          'sanctioned_load_kw',
+                          TextFormField(
+                            controller: _load,
+                            decoration: InputDecoration(labelText: l.fieldSanctionedLoad),
+                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                            inputFormatters: numberInput,
+                            validator: optionalNumber,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              ]),
-              _wrap(
-                'total_amount_bdt',
-                TextFormField(
-                  key: const Key('input-total_amount_bdt'),
-                  controller: _amount,
-                  decoration: InputDecoration(labelText: l.fieldTotalAmount, prefixText: '৳ '),
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  inputFormatters: numberInput,
-                  validator: optionalNumber,
-                ),
-              ),
-              Card(
-                margin: const EdgeInsets.only(bottom: 12),
-                clipBehavior: Clip.antiAlias,
-                child: ExpansionTile(
-                  key: const Key('more-details'),
-                  maintainState: true,
-                  initiallyExpanded: _detailsNeedAttention(),
-                  title: Text(l.reviewMoreDetails),
-                  childrenPadding: const EdgeInsets.fromLTRB(12, 0, 12, 4),
-                  children: [
-                    _wrap('utility_name', TextFormField(controller: _utility, decoration: InputDecoration(labelText: l.fieldUtilityName))),
-                    _dateField('period_start', l.fieldPeriodStart, _start, (d) => setState(() => _start = d)),
-                    _dateField('period_end', l.fieldPeriodEnd, _end, (d) => setState(() => _end = d)),
-                    _wrap('tariff_code', TextFormField(controller: _tariff, decoration: InputDecoration(labelText: l.fieldTariffCode))),
-                    _wrap(
-                      'sanctioned_load_kw',
-                      TextFormField(
-                        controller: _load,
-                        decoration: InputDecoration(labelText: l.fieldSanctionedLoad),
-                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                        inputFormatters: numberInput,
-                        validator: optionalNumber,
+                  if ((widget.existing?.extractionNotes ?? widget.extracted.notes) != null)
+                    Card(
+                      child: ListTile(
+                        leading: const Icon(Icons.notes),
+                        title: Text(l.fieldNotes),
+                        subtitle: Text(widget.existing?.extractionNotes ?? widget.extracted.notes!),
                       ),
                     ),
-                  ],
-                ),
-              ),
-              if ((widget.existing?.extractionNotes ?? widget.extracted.notes) != null)
-                Card(
-                  child: ListTile(
-                    leading: const Icon(Icons.notes),
-                    title: Text(l.fieldNotes),
-                    subtitle: Text(widget.existing?.extractionNotes ?? widget.extracted.notes!),
+                  for (final w in widget.warnings.where((w) => w.field == null))
+                    ListTile(leading: const Icon(Icons.warning_amber_rounded), title: Text(_warningText(l, w))),
+                  const SizedBox(height: 8),
+                  Material(
+                    color: (_checkError ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.primary).withValues(alpha: 0.07),
+                    clipBehavior: Clip.antiAlias,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                      side: BorderSide(
+                        color: (_checkError ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.primary).withValues(alpha: 0.3),
+                      ),
+                    ),
+                    child: CheckboxListTile(
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                      key: const Key('review-confirm'),
+                      value: _checked,
+                      onChanged: (v) => setState(() {
+                        _checked = v ?? false;
+                        _checkError = false;
+                      }),
+                      title: Text(l.reviewConfirm),
+                      subtitle: _checkError ? Text(l.reviewMustConfirm, style: TextStyle(color: Theme.of(context).colorScheme.error)) : null,
+                      controlAffinity: ListTileControlAffinity.leading,
+                    ),
                   ),
-                ),
-              for (final w in widget.warnings.where((w) => w.field == null))
-                ListTile(leading: const Icon(Icons.warning_amber_rounded), title: Text(_warningText(l, w))),
-              const SizedBox(height: 8),
-              CheckboxListTile(
-                key: const Key('review-confirm'),
-                value: _checked,
-                onChanged: (v) => setState(() {
-                  _checked = v ?? false;
-                  _checkError = false;
-                }),
-                title: Text(l.reviewConfirm),
-                subtitle: _checkError ? Text(l.reviewMustConfirm, style: TextStyle(color: Theme.of(context).colorScheme.error)) : null,
-                controlAffinity: ListTileControlAffinity.leading,
-                contentPadding: EdgeInsets.zero,
+                  const SizedBox(height: 6),
+                  if (!isEdit && widget.imageBytes != null) Text(keep ? l.imageWillBeKept : l.imageWillBeDeleted, style: Theme.of(context).textTheme.bodySmall),
+                  const SizedBox(height: 12),
+                  FilledButton.icon(
+                    key: const Key('review-save'),
+                    style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(56)),
+                    onPressed: (_saving || !_checked) ? null : _save,
+                    icon: const Icon(Icons.check_circle_outline_rounded),
+                    label: Text(l.actionSave),
+                  ),
+                  const SizedBox(height: 24),
+                ],
               ),
-              if (!isEdit && widget.imageBytes != null)
-                Text(keep ? l.imageWillBeKept : l.imageWillBeDeleted, style: Theme.of(context).textTheme.bodySmall),
-              const SizedBox(height: 12),
-              FilledButton(
-                key: const Key('review-save'),
-                onPressed: (_saving || !_checked) ? null : _save,
-                child: Text(l.actionSave),
-              ),
-              const SizedBox(height: 24),
-            ]),
-          ),
-        ]),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -55,7 +55,7 @@
   "privacyMustAcknowledge": "Please confirm you have read the privacy notice.",
   "onboardingStart": "Start",
   "uploadNoticeTitle": "Before your first upload",
-  "uploadNoticeBody": "The cropped photo will be sent to our server and to Google's Gemini API to read the bill. Hide names, addresses, consumer and meter numbers in the crop step. Photos are not stored on our server. On Google's free tier, Google may use uploads to improve its products and people may review them.",
+  "uploadNoticeBody": "The photo will be sent to our server and to Google's Gemini API to read the bill. Before sending, you crop the bill and cover names, addresses, consumer and meter numbers with black boxes. Photos are not stored on our server. On Google's free tier, Google may use uploads to improve its products and people may review them.",
   "uploadNoticeAccept": "I understand, continue",
   "homeLatestReport": "Latest carbon report",
   "homeNoReport": "No report yet. Add bills or import history, then open Reports.",
@@ -68,7 +68,8 @@
   "@homeBillsCount": {
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "int",
+        "format": "decimalPattern"
       }
     }
   },
@@ -78,7 +79,7 @@
   "addBillManual": "Enter manually (no image)",
   "addBillManualHint": "For diesel receipts, unmetered gas, or when a photo cannot be read.",
   "cropTitle": "Crop the bill",
-  "cropReminder": "Cut out names, addresses, consumer and meter numbers. Keep consumed units, amounts and dates.",
+  "cropReminder": "First trim the photo to the bill. In the next step you can cover any names, addresses, consumer or meter numbers that are inside it.",
   "preparingImage": "Preparing image…",
   "uploadProgress": "Uploading {percent}%",
   "@uploadProgress": {
@@ -177,7 +178,8 @@
   "@importRowsReady": {
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "int",
+        "format": "decimalPattern"
       }
     }
   },
@@ -188,7 +190,8 @@
   "@importDone": {
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "int",
+        "format": "decimalPattern"
       }
     }
   },
@@ -442,7 +445,8 @@
   "@wasteFlaggedCount": {
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "int",
+        "format": "decimalPattern"
       }
     }
   },
@@ -454,7 +458,8 @@
   "@solarPoints": {
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "int",
+        "format": "decimalPattern"
       }
     }
   },
@@ -619,7 +624,7 @@
   "stepProduction": "Enter monthly production",
   "stepReport": "Create your carbon report",
   "stepWaste": "Check for electricity waste",
-  "homeStatMonths": "Months with data",
+  "homeStatMonths": "Months",
   "homeStatLatest": "Latest month",
   "homeTryDemo": "Just looking around? Load synthetic demo data to see every feature.",
   "homeLoadDemo": "Load demo data",
@@ -628,7 +633,7 @@
   "reviewMoreDetails": "More details (optional)",
   "reviewImageHint": "Pinch to zoom the bill",
   "addBillScanTitle": "Scan a bill",
-  "addBillScanHint": "Take or choose a photo. You will crop out personal details and check every value before saving.",
+  "addBillScanHint": "Take or choose a photo. You will hide personal details and check every value before saving.",
   "solarMyLocation": "Go to factory location",
   "errInvalidPolygon": "The roof outline is not valid. Make sure its edges do not cross.",
   "errPolygonTooSmall": "The roof outline is too small. Zoom in and tap the roof corners.",
@@ -666,5 +671,72 @@
   "swOmNotIncluded": "Maintenance (O&M) cost is not included.",
   "swExportPriceMissing": "Net metering is on but no export price is set; exported energy is valued at zero.",
   "swFinancialAssumptions": "Assumes a constant electricity price and no loan cost.",
-  "swNoPayback": "Yearly savings do not cover maintenance, so there is no payback."
+  "swNoPayback": "Yearly savings do not cover maintenance, so there is no payback.",
+  "introSkip": "Skip",
+  "introNext": "Next",
+  "introGetStarted": "Get started",
+  "intro1Title": "Snap a bill. We read it.",
+  "intro1Body": "Take a photo of your electricity, gas or diesel bill. AI reads the numbers, and you check them before anything is saved.",
+  "intro2Title": "Carbon report in one tap",
+  "intro2Body": "Get the Scope 1 + 2 carbon report your buyers ask for, ready to share as PDF or spreadsheet.",
+  "intro3Title": "Cut waste. Go solar.",
+  "intro3Body": "Spot months with unusually high electricity use, and estimate what rooftop solar could save you.",
+  "introPrivacyNote": "Your data stays on this phone.",
+  "onboardingFormSubtitle": "A few details for your reports. You can change them later.",
+  "factoryCoordsHint": "Optional. Used to centre the solar map on your factory.",
+  "homeGreetingMorning": "Good morning",
+  "homeGreetingAfternoon": "Good afternoon",
+  "homeGreetingEvening": "Good evening",
+  "homeFootprint": "Carbon footprint",
+  "homeHeroEmpty": "Let's measure your factory's energy and carbon.",
+  "homeScanTitle": "Scan a bill",
+  "homeScanSubtitle": "Take a photo of an electricity, gas or diesel bill. We read the numbers for you.",
+  "homeExplore": "What would you like to do?",
+  "tileBillsSub": "See and edit saved bills",
+  "tileImportSub": "Add past months from a spreadsheet",
+  "tileProductionSub": "Monthly output for intensity",
+  "tileCarbonSub": "Scope 1 + 2 report and PDF",
+  "tileWasteSub": "Find unusual electricity use",
+  "tileSolarSub": "Rooftop solar estimate",
+  "connOfflineTitle": "Not connected to the server",
+  "connOfflineBody": "Bill reading, reports and solar need the server. Your saved data is safe on this phone.",
+  "connOnline": "Server connected",
+  "connChecking": "Checking connection…",
+  "connReadingOn": "Bill reading ready",
+  "uploadStepSend": "Sending the photo",
+  "uploadStepRead": "AI is reading the bill",
+  "uploadStepReview": "You check every value",
+  "addBillTipsTitle": "Tips for a good photo",
+  "addBillTip1": "Lay the bill flat in good light",
+  "addBillTip2": "Fit the whole bill in the frame",
+  "addBillTip3": "Cover names, addresses and account numbers",
+  "addBillOr": "or",
+  "billsSubtitle": "All your energy bills in one place",
+  "reportsSubtitle": "Your carbon footprint and electricity waste",
+  "solarSubtitle": "Estimate rooftop solar for your factory",
+  "settingsSubtitle": "Language, server, privacy and your data",
+  "solarHowTitle": "How it works",
+  "solarHow1": "Draw your roof on the map",
+  "solarHow2": "Check the assumptions",
+  "solarHow3": "See size, output and payback",
+  "wasteAllGoodTitle": "All good",
+  "wasteAttentionTitle": "Needs attention",
+  "carbonScopeSplit": "Scope 1 (fuel) vs Scope 2 (electricity)",
+  "reviewAiRead": "Read by AI",
+  "reviewManualBadge": "Manual entry",
+  "redactTitle": "Hide private details",
+  "redactHint": "Drag your finger over names, addresses, consumer and meter numbers. Each one is covered with a black box, and only the covered photo is sent.",
+  "redactKeepVisible": "Keep units, amounts and dates visible.",
+  "redactNothing": "Nothing private on the photo? Just continue.",
+  "redactSend": "Read this bill",
+  "redactPreparing": "Covering the details…",
+  "redactAreas": "{count, plural, =0{No areas covered} =1{1 area covered} other{{count} areas covered}}",
+  "@redactAreas": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  }
 }

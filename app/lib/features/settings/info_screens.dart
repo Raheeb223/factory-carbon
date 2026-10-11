@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../core/l10n/gen/app_localizations.dart';
+import '../../core/theme.dart';
+import '../../widgets/ui.dart';
 
 /// What is stored on the phone, sent to the backend, and sent to Google (spec 8.8).
 class DataHandlingScreen extends StatelessWidget {
@@ -9,24 +11,33 @@ class DataHandlingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    Widget section(IconData icon, String title, String body) => Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Row(children: [Icon(icon), const SizedBox(width: 8), Expanded(child: Text(title, style: Theme.of(context).textTheme.titleMedium))]),
-              const SizedBox(height: 8),
-              Text(body),
-            ]),
+    Widget section(IconData icon, Color color, String title, String body) => SoftCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              IconBlob(icon, color: color, size: 40),
+              const SizedBox(width: 12),
+              Expanded(child: Text(title, style: Theme.of(context).textTheme.titleMedium)),
+            ],
           ),
-        );
+          const SizedBox(height: 10),
+          Text(body, style: const TextStyle(height: 1.4)),
+        ],
+      ),
+    );
     return Scaffold(
       appBar: AppBar(title: Text(l.dataHandlingTitle)),
-      body: ListView(padding: const EdgeInsets.all(16), children: [
-        section(Icons.phone_android, l.dataHandlingPhoneTitle, l.dataHandlingPhoneBody),
-        section(Icons.dns_outlined, l.dataHandlingServerTitle, l.dataHandlingServerBody),
-        section(Icons.auto_awesome_outlined, l.dataHandlingGoogleTitle, l.dataHandlingGoogleBody),
-        section(Icons.wb_sunny_outlined, l.dataHandlingNasaTitle, l.dataHandlingNasaBody),
-      ]),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          section(Icons.phone_android_rounded, FeatureColors.carbon, l.dataHandlingPhoneTitle, l.dataHandlingPhoneBody),
+          section(Icons.dns_rounded, FeatureColors.import, l.dataHandlingServerTitle, l.dataHandlingServerBody),
+          section(Icons.auto_awesome_rounded, FeatureColors.bills, l.dataHandlingGoogleTitle, l.dataHandlingGoogleBody),
+          section(Icons.wb_sunny_rounded, FeatureColors.solar, l.dataHandlingNasaTitle, l.dataHandlingNasaBody),
+        ],
+      ),
     );
   }
 }
@@ -40,7 +51,10 @@ class LimitationsScreen extends StatelessWidget {
     final l = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(title: Text(l.limitationsTitle)),
-      body: ListView(padding: const EdgeInsets.all(16), children: [Text(l.limitationsBody)]),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [SoftCard(child: Text(l.limitationsBody, style: const TextStyle(height: 1.45)))],
+      ),
     );
   }
 }

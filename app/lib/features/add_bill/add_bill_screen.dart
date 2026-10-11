@@ -1,11 +1,16 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/l10n/gen/app_localizations.dart';
+import '../../core/theme.dart';
 import '../../data/providers.dart';
 import '../../domain/api_models.dart';
 import '../../widgets/common.dart';
+import '../../widgets/ui.dart';
 import 'image_service.dart';
+import 'redact_screen.dart';
 import 'review_screen.dart';
 import 'upload_screen.dart';
 
@@ -73,7 +78,11 @@ class _AddBillScreenState extends ConsumerState<AddBillScreen> {
     try {
       final bytes = await images.loadPreparedAndDeleteTemp([picked, cropped]);
       if (!mounted) return;
-      await Navigator.of(context).pushReplacement(MaterialPageRoute<void>(builder: (_) => UploadScreen(imageBytes: bytes)));
+      setState(() => _busy = false);
+      // Cover details that cropping cannot remove (they sit between the values we need).
+      final covered = await Navigator.of(context).push<Uint8List>(MaterialPageRoute(builder: (_) => RedactScreen(imageBytes: bytes)));
+      if (covered == null || !mounted) return; // backed out: nothing is uploaded
+      await Navigator.of(context).pushReplacement(MaterialPageRoute<void>(builder: (_) => UploadScreen(imageBytes: covered)));
     } catch (e) {
       if (mounted) showSnack(context, l.errorGeneric);
     } finally {
@@ -82,67 +91,154 @@ class _AddBillScreenState extends ConsumerState<AddBillScreen> {
   }
 
   void _manual() => Navigator.of(context).pushReplacement(
-        MaterialPageRoute<void>(builder: (_) => const ReviewScreen(extraction: null, warnings: [], imageBytes: null, extracted: ExtractedBill.empty)),
-      );
+    MaterialPageRoute<void>(
+      builder: (_) => const ReviewScreen(extraction: null, warnings: [], imageBytes: null, extracted: ExtractedBill.empty),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final scheme = Theme.of(context).colorScheme;
+    final t = Theme.of(context).textTheme;
+
+    Widget option({required Key key, required IconData icon, required String label, required Gradient gradient, required VoidCallback onTap}) => Expanded(
+      child: GradientSurface(
+        inkKey: key,
+        gradient: gradient,
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+          child: Column(
+            children: [
+              Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.22), shape: BoxShape.circle),
+                child: Icon(icon, color: Colors.white, size: 30),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                label,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    Widget tip(IconData icon, String text) => Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Row(
+        children: [
+          Icon(icon, size: 20, color: scheme.primary),
+          const SizedBox(width: 10),
+          Expanded(child: Text(text, style: t.bodyMedium)),
+        ],
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(title: Text(l.addBillTitle)),
       body: _busy
-          ? Center(child: Column(mainAxisSize: MainAxisSize.min, children: [const CircularProgressIndicator(), const SizedBox(height: 12), Text(l.preparingImage)]))
-          : ListView(padding: const EdgeInsets.all(16), children: [
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                    Row(children: [
-                      CircleAvatar(backgroundColor: scheme.primaryContainer, child: Icon(Icons.document_scanner_outlined, color: scheme.onPrimaryContainer)),
-                      const SizedBox(width: 12),
-                      Expanded(child: Text(l.addBillScanTitle, style: Theme.of(context).textTheme.titleMedium)),
-                    ]),
-                    const SizedBox(height: 8),
-                    Text(l.addBillScanHint),
-                    const SizedBox(height: 16),
-                    FilledButton.icon(
-                      key: const Key('add-camera'),
-                      style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(52)),
-                      onPressed: () => _fromImage(camera: true),
-                      icon: const Icon(Icons.photo_camera_outlined),
-                      label: Text(l.addBillCamera),
+          ? Center(
+              child: Column(mainAxisSize: MainAxisSize.min, children: [const CircularProgressIndicator(), const SizedBox(height: 12), Text(l.preparingImage)]),
+            )
+          : ListView(
+              padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
+              children: [
+                FadeSlideIn(
+                  child: SoftCard(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const IconBlob(Icons.document_scanner_rounded, color: FeatureColors.bills, size: 48),
+                            const SizedBox(width: 14),
+                            Expanded(child: Text(l.addBillScanTitle, style: t.titleLarge)),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Text(l.addBillScanHint, style: t.bodyMedium?.copyWith(color: scheme.onSurfaceVariant, height: 1.4)),
+                        const SizedBox(height: 18),
+                        Row(
+                          children: [
+                            option(
+                              key: const Key('add-camera'),
+                              icon: Icons.photo_camera_rounded,
+                              label: l.addBillCamera,
+                              gradient: BrandGradients.bills,
+                              onTap: () => _fromImage(camera: true),
+                            ),
+                            const SizedBox(width: 12),
+                            option(
+                              key: const Key('add-gallery'),
+                              icon: Icons.photo_library_rounded,
+                              label: l.addBillGallery,
+                              gradient: BrandGradients.primary,
+                              onTap: () => _fromImage(camera: false),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 8),
-                    FilledButton.tonalIcon(
-                      key: const Key('add-gallery'),
-                      style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(52)),
-                      onPressed: () => _fromImage(camera: false),
-                      icon: const Icon(Icons.photo_library_outlined),
-                      label: Text(l.addBillGallery),
-                    ),
-                    const SizedBox(height: 12),
-                    Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      Icon(Icons.shield_outlined, size: 18, color: scheme.primary),
-                      const SizedBox(width: 6),
-                      Expanded(child: Text(l.cropReminder, style: Theme.of(context).textTheme.bodySmall)),
-                    ]),
-                  ]),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              Card(
-                child: ListTile(
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Row(
+                    children: [
+                      const Expanded(child: Divider()),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Text(l.addBillOr, style: t.labelLarge?.copyWith(color: scheme.outline)),
+                      ),
+                      const Expanded(child: Divider()),
+                    ],
+                  ),
+                ),
+                SoftCard(
                   key: const Key('add-manual'),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  leading: CircleAvatar(backgroundColor: scheme.secondaryContainer, child: Icon(Icons.edit_note, color: scheme.onSecondaryContainer)),
-                  title: Text(l.addBillManual),
-                  subtitle: Text(l.addBillManualHint),
-                  trailing: const Icon(Icons.chevron_right),
                   onTap: _manual,
+                  child: Row(
+                    children: [
+                      const IconBlob(Icons.edit_note_rounded, color: FeatureColors.production, size: 46),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(l.addBillManual, style: t.titleSmall),
+                            const SizedBox(height: 2),
+                            Text(l.addBillManualHint, style: t.bodySmall?.copyWith(color: scheme.onSurfaceVariant)),
+                          ],
+                        ),
+                      ),
+                      Icon(Icons.chevron_right_rounded, color: scheme.outline),
+                    ],
+                  ),
                 ),
-              ),
-            ]),
+                const SizedBox(height: 8),
+                SoftCard(
+                  color: scheme.primary.withValues(alpha: 0.05),
+                  borderColor: scheme.primary.withValues(alpha: 0.15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(l.addBillTipsTitle, style: t.titleSmall),
+                      const SizedBox(height: 6),
+                      tip(Icons.wb_sunny_outlined, l.addBillTip1),
+                      tip(Icons.crop_free_rounded, l.addBillTip2),
+                      tip(Icons.shield_outlined, l.addBillTip3),
+                    ],
+                  ),
+                ),
+              ],
+            ),
     );
   }
 }

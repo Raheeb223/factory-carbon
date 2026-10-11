@@ -190,6 +190,18 @@ void main() {
     test('garbage input throws', () {
       expect(() => prepareForUpload(Uint8List.fromList([1, 2, 3])), throwsA(isA<ImagePrepException>()));
     });
+
+    test('redaction burns black boxes into the pixels and leaves the rest', () {
+      final white = img.Image(width: 400, height: 200);
+      img.fill(white, color: img.ColorRgb8(255, 255, 255));
+      final out = applyRedactions(Uint8List.fromList(img.encodeJpg(white)), const [RedactBox(0.1, 0.2, 0.5, 0.6)]);
+      final d = img.decodeJpg(out)!;
+      expect((d.width, d.height), (400, 200));
+      expect(d.getPixel(120, 80).r, lessThan(30)); // inside the box: black
+      expect(d.getPixel(300, 160).r, greaterThan(225)); // outside: still white
+      final untouched = Uint8List.fromList([1, 2, 3]);
+      expect(identical(applyRedactions(untouched, const []), untouched), isTrue); // no boxes: no re-encode
+    });
   });
 }
 

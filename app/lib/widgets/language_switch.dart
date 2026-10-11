@@ -41,3 +41,31 @@ class LanguageToggleAction extends ConsumerWidget {
     );
   }
 }
+
+/// Language toggle pill for use on top of a gradient header.
+class LanguagePill extends ConsumerWidget {
+  const LanguagePill({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final current = ref.watch(localeProvider)?.languageCode ?? Localizations.localeOf(context).languageCode;
+    final toBangla = current != 'bn';
+    return Material(
+      color: Colors.white.withValues(alpha: 0.18),
+      borderRadius: BorderRadius.circular(20),
+      child: InkWell(
+        key: const Key('language-toggle'),
+        borderRadius: BorderRadius.circular(20),
+        onTap: () => ref.read(localeProvider.notifier).set(toBangla ? 'bn' : 'en'),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Row(mainAxisSize: MainAxisSize.min, children: [
+            const Icon(Icons.translate_rounded, size: 16, color: Colors.white),
+            const SizedBox(width: 6),
+            Text(toBangla ? 'বাংলা' : 'English', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
+          ]),
+        ),
+      ),
+    );
+  }
+}
