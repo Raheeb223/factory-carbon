@@ -10,7 +10,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'Factory Energy & Carbon';
+  String get appTitle => 'BillToGreen';
 
   @override
   String get navHome => 'Home';

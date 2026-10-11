@@ -1,4 +1,6 @@
-# Factory Energy & Carbon
+# BillToGreen
+
+From utility bills to a greener factory (formerly "Factory Energy & Carbon").
 
 A mobile app for Bangladeshi garment factories. Photograph utility bills and get:
 
