@@ -1355,7 +1355,7 @@ abstract class AppLocalizations {
   /// No description provided for @solarDrawHint.
   ///
   /// In en, this message translates to:
-  /// **'Tap the roof corners on the map. Use undo to fix mistakes.'**
+  /// **'Search your area or tap the GPS button. Zoom in and tap your factory roof: the outline is drawn for you. No outline? Tap each roof corner.'**
   String get solarDrawHint;
 
   /// No description provided for @solarPoints.
@@ -1391,85 +1391,85 @@ abstract class AppLocalizations {
   /// No description provided for @solarParamsTitle.
   ///
   /// In en, this message translates to:
-  /// **'Parameters'**
+  /// **'Solar details'**
   String get solarParamsTitle;
 
   /// No description provided for @paramUsableRoof.
   ///
   /// In en, this message translates to:
-  /// **'Usable roof fraction'**
+  /// **'Usable roof (%)'**
   String get paramUsableRoof;
 
   /// No description provided for @paramM2PerKwp.
   ///
   /// In en, this message translates to:
-  /// **'m² per kWp'**
+  /// **'Roof area per kW of panels (m²)'**
   String get paramM2PerKwp;
 
   /// No description provided for @paramPerformanceRatio.
   ///
   /// In en, this message translates to:
-  /// **'Performance ratio'**
+  /// **'System efficiency (%)'**
   String get paramPerformanceRatio;
 
   /// No description provided for @paramDegradation.
   ///
   /// In en, this message translates to:
-  /// **'Degradation per year'**
+  /// **'Panel ageing per year (%)'**
   String get paramDegradation;
 
   /// No description provided for @paramCapex.
   ///
   /// In en, this message translates to:
-  /// **'Capex (Tk per kWp, optional)'**
+  /// **'Installer price per kW (Tk)'**
   String get paramCapex;
 
   /// No description provided for @paramOm.
   ///
   /// In en, this message translates to:
-  /// **'O&M (fraction of capex per year, optional)'**
+  /// **'Yearly maintenance (% of price)'**
   String get paramOm;
 
   /// No description provided for @paramPrice.
   ///
   /// In en, this message translates to:
-  /// **'Electricity price (Tk/kWh, optional)'**
+  /// **'Your electricity price (Tk per kWh)'**
   String get paramPrice;
 
   /// No description provided for @paramPriceHint.
   ///
   /// In en, this message translates to:
-  /// **'Default: average from your bills'**
+  /// **'Empty: average from your bills'**
   String get paramPriceHint;
 
   /// No description provided for @paramExportPrice.
   ///
   /// In en, this message translates to:
-  /// **'Export price (Tk/kWh, optional)'**
+  /// **'Price the utility pays you (Tk per kWh)'**
   String get paramExportPrice;
 
   /// No description provided for @paramNetMetering.
   ///
   /// In en, this message translates to:
-  /// **'Net metering'**
+  /// **'Sell extra power to the grid (net metering)'**
   String get paramNetMetering;
 
   /// No description provided for @paramPsh.
   ///
   /// In en, this message translates to:
-  /// **'Peak sun hours (optional)'**
+  /// **'Sunshine hours per day'**
   String get paramPsh;
 
   /// No description provided for @paramPshHint.
   ///
   /// In en, this message translates to:
-  /// **'Leave empty to use NASA POWER data'**
+  /// **'Empty: we use NASA satellite sunlight data for your roof.'**
   String get paramPshHint;
 
   /// No description provided for @paramDefault.
   ///
   /// In en, this message translates to:
-  /// **'Default {value}'**
+  /// **'Typical {value}'**
   String paramDefault(String value);
 
   /// No description provided for @solarEstimate.
@@ -2786,18 +2786,6 @@ abstract class AppLocalizations {
   /// **'Go through these in order. Add the fix to your action plan; the app then measures the saving from your next bills.'**
   String get wasteChecksIntro;
 
-  /// No description provided for @paramShading.
-  ///
-  /// In en, this message translates to:
-  /// **'Shading loss (fraction, e.g. 0.1 = 10%)'**
-  String get paramShading;
-
-  /// No description provided for @paramShadingHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Sunlight lost to water tanks, trees or nearby buildings. Empty = no shading.'**
-  String get paramShadingHint;
-
   /// No description provided for @paramRoofStructure.
   ///
   /// In en, this message translates to:
@@ -3307,6 +3295,210 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cost Tk {cost}: paid back in less than a month'**
   String actionPaybackUnderMonth(String cost);
+
+  /// No description provided for @solarSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search area, road or factory, or paste coordinates'**
+  String get solarSearchHint;
+
+  /// No description provided for @solarSearchNone.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing found. Try an area name such as Tongi or Ashulia.'**
+  String get solarSearchNone;
+
+  /// No description provided for @solarSearchFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Search needs internet. Check the connection and try again.'**
+  String get solarSearchFailed;
+
+  /// No description provided for @solarGps.
+  ///
+  /// In en, this message translates to:
+  /// **'My location (GPS)'**
+  String get solarGps;
+
+  /// No description provided for @solarGpsOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on location (GPS) in the phone settings.'**
+  String get solarGpsOff;
+
+  /// No description provided for @solarGpsDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Location permission was not given.'**
+  String get solarGpsDenied;
+
+  /// No description provided for @solarGpsFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not get your location. Try again near a window or outside.'**
+  String get solarGpsFailed;
+
+  /// No description provided for @solarZoomedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Zoomed in. Now tap on your factory roof.'**
+  String get solarZoomedIn;
+
+  /// No description provided for @solarFindingRoof.
+  ///
+  /// In en, this message translates to:
+  /// **'Finding the roof outline…'**
+  String get solarFindingRoof;
+
+  /// No description provided for @solarOutlineFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Roof outline found. Check that it matches your roof, then tap Continue.'**
+  String get solarOutlineFound;
+
+  /// No description provided for @solarOutlineNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No building outline here on the map. Tap each corner of your roof instead.'**
+  String get solarOutlineNone;
+
+  /// No description provided for @solarOutlineOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load building outlines. Tap each corner of your roof instead.'**
+  String get solarOutlineOffline;
+
+  /// No description provided for @solarAreaApprox.
+  ///
+  /// In en, this message translates to:
+  /// **'about {area} m²'**
+  String solarAreaApprox(String area);
+
+  /// No description provided for @paramsIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Every box is optional. Empty boxes use typical values, so you can press Estimate right away.'**
+  String get paramsIntro;
+
+  /// No description provided for @paramShadeQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Is anything shading the roof?'**
+  String get paramShadeQuestion;
+
+  /// No description provided for @paramShadeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Water tanks, trees or taller buildings next to the factory.'**
+  String get paramShadeHint;
+
+  /// No description provided for @shadeNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No shade'**
+  String get shadeNone;
+
+  /// No description provided for @shadeSome.
+  ///
+  /// In en, this message translates to:
+  /// **'Some (10%)'**
+  String get shadeSome;
+
+  /// No description provided for @shadeLot.
+  ///
+  /// In en, this message translates to:
+  /// **'A lot (25%)'**
+  String get shadeLot;
+
+  /// No description provided for @paramRoofHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Panels add weight. Old or tin roofs need an engineer\'s check.'**
+  String get paramRoofHint;
+
+  /// No description provided for @paramCapexHint.
+  ///
+  /// In en, this message translates to:
+  /// **'From a solar company\'s quote. Example: Tk 60 lakh for 100 kW = 60,000. Empty: you still see size and output, but no payback.'**
+  String get paramCapexHint;
+
+  /// No description provided for @paramNetMeteringHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Only if your utility (DPDC, DESCO, REB…) has approved it.'**
+  String get paramNetMeteringHint;
+
+  /// No description provided for @paramsAdvanced.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced (for engineers)'**
+  String get paramsAdvanced;
+
+  /// No description provided for @paramsAdvancedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave these empty unless you have better values.'**
+  String get paramsAdvancedHint;
+
+  /// No description provided for @paramUsableRoofHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Part of the roof that can hold panels, after walkways, tanks and stairs.'**
+  String get paramUsableRoofHint;
+
+  /// No description provided for @paramM2PerKwpHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Space one kW of panels needs, including gaps.'**
+  String get paramM2PerKwpHint;
+
+  /// No description provided for @paramPerformanceRatioHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Power left after heat, dust, wiring and inverter losses.'**
+  String get paramPerformanceRatioHint;
+
+  /// No description provided for @paramDegradationHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Panels give a little less power every year.'**
+  String get paramDegradationHint;
+
+  /// No description provided for @paramOmHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Cleaning and repairs each year, as a share of the installation price. Often 1–2%.'**
+  String get paramOmHint;
+
+  /// No description provided for @invalidPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a number from 0 to 100'**
+  String get invalidPercent;
+
+  /// No description provided for @solarSearching.
+  ///
+  /// In en, this message translates to:
+  /// **'Searching…'**
+  String get solarSearching;
+
+  /// No description provided for @solarGpsFinding.
+  ///
+  /// In en, this message translates to:
+  /// **'Finding your location…'**
+  String get solarGpsFinding;
+
+  /// No description provided for @shadeUnsure.
+  ///
+  /// In en, this message translates to:
+  /// **'Not sure'**
+  String get shadeUnsure;
+
+  /// Grid electricity only: the grid factor covers CO2, not other gases
+  ///
+  /// In en, this message translates to:
+  /// **'{value} t CO₂'**
+  String tonnesCo2(String value);
 }
 
 class _AppLocalizationsDelegate

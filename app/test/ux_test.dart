@@ -12,9 +12,12 @@ import 'package:factory_carbon/features/carbon/reports_screen.dart';
 import 'package:factory_carbon/features/home/home_shell.dart';
 import 'package:factory_carbon/features/settings/server_screen.dart';
 import 'package:factory_carbon/features/settings/settings_screen.dart';
+import 'package:factory_carbon/features/solar/solar_params_screen.dart';
 import 'package:factory_carbon/features/solar/solar_result_screen.dart';
 import 'package:factory_carbon/features/solar/solar_screen.dart';
 import 'package:factory_carbon/widgets/month_picker.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -135,6 +138,63 @@ void main() {
     await teardownDb(tester, db);
   });
 
+  testWidgets('solar details: plain answers and percents become API fractions', (tester) async {
+    final db = memoryDb();
+    Map<String, dynamic>? sent;
+    final adapter = FakeAdapter((o) {
+      if (o.path.endsWith('/v1/solar/defaults')) {
+        return jsonBody({
+          'params': [
+            {'name': 'usable_roof_fraction', 'value': 0.6, 'unit': 'fraction', 'origin': 'default', 'status': 'verified', 'source': 's'},
+            {'name': 'performance_ratio', 'value': 0.78, 'unit': 'fraction', 'origin': 'default', 'status': 'verified', 'source': 's'},
+          ],
+          'net_metering': false,
+          'disclaimer': 'd',
+        });
+      }
+      if (o.path.endsWith('/v1/solar/estimate')) {
+        sent = o.data is String ? jsonDecode(o.data as String) as Map<String, dynamic> : o.data as Map<String, dynamic>;
+        return jsonBody({'error': {'code': 'invalid_polygon', 'message': 'x'}}, status: 422);
+      }
+      return defaultHandler(o);
+    });
+    await tester.pumpWidget(testApp(
+      const SolarParamsScreen(polygon: [LatLon(23.8, 90.4), LatLon(23.8, 90.401), LatLon(23.801, 90.401)]),
+      overrides: testOverrides(db: db, api: fakeApi(adapter)),
+    ));
+    await settle(tester);
+    final en = await AppLocalizations.delegate.load(const Locale('en'));
+    expect(find.byKey(const Key('param-export_price_bdt_per_kwh')), findsNothing);
+
+    // "Not sure" about shade sends nothing, so the result can warn that shading was not assessed
+    await tester.tap(find.byKey(const Key('solar-estimate')));
+    await settle(tester);
+    expect(sent!['params'], isNot(contains('shading_loss')));
+
+    await tester.tap(find.byKey(const Key('shade-some')));
+    await tester.enterText(find.byKey(const Key('param-capex_bdt_per_kwp')), '60,000');
+    await tapScrolled(tester, find.byKey(const Key('net-metering')));
+    await tapScrolled(tester, find.text(en.paramsAdvanced));
+    await settle(tester);
+    expect(find.textContaining(en.paramDefault('60%')), findsOneWidget);
+    await tester.enterText(find.byKey(const Key('param-usable_roof_fraction')), '70');
+    await tester.enterText(find.byKey(const Key('param-export_price_bdt_per_kwh')), '5');
+    await tester.tap(find.byKey(const Key('solar-estimate')));
+    await settle(tester);
+    final params = sent!['params'] as Map<String, dynamic>;
+    expect(params['shading_loss'], 0.1);
+    expect(params['capex_bdt_per_kwp'], 60000);
+    expect(params['usable_roof_fraction'], closeTo(0.7, 1e-9));
+    expect(params['net_metering'], true);
+    expect(params['export_price_bdt_per_kwh'], 5);
+
+    await tester.enterText(find.byKey(const Key('param-usable_roof_fraction')), '170');
+    await tester.tap(find.byKey(const Key('solar-estimate')));
+    await settle(tester);
+    expect(find.text(en.invalidPercent), findsOneWidget);
+    await teardownDb(tester, db);
+  });
+
   // Every main screen, both languages, on a small phone (360x640): no overflow or exceptions.
   for (final locale in const [Locale('en'), Locale('bn')]) {
     final screens = <String, Widget>{
@@ -143,6 +203,7 @@ void main() {
       'reports': const ReportsScreen(),
       'solar': const SolarScreen(),
       'settings': const SettingsScreen(),
+      'solar details': const SolarParamsScreen(polygon: [LatLon(23.8, 90.4), LatLon(23.8, 90.401), LatLon(23.801, 90.401)]),
     };
     for (final entry in screens.entries) {
       testWidgets('${entry.key} renders in ${locale.languageCode} on a small phone', (tester) async {

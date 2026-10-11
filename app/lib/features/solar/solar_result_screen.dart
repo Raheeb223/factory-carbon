@@ -166,7 +166,7 @@ class SolarResultScreen extends ConsumerWidget {
                 LabeledValue(l.solarOffset, r.offsetShare == null ? l.notAvailable : l.valuePercent(fmt.number(r.offsetShare! * 100, decimals: 1))),
                 LabeledValue(
                   l.solarCo2,
-                  r.co2AvoidedT == null ? l.notAvailable : l.tonnesCo2e(fmt.tonnes(r.co2AvoidedT)),
+                  r.co2AvoidedT == null ? l.notAvailable : l.tonnesCo2(fmt.tonnes(r.co2AvoidedT)),
                   trailing: gridPlaceholder && r.co2AvoidedT != null ? const UnverifiedBadge() : null,
                 ),
               ],

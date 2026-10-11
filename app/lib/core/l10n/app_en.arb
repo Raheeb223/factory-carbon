@@ -453,7 +453,7 @@
   "solarTitle": "Rooftop solar",
   "solarNewPlan": "New plan",
   "solarNoPlans": "No saved plans. Draw your roof to start.",
-  "solarDrawHint": "Tap the roof corners on the map. Use undo to fix mistakes.",
+  "solarDrawHint": "Search your area or tap the GPS button. Zoom in and tap your factory roof: the outline is drawn for you. No outline? Tap each roof corner.",
   "solarPoints": "{count, plural, =1{1 corner} other{{count} corners}}",
   "@solarPoints": {
     "placeholders": {
@@ -467,20 +467,20 @@
   "solarLayerStreet": "Map",
   "solarLayerSatellite": "Satellite",
   "solarSatelliteUnavailable": "Satellite imagery is not configured. Building outlines are visible on the map at high zoom.",
-  "solarParamsTitle": "Parameters",
-  "paramUsableRoof": "Usable roof fraction",
-  "paramM2PerKwp": "m² per kWp",
-  "paramPerformanceRatio": "Performance ratio",
-  "paramDegradation": "Degradation per year",
-  "paramCapex": "Capex (Tk per kWp, optional)",
-  "paramOm": "O&M (fraction of capex per year, optional)",
-  "paramPrice": "Electricity price (Tk/kWh, optional)",
-  "paramPriceHint": "Default: average from your bills",
-  "paramExportPrice": "Export price (Tk/kWh, optional)",
-  "paramNetMetering": "Net metering",
-  "paramPsh": "Peak sun hours (optional)",
-  "paramPshHint": "Leave empty to use NASA POWER data",
-  "paramDefault": "Default {value}",
+  "solarParamsTitle": "Solar details",
+  "paramUsableRoof": "Usable roof (%)",
+  "paramM2PerKwp": "Roof area per kW of panels (m²)",
+  "paramPerformanceRatio": "System efficiency (%)",
+  "paramDegradation": "Panel ageing per year (%)",
+  "paramCapex": "Installer price per kW (Tk)",
+  "paramOm": "Yearly maintenance (% of price)",
+  "paramPrice": "Your electricity price (Tk per kWh)",
+  "paramPriceHint": "Empty: average from your bills",
+  "paramExportPrice": "Price the utility pays you (Tk per kWh)",
+  "paramNetMetering": "Sell extra power to the grid (net metering)",
+  "paramPsh": "Sunshine hours per day",
+  "paramPshHint": "Empty: we use NASA satellite sunlight data for your roof.",
+  "paramDefault": "Typical {value}",
   "@paramDefault": {
     "placeholders": {
       "value": {
@@ -826,8 +826,6 @@
   },
   "wasteChecksTitle": "What to check",
   "wasteChecksIntro": "Go through these in order. Add the fix to your action plan; the app then measures the saving from your next bills.",
-  "paramShading": "Shading loss (fraction, e.g. 0.1 = 10%)",
-  "paramShadingHint": "Sunlight lost to water tanks, trees or nearby buildings. Empty = no shading.",
   "paramRoofStructure": "Can the roof carry panels?",
   "roofUnknown": "Not checked",
   "roofOk": "Engineer: yes",
@@ -1002,6 +1000,55 @@
   "@actionPaybackUnderMonth": {
     "placeholders": {
       "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "solarSearchHint": "Search area, road or factory, or paste coordinates",
+  "solarSearchNone": "Nothing found. Try an area name such as Tongi or Ashulia.",
+  "solarSearchFailed": "Search needs internet. Check the connection and try again.",
+  "solarGps": "My location (GPS)",
+  "solarGpsOff": "Turn on location (GPS) in the phone settings.",
+  "solarGpsDenied": "Location permission was not given.",
+  "solarGpsFailed": "Could not get your location. Try again near a window or outside.",
+  "solarZoomedIn": "Zoomed in. Now tap on your factory roof.",
+  "solarFindingRoof": "Finding the roof outline…",
+  "solarOutlineFound": "Roof outline found. Check that it matches your roof, then tap Continue.",
+  "solarOutlineNone": "No building outline here on the map. Tap each corner of your roof instead.",
+  "solarOutlineOffline": "Could not load building outlines. Tap each corner of your roof instead.",
+  "solarAreaApprox": "about {area} m²",
+  "@solarAreaApprox": {
+    "placeholders": {
+      "area": {
+        "type": "String"
+      }
+    }
+  },
+  "paramsIntro": "Every box is optional. Empty boxes use typical values, so you can press Estimate right away.",
+  "paramShadeQuestion": "Is anything shading the roof?",
+  "paramShadeHint": "Water tanks, trees or taller buildings next to the factory.",
+  "shadeNone": "No shade",
+  "shadeSome": "Some (10%)",
+  "shadeLot": "A lot (25%)",
+  "paramRoofHint": "Panels add weight. Old or tin roofs need an engineer's check.",
+  "paramCapexHint": "From a solar company's quote. Example: Tk 60 lakh for 100 kW = 60,000. Empty: you still see size and output, but no payback.",
+  "paramNetMeteringHint": "Only if your utility (DPDC, DESCO, REB…) has approved it.",
+  "paramsAdvanced": "Advanced (for engineers)",
+  "paramsAdvancedHint": "Leave these empty unless you have better values.",
+  "paramUsableRoofHint": "Part of the roof that can hold panels, after walkways, tanks and stairs.",
+  "paramM2PerKwpHint": "Space one kW of panels needs, including gaps.",
+  "paramPerformanceRatioHint": "Power left after heat, dust, wiring and inverter losses.",
+  "paramDegradationHint": "Panels give a little less power every year.",
+  "paramOmHint": "Cleaning and repairs each year, as a share of the installation price. Often 1–2%.",
+  "invalidPercent": "Enter a number from 0 to 100",
+  "solarSearching": "Searching…",
+  "solarGpsFinding": "Finding your location…",
+  "shadeUnsure": "Not sure",
+  "tonnesCo2": "{value} t CO₂",
+  "@tonnesCo2": {
+    "description": "Grid electricity only: the grid factor covers CO2, not other gases",
+    "placeholders": {
+      "value": {
         "type": "String"
       }
     }
