@@ -1541,31 +1541,31 @@ abstract class AppLocalizations {
   /// No description provided for @solarFinancials.
   ///
   /// In en, this message translates to:
-  /// **'Financials'**
+  /// **'Money'**
   String get solarFinancials;
 
   /// No description provided for @solarCapex.
   ///
   /// In en, this message translates to:
-  /// **'Investment'**
+  /// **'Installation cost'**
   String get solarCapex;
 
   /// No description provided for @solarYear1Savings.
   ///
   /// In en, this message translates to:
-  /// **'Year-1 savings'**
+  /// **'Saved in year 1'**
   String get solarYear1Savings;
 
   /// No description provided for @solarYear1Om.
   ///
   /// In en, this message translates to:
-  /// **'Year-1 O&M'**
+  /// **'Maintenance in year 1'**
   String get solarYear1Om;
 
   /// No description provided for @solarPayback.
   ///
   /// In en, this message translates to:
-  /// **'Simple payback'**
+  /// **'Pays back in'**
   String get solarPayback;
 
   /// No description provided for @solarNoPayback.
@@ -1577,7 +1577,7 @@ abstract class AppLocalizations {
   /// No description provided for @solarNoFinancials.
   ///
   /// In en, this message translates to:
-  /// **'Enter a capex per kWp to see savings and payback.'**
+  /// **'Enter the installer\'s price per kW to see money saved and payback.'**
   String get solarNoFinancials;
 
   /// No description provided for @solarCashflow.
@@ -3499,6 +3499,186 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{value} t CO₂'**
   String tonnesCo2(String value);
+
+  /// No description provided for @solarPanelsFit.
+  ///
+  /// In en, this message translates to:
+  /// **'Solar panels that fit on your roof'**
+  String get solarPanelsFit;
+
+  /// No description provided for @solarPanelsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} panels'**
+  String solarPanelsCount(String count);
+
+  /// No description provided for @solarPanelsEach.
+  ///
+  /// In en, this message translates to:
+  /// **'{watt} W each · {kw} kW system'**
+  String solarPanelsEach(String watt, String kw);
+
+  /// No description provided for @solarStatUnits.
+  ///
+  /// In en, this message translates to:
+  /// **'units/month'**
+  String get solarStatUnits;
+
+  /// No description provided for @solarStatCovers.
+  ///
+  /// In en, this message translates to:
+  /// **'of your use'**
+  String get solarStatCovers;
+
+  /// No description provided for @solarStatPayback.
+  ///
+  /// In en, this message translates to:
+  /// **'payback'**
+  String get solarStatPayback;
+
+  /// No description provided for @solarSummaryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'In simple words'**
+  String get solarSummaryTitle;
+
+  /// No description provided for @solarSay1.
+  ///
+  /// In en, this message translates to:
+  /// **'Your roof has space for about {count} solar panels of {watt} W. Together they make a {kw} kW system.'**
+  String solarSay1(String count, String watt, String kw);
+
+  /// No description provided for @solarSay2.
+  ///
+  /// In en, this message translates to:
+  /// **'They will make about {units} units (kWh) of electricity a month: more in sunny months, less in the monsoon.'**
+  String solarSay2(String units);
+
+  /// No description provided for @solarSay3.
+  ///
+  /// In en, this message translates to:
+  /// **'Your factory uses about {use} units a month, so solar covers about {percent}% of it.'**
+  String solarSay3(String use, String percent);
+
+  /// No description provided for @solarSay4.
+  ///
+  /// In en, this message translates to:
+  /// **'It saves about Tk {tk} a year. The installation cost of Tk {capex} comes back in about {years} years.'**
+  String solarSay4(String tk, String capex, String years);
+
+  /// No description provided for @solarSayNoPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'To see money saved and payback, go back and enter the installer\'s price per kW.'**
+  String get solarSayNoPrice;
+
+  /// No description provided for @solarSayNoBills.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your electricity bills to see how much of your use solar covers.'**
+  String get solarSayNoBills;
+
+  /// No description provided for @solarChartTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Units (kWh) made each month'**
+  String get solarChartTitle;
+
+  /// No description provided for @solarWorkedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How we worked it out'**
+  String get solarWorkedTitle;
+
+  /// No description provided for @solarWorkedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Step by step, for engineers'**
+  String get solarWorkedHint;
+
+  /// No description provided for @solarStep1.
+  ///
+  /// In en, this message translates to:
+  /// **'Roof area drawn on the map'**
+  String get solarStep1;
+
+  /// No description provided for @solarStep2.
+  ///
+  /// In en, this message translates to:
+  /// **'Usable for panels: {percent}% of the roof (walkways, tanks and stairs kept free)'**
+  String solarStep2(String percent);
+
+  /// No description provided for @solarStep3.
+  ///
+  /// In en, this message translates to:
+  /// **'System size: {area} m² ÷ {m2} m² per kW'**
+  String solarStep3(String area, String m2);
+
+  /// No description provided for @solarStep4.
+  ///
+  /// In en, this message translates to:
+  /// **'Panels: {kw} kW ÷ {panelKw} kW per panel'**
+  String solarStep4(String kw, String panelKw);
+
+  /// No description provided for @solarStep5Nasa.
+  ///
+  /// In en, this message translates to:
+  /// **'Full-sun hours per day, yearly average (NASA satellite data for this roof)'**
+  String get solarStep5Nasa;
+
+  /// No description provided for @solarStep5Manual.
+  ///
+  /// In en, this message translates to:
+  /// **'Full-sun hours per day (your value)'**
+  String get solarStep5Manual;
+
+  /// No description provided for @solarStep6.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly output: {kw} kW × {hours} h × 365 days × {pr}% efficiency{shade}'**
+  String solarStep6(String kw, String hours, String pr, String shade);
+
+  /// No description provided for @solarStepShade.
+  ///
+  /// In en, this message translates to:
+  /// **' × {percent}% left after shade'**
+  String solarStepShade(String percent);
+
+  /// No description provided for @solarStep7.
+  ///
+  /// In en, this message translates to:
+  /// **'CO₂ avoided: {units} kWh of grid power replaced × {factor} kg per kWh'**
+  String solarStep7(String units, String factor);
+
+  /// No description provided for @solarStepNote.
+  ///
+  /// In en, this message translates to:
+  /// **'kWp = panel power in full sun (1,000 W/m²). One full-sun hour = 1 kWh of sunlight per m². Efficiency covers heat, dust, wiring and inverter losses.'**
+  String get solarStepNote;
+
+  /// No description provided for @valueHoursDay.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} h/day'**
+  String valueHoursDay(String value);
+
+  /// No description provided for @valueWatt.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} W'**
+  String valueWatt(String value);
+
+  /// No description provided for @paramPanelQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Panel size (watts per panel)'**
+  String get paramPanelQuestion;
+
+  /// No description provided for @paramPanelHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Written on the panel label or the installer\'s quote. Most new panels are 540–600 W. Not sure? Keep 550 W.'**
+  String get paramPanelHint;
 }
 
 class _AppLocalizationsDelegate

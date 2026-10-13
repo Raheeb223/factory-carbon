@@ -7,6 +7,7 @@ import '../../data/providers.dart';
 import '../../domain/api_models.dart';
 import '../../domain/models.dart';
 import '../../domain/requests.dart';
+import '../../domain/solar_summary.dart';
 import '../../widgets/common.dart';
 import '../../widgets/inputs.dart';
 import 'solar_result_screen.dart';
@@ -48,6 +49,7 @@ class _SolarParamsScreenState extends ConsumerState<SolarParamsScreen> {
   bool? _netMetering;
   String _structure = 'unknown';
   String _shade = 'unsure';
+  late int _panelWatt = (widget.plan?.params['panel_watt'] as num?)?.toInt() ?? defaultPanelWatt;
   bool _busy = false;
   Object? _error;
 
@@ -117,7 +119,7 @@ class _SolarParamsScreenState extends ConsumerState<SolarParamsScreen> {
     try {
       final result = await ref.read(apiClientProvider).solarEstimate(body);
       if (!mounted) return;
-      final saved = {'params': body['params'], 'manual_peak_sun_hours': body['manual_peak_sun_hours']};
+      final saved = {'params': body['params'], 'manual_peak_sun_hours': body['manual_peak_sun_hours'], 'panel_watt': _panelWatt};
       await Navigator.of(context).push(MaterialPageRoute<void>(
         builder: (_) => SolarResultScreen(result: result, polygon: widget.polygon, params: saved, plan: widget.plan),
       ));
@@ -198,6 +200,19 @@ class _SolarParamsScreenState extends ConsumerState<SolarParamsScreen> {
               ]),
             ),
           ),
+          const SizedBox(height: 18),
+          Text(l.paramPanelQuestion, style: text.titleSmall),
+          Text(l.paramPanelHint, style: text.bodySmall),
+          const SizedBox(height: 8),
+          Wrap(spacing: 8, runSpacing: 8, children: [
+            for (final w in {...panelWattChoices, _panelWatt}.toList()..sort())
+              ChoiceChip(
+                key: Key('panel-$w'),
+                label: Text(l.valueWatt(fmt.number(w.toDouble()))),
+                selected: _panelWatt == w,
+                onSelected: (_) => setState(() => _panelWatt = w),
+              ),
+          ]),
           const SizedBox(height: 18),
           Text(l.paramShadeQuestion, style: text.titleSmall),
           Text(l.paramShadeHint, style: text.bodySmall),

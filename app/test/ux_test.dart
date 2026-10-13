@@ -7,6 +7,7 @@ import 'package:factory_carbon/data/providers.dart';
 import 'package:factory_carbon/data/settings_store.dart';
 import 'package:factory_carbon/domain/api_models.dart';
 import 'package:factory_carbon/domain/models.dart';
+import 'package:factory_carbon/domain/solar_summary.dart';
 import 'package:factory_carbon/features/bills/bills_screen.dart';
 import 'package:factory_carbon/features/carbon/reports_screen.dart';
 import 'package:factory_carbon/features/home/home_shell.dart';
@@ -195,6 +196,39 @@ void main() {
     await teardownDb(tester, db);
   });
 
+  test('panel count rounds down so the panels fit', () {
+    expect(panelCount(308.571, 550), 561);
+    expect(panelCount(5.5, 550), 10);
+    expect(panelCount(1, 0), 0);
+  });
+
+  test('solar result in plain words and a step chain an engineer can check', () async {
+    final en = await AppLocalizations.delegate.load(const Locale('en'));
+    final fmt = Fmt('en');
+    final r = SolarResult.fromJson(solarResultFixture());
+    final s = SolarSummary(r, panelWatt: 550);
+    final words = plainWords(en, fmt, s);
+    expect(words.first, en.solarSay1('561', '550', '309'));
+    expect(words[2], contains('covers about'));
+    expect(words.last, en.solarSayNoPrice);
+
+    final steps = workedSteps(en, fmt, s);
+    expect(steps.map((e) => e.$2), [
+      en.valueM2('3,600'),
+      en.valueM2('2,160'),
+      en.valueKwp('308.6'),
+      en.solarPanelsCount('561'),
+      en.valueHoursDay(fmt.number(r.peakSunHoursAnnualAvg, decimals: 2)),
+      en.valueKwhYear(fmt.number(r.annualGenerationKwh)),
+      en.tonnesCo2(fmt.tonnes(r.co2AvoidedT)),
+    ]);
+    expect(steps[1].$1, contains('60%'));
+    // the chain multiplies out to the backend's yearly output
+    expect(308.571 * r.peakSunHoursAnnualAvg * 365 * 0.78, closeTo(r.annualGenerationKwh, 1));
+    // a panel size chosen by the user changes only the count
+    expect(SolarSummary(r, panelWatt: 600).panels, 514);
+  });
+
   // Every main screen, both languages, on a small phone (360x640): no overflow or exceptions.
   for (final locale in const [Locale('en'), Locale('bn')]) {
     final screens = <String, Widget>{
@@ -204,6 +238,7 @@ void main() {
       'solar': const SolarScreen(),
       'settings': const SettingsScreen(),
       'solar details': const SolarParamsScreen(polygon: [LatLon(23.8, 90.4), LatLon(23.8, 90.401), LatLon(23.801, 90.401)]),
+      'solar result': SolarResultScreen(result: SolarResult.fromJson(solarResultFixture()), polygon: const [LatLon(23.8, 90.4)], params: const {'panel_watt': 550}),
     };
     for (final entry in screens.entries) {
       testWidgets('${entry.key} renders in ${locale.languageCode} on a small phone', (tester) async {
@@ -232,4 +267,46 @@ void main() {
       });
     }
   }
+}
+
+/// A backend-shaped solar estimate for a 3,600 m² roof in Dhaka (no capex, so no financials).
+Map<String, dynamic> solarResultFixture() {
+  const days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  const psh = [4.2, 4.9, 5.6, 5.8, 5.4, 4.4, 4.0, 4.1, 4.0, 4.3, 4.3, 4.0];
+  const kwp = 3600 * 0.6 / 7;
+  final gen = [for (var i = 0; i < 12; i++) kwp * psh[i] * days[i] * 0.78];
+  final annual = gen.reduce((a, b) => a + b);
+  var avg = 0.0;
+  for (var i = 0; i < 12; i++) {
+    avg += psh[i] * days[i] / 365;
+  }
+  const use = 1200000.0;
+  return {
+    'roof_area_m2': 3600.0,
+    'usable_area_m2': 2160.0,
+    'kwp': kwp,
+    'centroid': {'lat': 23.8, 'lon': 90.4},
+    'peak_sun_hours_monthly': psh,
+    'peak_sun_hours_annual_avg': avg,
+    'irradiance_source': 'nasa_power',
+    'monthly_generation_kwh': gen,
+    'annual_generation_kwh': annual,
+    'annual_consumption_kwh': use,
+    'self_consumed_kwh': annual,
+    'exported_kwh': 0.0,
+    'offset_share': annual / use,
+    'co2_avoided_t_per_year': annual * 0.62 / 1000,
+    'financials': null,
+    'params_used': [
+      for (final (n, v) in [('usable_roof_fraction', 0.6), ('m2_per_kwp', 7), ('performance_ratio', 0.78), ('shading_loss', 0)])
+        {'name': n, 'value': v, 'unit': 'x', 'origin': 'default', 'status': 'verified', 'source': 's'},
+    ],
+    'factors': {
+      'grid_electricity': {'name': 'grid_electricity', 'value': 0.62, 'unit': 'kgCO2_per_kWh', 'source': 'DoE', 'year': 2023, 'status': 'verified'},
+    },
+    'warnings': [
+      {'code': 'shading_not_assessed', 'message': 'x'},
+    ],
+    'disclaimer': 'Estimate only.',
+  };
 }
