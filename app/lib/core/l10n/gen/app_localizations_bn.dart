@@ -887,26 +887,26 @@ class AppLocalizationsBn extends AppLocalizations {
   String get solarSourceManual => 'হাতে দেওয়া';
 
   @override
-  String get solarFinancials => 'আর্থিক হিসাব';
+  String get solarFinancials => 'টাকার হিসাব';
 
   @override
-  String get solarCapex => 'বিনিয়োগ';
+  String get solarCapex => 'বসানোর খরচ';
 
   @override
-  String get solarYear1Savings => 'প্রথম বছরের সাশ্রয়';
+  String get solarYear1Savings => 'প্রথম বছরে সাশ্রয়';
 
   @override
-  String get solarYear1Om => 'প্রথম বছরের রক্ষণাবেক্ষণ';
+  String get solarYear1Om => 'প্রথম বছরে রক্ষণাবেক্ষণ';
 
   @override
-  String get solarPayback => 'বিনিয়োগ ফেরতের সময়';
+  String get solarPayback => 'খরচ উঠে আসবে';
 
   @override
   String get solarNoPayback => 'বিনিয়োগ ফেরত আসে না';
 
   @override
   String get solarNoFinancials =>
-      'সাশ্রয় ও বিনিয়োগ ফেরতের সময় দেখতে প্রতি kWp বিনিয়োগ লিখুন।';
+      'সাশ্রয় ও খরচ উঠে আসার সময় দেখতে প্রতি kW-এর দাম লিখুন।';
 
   @override
   String get solarCashflow => 'ক্রমপুঞ্জিত নগদ প্রবাহ (মিলিয়ন টাকা)';
@@ -2049,4 +2049,127 @@ class AppLocalizationsBn extends AppLocalizations {
   String tonnesCo2(String value) {
     return '$value টন CO₂';
   }
+
+  @override
+  String get solarPanelsFit => 'আপনার ছাদে যতগুলো সোলার প্যানেল বসবে';
+
+  @override
+  String solarPanelsCount(String count) {
+    return '$countটি প্যানেল';
+  }
+
+  @override
+  String solarPanelsEach(String watt, String kw) {
+    return 'প্রতিটি $watt W · মোট $kw kW সিস্টেম';
+  }
+
+  @override
+  String get solarStatUnits => 'ইউনিট/মাস';
+
+  @override
+  String get solarStatCovers => 'আপনার ব্যবহারের';
+
+  @override
+  String get solarStatPayback => 'খরচ উঠবে';
+
+  @override
+  String get solarSummaryTitle => 'সহজ কথায়';
+
+  @override
+  String solarSay1(String count, String watt, String kw) {
+    return 'আপনার ছাদে $watt W-এর প্রায় $countটি সোলার প্যানেল বসানোর জায়গা আছে। সব মিলিয়ে এটি $kw kW-এর সিস্টেম।';
+  }
+
+  @override
+  String solarSay2(String units) {
+    return 'এগুলো মাসে প্রায় $units ইউনিট (kWh) বিদ্যুৎ তৈরি করবে: রোদের মাসে বেশি, বর্ষায় কম।';
+  }
+
+  @override
+  String solarSay3(String use, String percent) {
+    return 'আপনার কারখানা মাসে প্রায় $use ইউনিট ব্যবহার করে, তাই সোলার এর প্রায় $percent% পূরণ করবে।';
+  }
+
+  @override
+  String solarSay4(String tk, String capex, String years) {
+    return 'বছরে প্রায় $tk টাকা সাশ্রয় হবে। বসানোর খরচ $capex টাকা প্রায় $years বছরে উঠে আসবে।';
+  }
+
+  @override
+  String get solarSayNoPrice =>
+      'সাশ্রয় ও খরচ উঠে আসার সময় দেখতে আগের পাতায় ফিরে প্রতি kW-এর দাম লিখুন।';
+
+  @override
+  String get solarSayNoBills =>
+      'সোলার আপনার ব্যবহারের কত অংশ পূরণ করবে দেখতে বিদ্যুৎ বিল যোগ করুন।';
+
+  @override
+  String get solarChartTitle => 'প্রতি মাসে তৈরি ইউনিট (kWh)';
+
+  @override
+  String get solarWorkedTitle => 'কীভাবে হিসাব করা হলো';
+
+  @override
+  String get solarWorkedHint => 'ধাপে ধাপে, প্রকৌশলীদের জন্য';
+
+  @override
+  String get solarStep1 => 'ম্যাপে আঁকা ছাদের আয়তন';
+
+  @override
+  String solarStep2(String percent) {
+    return 'প্যানেলের জন্য ব্যবহারযোগ্য: ছাদের $percent% (হাঁটার পথ, ট্যাংক ও সিঁড়ি খালি রেখে)';
+  }
+
+  @override
+  String solarStep3(String area, String m2) {
+    return 'সিস্টেমের আকার: $area m² ÷ প্রতি kW-এ $m2 m²';
+  }
+
+  @override
+  String solarStep4(String kw, String panelKw) {
+    return 'প্যানেল: $kw kW ÷ প্রতি প্যানেলে $panelKw kW';
+  }
+
+  @override
+  String get solarStep5Nasa =>
+      'দিনে পূর্ণ রোদের ঘণ্টা, বছরের গড় (এই ছাদের জন্য NASA স্যাটেলাইট তথ্য)';
+
+  @override
+  String get solarStep5Manual => 'দিনে পূর্ণ রোদের ঘণ্টা (আপনার দেওয়া মান)';
+
+  @override
+  String solarStep6(String kw, String hours, String pr, String shade) {
+    return 'বছরে উৎপাদন: $kw kW × $hours ঘণ্টা × ৩৬৫ দিন × $pr% দক্ষতা$shade';
+  }
+
+  @override
+  String solarStepShade(String percent) {
+    return ' × ছায়ার পরে বাকি $percent%';
+  }
+
+  @override
+  String solarStep7(String units, String factor) {
+    return 'এড়ানো CO₂: গ্রিডের $units kWh বিদ্যুতের বদলে × প্রতি kWh-এ $factor kg';
+  }
+
+  @override
+  String get solarStepNote =>
+      'kWp = পূর্ণ রোদে (১,০০০ W/m²) প্যানেলের ক্ষমতা। এক ঘণ্টা পূর্ণ রোদ = প্রতি m²-এ ১ kWh সূর্যালোক। দক্ষতার মধ্যে তাপ, ধুলা, তার ও ইনভার্টারের ক্ষতি ধরা আছে।';
+
+  @override
+  String valueHoursDay(String value) {
+    return '$value ঘণ্টা/দিন';
+  }
+
+  @override
+  String valueWatt(String value) {
+    return '$value W';
+  }
+
+  @override
+  String get paramPanelQuestion => 'প্যানেলের আকার (প্রতি প্যানেলে ওয়াট)';
+
+  @override
+  String get paramPanelHint =>
+      'প্যানেলের লেবেলে বা কোটেশনে লেখা থাকে। নতুন প্যানেল সাধারণত ৫৪০–৬০০ W। নিশ্চিত না হলে ৫৫০ W রাখুন।';
 }

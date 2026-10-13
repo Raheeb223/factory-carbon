@@ -499,13 +499,13 @@
   "solarPsh": "Peak sun hours (average)",
   "solarSourceNasa": "NASA POWER",
   "solarSourceManual": "Manual",
-  "solarFinancials": "Financials",
-  "solarCapex": "Investment",
-  "solarYear1Savings": "Year-1 savings",
-  "solarYear1Om": "Year-1 O&M",
-  "solarPayback": "Simple payback",
+  "solarFinancials": "Money",
+  "solarCapex": "Installation cost",
+  "solarYear1Savings": "Saved in year 1",
+  "solarYear1Om": "Maintenance in year 1",
+  "solarPayback": "Pays back in",
   "solarNoPayback": "No payback",
-  "solarNoFinancials": "Enter a capex per kWp to see savings and payback.",
+  "solarNoFinancials": "Enter the installer's price per kW to see money saved and payback.",
   "solarCashflow": "Cumulative cash flow (million Tk)",
   "solarSavePlan": "Save plan",
   "solarPlanName": "Plan name",
@@ -1052,5 +1052,169 @@
         "type": "String"
       }
     }
-  }
+  },
+  "solarPanelsFit": "Solar panels that fit on your roof",
+  "solarPanelsCount": "{count} panels",
+  "@solarPanelsCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "solarPanelsEach": "{watt} W each · {kw} kW system",
+  "@solarPanelsEach": {
+    "placeholders": {
+      "watt": {
+        "type": "String"
+      },
+      "kw": {
+        "type": "String"
+      }
+    }
+  },
+  "solarStatUnits": "units/month",
+  "solarStatCovers": "of your use",
+  "solarStatPayback": "payback",
+  "solarSummaryTitle": "In simple words",
+  "solarSay1": "Your roof has space for about {count} solar panels of {watt} W. Together they make a {kw} kW system.",
+  "@solarSay1": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      },
+      "watt": {
+        "type": "String"
+      },
+      "kw": {
+        "type": "String"
+      }
+    }
+  },
+  "solarSay2": "They will make about {units} units (kWh) of electricity a month: more in sunny months, less in the monsoon.",
+  "@solarSay2": {
+    "placeholders": {
+      "units": {
+        "type": "String"
+      }
+    }
+  },
+  "solarSay3": "Your factory uses about {use} units a month, so solar covers about {percent}% of it.",
+  "@solarSay3": {
+    "placeholders": {
+      "use": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "solarSay4": "It saves about Tk {tk} a year. The installation cost of Tk {capex} comes back in about {years} years.",
+  "@solarSay4": {
+    "placeholders": {
+      "tk": {
+        "type": "String"
+      },
+      "capex": {
+        "type": "String"
+      },
+      "years": {
+        "type": "String"
+      }
+    }
+  },
+  "solarSayNoPrice": "To see money saved and payback, go back and enter the installer's price per kW.",
+  "solarSayNoBills": "Add your electricity bills to see how much of your use solar covers.",
+  "solarChartTitle": "Units (kWh) made each month",
+  "solarWorkedTitle": "How we worked it out",
+  "solarWorkedHint": "Step by step, for engineers",
+  "solarStep1": "Roof area drawn on the map",
+  "solarStep2": "Usable for panels: {percent}% of the roof (walkways, tanks and stairs kept free)",
+  "@solarStep2": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "solarStep3": "System size: {area} m² ÷ {m2} m² per kW",
+  "@solarStep3": {
+    "placeholders": {
+      "area": {
+        "type": "String"
+      },
+      "m2": {
+        "type": "String"
+      }
+    }
+  },
+  "solarStep4": "Panels: {kw} kW ÷ {panelKw} kW per panel",
+  "@solarStep4": {
+    "placeholders": {
+      "kw": {
+        "type": "String"
+      },
+      "panelKw": {
+        "type": "String"
+      }
+    }
+  },
+  "solarStep5Nasa": "Full-sun hours per day, yearly average (NASA satellite data for this roof)",
+  "solarStep5Manual": "Full-sun hours per day (your value)",
+  "solarStep6": "Yearly output: {kw} kW × {hours} h × 365 days × {pr}% efficiency{shade}",
+  "@solarStep6": {
+    "placeholders": {
+      "kw": {
+        "type": "String"
+      },
+      "hours": {
+        "type": "String"
+      },
+      "pr": {
+        "type": "String"
+      },
+      "shade": {
+        "type": "String"
+      }
+    }
+  },
+  "solarStepShade": " × {percent}% left after shade",
+  "@solarStepShade": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "solarStep7": "CO₂ avoided: {units} kWh of grid power replaced × {factor} kg per kWh",
+  "@solarStep7": {
+    "placeholders": {
+      "units": {
+        "type": "String"
+      },
+      "factor": {
+        "type": "String"
+      }
+    }
+  },
+  "solarStepNote": "kWp = panel power in full sun (1,000 W/m²). One full-sun hour = 1 kWh of sunlight per m². Efficiency covers heat, dust, wiring and inverter losses.",
+  "valueHoursDay": "{value} h/day",
+  "@valueHoursDay": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "valueWatt": "{value} W",
+  "@valueWatt": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "paramPanelQuestion": "Panel size (watts per panel)",
+  "paramPanelHint": "Written on the panel label or the installer's quote. Most new panels are 540–600 W. Not sure? Keep 550 W."
 }

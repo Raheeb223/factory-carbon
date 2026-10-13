@@ -890,26 +890,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get solarSourceManual => 'Manual';
 
   @override
-  String get solarFinancials => 'Financials';
+  String get solarFinancials => 'Money';
 
   @override
-  String get solarCapex => 'Investment';
+  String get solarCapex => 'Installation cost';
 
   @override
-  String get solarYear1Savings => 'Year-1 savings';
+  String get solarYear1Savings => 'Saved in year 1';
 
   @override
-  String get solarYear1Om => 'Year-1 O&M';
+  String get solarYear1Om => 'Maintenance in year 1';
 
   @override
-  String get solarPayback => 'Simple payback';
+  String get solarPayback => 'Pays back in';
 
   @override
   String get solarNoPayback => 'No payback';
 
   @override
   String get solarNoFinancials =>
-      'Enter a capex per kWp to see savings and payback.';
+      'Enter the installer\'s price per kW to see money saved and payback.';
 
   @override
   String get solarCashflow => 'Cumulative cash flow (million Tk)';
@@ -2063,4 +2063,127 @@ class AppLocalizationsEn extends AppLocalizations {
   String tonnesCo2(String value) {
     return '$value t CO₂';
   }
+
+  @override
+  String get solarPanelsFit => 'Solar panels that fit on your roof';
+
+  @override
+  String solarPanelsCount(String count) {
+    return '$count panels';
+  }
+
+  @override
+  String solarPanelsEach(String watt, String kw) {
+    return '$watt W each · $kw kW system';
+  }
+
+  @override
+  String get solarStatUnits => 'units/month';
+
+  @override
+  String get solarStatCovers => 'of your use';
+
+  @override
+  String get solarStatPayback => 'payback';
+
+  @override
+  String get solarSummaryTitle => 'In simple words';
+
+  @override
+  String solarSay1(String count, String watt, String kw) {
+    return 'Your roof has space for about $count solar panels of $watt W. Together they make a $kw kW system.';
+  }
+
+  @override
+  String solarSay2(String units) {
+    return 'They will make about $units units (kWh) of electricity a month: more in sunny months, less in the monsoon.';
+  }
+
+  @override
+  String solarSay3(String use, String percent) {
+    return 'Your factory uses about $use units a month, so solar covers about $percent% of it.';
+  }
+
+  @override
+  String solarSay4(String tk, String capex, String years) {
+    return 'It saves about Tk $tk a year. The installation cost of Tk $capex comes back in about $years years.';
+  }
+
+  @override
+  String get solarSayNoPrice =>
+      'To see money saved and payback, go back and enter the installer\'s price per kW.';
+
+  @override
+  String get solarSayNoBills =>
+      'Add your electricity bills to see how much of your use solar covers.';
+
+  @override
+  String get solarChartTitle => 'Units (kWh) made each month';
+
+  @override
+  String get solarWorkedTitle => 'How we worked it out';
+
+  @override
+  String get solarWorkedHint => 'Step by step, for engineers';
+
+  @override
+  String get solarStep1 => 'Roof area drawn on the map';
+
+  @override
+  String solarStep2(String percent) {
+    return 'Usable for panels: $percent% of the roof (walkways, tanks and stairs kept free)';
+  }
+
+  @override
+  String solarStep3(String area, String m2) {
+    return 'System size: $area m² ÷ $m2 m² per kW';
+  }
+
+  @override
+  String solarStep4(String kw, String panelKw) {
+    return 'Panels: $kw kW ÷ $panelKw kW per panel';
+  }
+
+  @override
+  String get solarStep5Nasa =>
+      'Full-sun hours per day, yearly average (NASA satellite data for this roof)';
+
+  @override
+  String get solarStep5Manual => 'Full-sun hours per day (your value)';
+
+  @override
+  String solarStep6(String kw, String hours, String pr, String shade) {
+    return 'Yearly output: $kw kW × $hours h × 365 days × $pr% efficiency$shade';
+  }
+
+  @override
+  String solarStepShade(String percent) {
+    return ' × $percent% left after shade';
+  }
+
+  @override
+  String solarStep7(String units, String factor) {
+    return 'CO₂ avoided: $units kWh of grid power replaced × $factor kg per kWh';
+  }
+
+  @override
+  String get solarStepNote =>
+      'kWp = panel power in full sun (1,000 W/m²). One full-sun hour = 1 kWh of sunlight per m². Efficiency covers heat, dust, wiring and inverter losses.';
+
+  @override
+  String valueHoursDay(String value) {
+    return '$value h/day';
+  }
+
+  @override
+  String valueWatt(String value) {
+    return '$value W';
+  }
+
+  @override
+  String get paramPanelQuestion => 'Panel size (watts per panel)';
+
+  @override
+  String get paramPanelHint =>
+      'Written on the panel label or the installer\'s quote. Most new panels are 540–600 W. Not sure? Keep 550 W.';
 }
