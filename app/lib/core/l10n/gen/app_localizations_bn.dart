@@ -647,7 +647,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get methodologyBody =>
-      'স্কোপ ২ (অবস্থানভিত্তিক) = বিদ্যুৎ kWh × গ্রিড নির্গমন ফ্যাক্টর। স্কোপ ১ = ডিজেল লিটার × ডিজেল ফ্যাক্টর + গ্যাস m³ × গ্যাস ফ্যাক্টর। ফলাফল টন CO2e-তে। প্রতি উৎপাদন এককে নির্গমন শুধু উৎপাদনের তথ্যসহ সম্পূর্ণ মাসের জন্য দেখানো হয়।';
+      'স্কোপ ২ (অবস্থানভিত্তিক) = বিদ্যুৎ kWh × বাংলাদেশের গ্রিড নির্গমন ফ্যাক্টর। স্কোপ ১ = ব্যবহৃত জ্বালানি × সেই জ্বালানির ফ্যাক্টর (ডিজেল লিটার, প্রাকৃতিক গ্যাস m³, এলপিজি কেজি, ফার্নেস অয়েল লিটার; DESNZ ফ্যাক্টর)। ফলাফল টন CO2e-তে। প্রতি উৎপাদন এককে নির্গমন শুধু উৎপাদনের তথ্যসহ সম্পূর্ণ মাসের জন্য দেখানো হয়। এগুলো পরিকল্পনা ও ক্রেতাদের কাছে রিপোর্ট করার জন্য আনুমানিক হিসাব, প্রত্যয়িত অডিট নয়।';
 
   @override
   String noteMissingData(String source) {
@@ -785,7 +785,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get solarDrawHint =>
-      'এলাকার নাম খুঁজুন বা GPS বোতাম চাপুন। কাছে জুম করে কারখানার ছাদে ট্যাপ করুন: ছাদের সীমানা নিজে থেকেই আঁকা হবে। সীমানা না এলে ছাদের প্রতিটি কোণে ট্যাপ করুন।';
+      'কারখানার ছাদে ট্যাপ করুন, ছাদের সীমানা নিজে থেকেই আঁকা হবে। ঠিকমতো মেলাতে কোণগুলো টেনে সরান, নতুন কোণ যোগ করতে কিনারার + চাপুন, কোণ মুছতে কোণটি চেপে ধরে রাখুন।';
 
   @override
   String solarPoints(int count) {
@@ -1970,7 +1970,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get solarOutlineFound =>
-      'ছাদের সীমানা পাওয়া গেছে। আপনার ছাদের সাথে মিলছে কিনা দেখে \'চালিয়ে যান\' চাপুন।';
+      'ছাদের সীমানা পাওয়া গেছে। দরকার হলে কোণগুলো টেনে ঠিক করুন, তারপর \'চালিয়ে যান\' চাপুন।';
 
   @override
   String get solarOutlineNone =>
@@ -1979,6 +1979,25 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get solarOutlineOffline =>
       'ভবনের সীমানা আনা যায়নি। ছাদের প্রতিটি কোণে ট্যাপ করুন।';
+
+  @override
+  String get solarOutlineAttribution => 'ভবন © OpenStreetMap, Overture Maps';
+
+  @override
+  String get solarNoRoofThere =>
+      'সেখানে কোনো ছাদের সীমানা নেই। কোণগুলো টেনে ঠিক করুন, অথবা হাতে আঁকতে \'মুছুন\' চাপুন।';
+
+  @override
+  String get solarAdjustHint =>
+      'কোণ সরাতে টেনে নিন, নতুন কোণ যোগ করতে কিনারার + চাপুন, কোণ মুছতে চেপে ধরে রাখুন।';
+
+  @override
+  String get solarOutlineSwitched =>
+      'এই ছাদটি বেছে নেওয়া হয়েছে। আগেরটিতে ফিরতে \'আগের অবস্থা\' চাপুন।';
+
+  @override
+  String get solarSuggested =>
+      'আপনার কারখানার অবস্থানের ছাদটি চিহ্নিত করা হয়েছে। কোণগুলো টেনে ঠিক করুন, অথবা অন্য ছাদে ট্যাপ করুন।';
 
   @override
   String solarAreaApprox(String area) {

@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../data/providers.dart';
 import '../../domain/geo.dart';
 import '../../domain/models.dart';
 
@@ -40,7 +41,7 @@ abstract interface class PlaceFinder {
 /// OpenStreetMap services: Nominatim for search (one request per user action, as its usage
 /// policy requires; no search-as-you-type) and Overpass for building footprints.
 class OsmPlaceFinder implements PlaceFinder {
-  OsmPlaceFinder({Dio? dio, BuildingCache? cache})
+  OsmPlaceFinder({Dio? dio, BuildingCache? cache, this.footprints})
       : _cache = cache ?? BuildingCache(),
         _dio = dio ??
             Dio(BaseOptions(
@@ -52,9 +53,16 @@ class OsmPlaceFinder implements PlaceFinder {
   final Dio _dio;
   final BuildingCache _cache;
 
+  /// Building outlines from the app's server (Overture Maps), tried before Overpass:
+  /// it also has Google and Microsoft footprints, so far more Bangladeshi roofs are covered.
+  final Future<List<List<LatLon>>> Function(LatLon at)? footprints;
+
   /// The whole outline lookup gives up after this, so the user can tap the corners instead
   /// of waiting on overloaded public servers.
   static const outlineBudget = Duration(seconds: 12);
+
+  /// Time allowed for the app's server before falling back to Overpass.
+  static const serverBudget = Duration(seconds: 10);
 
   /// Public Overpass mirrors are often overloaded (504) or reject POST, so the same GET query
   /// goes to several at once and the first good answer wins.
@@ -101,6 +109,20 @@ class OsmPlaceFinder implements PlaceFinder {
     final cached = await _cache.near(tap);
     final fromCache = cached == null ? null : pickBuilding(cached, tap);
     if (fromCache != null) return fromCache;
+
+    if (footprints != null) {
+      List<List<LatLon>>? outlines;
+      try {
+        outlines = await footprints!(tap).timeout(serverBudget);
+      } catch (_) {
+        // server asleep or offline: fall back to OpenStreetMap's Overpass below
+      }
+      if (outlines != null) {
+        // Overture already includes OpenStreetMap, so its answer is final.
+        unawaited(_cache.add(tap, outlines));
+        return pickBuilding(outlines, tap);
+      }
+    }
 
     // "around" measures distance to a building's outline, so a wide radius is needed for a
     // tap in the middle of a big shed; the containing outline is then chosen locally.
@@ -229,4 +251,6 @@ class BuildingCache {
   }
 }
 
-final placeFinderProvider = Provider<PlaceFinder>((ref) => OsmPlaceFinder());
+final placeFinderProvider = Provider<PlaceFinder>(
+  (ref) => OsmPlaceFinder(footprints: (at) => ref.read(apiClientProvider).buildingsNear(at, timeout: OsmPlaceFinder.serverBudget)),
+);

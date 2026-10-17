@@ -13,3 +13,8 @@ pyproj==3.7.2
 shapely==2.2.0
 reportlab==5.0.1
 matplotlib==3.11.2
+# building outlines (Overture PMTiles vector tiles)
+pmtiles==3.8.1
+mapbox-vector-tile==2.2.0
+protobuf==6.33.6
+pyclipper==1.4.0

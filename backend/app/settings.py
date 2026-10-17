@@ -45,6 +45,8 @@ class Settings(BaseSettings):
     trust_proxy_headers: bool = False
     nasa_power_timeout_s: float = Field(default=20.0, gt=0)
     nasa_cache_dir: Path | None = None
+    buildings_timeout_s: float = Field(default=15.0, gt=0)
+    buildings_pmtiles_url: str | None = None
     config_dir: Path = DEFAULT_CONFIG_DIR
 
     @field_validator("gemini_model", mode="before")

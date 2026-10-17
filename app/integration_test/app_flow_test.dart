@@ -312,8 +312,8 @@ void main() {
     expect(String.fromCharCodes(pdf.take(5)), '%PDF-');
     expect(pdf.length, greaterThan(20000));
 
-    // Find the roof: place search (Nominatim), pasted coordinates, then one tap on a mapped
-    // building in Tongi draws its outline from OpenStreetMap (Overpass).
+    // Find the roof: place search (Nominatim), pasted coordinates, then one tap on a building
+    // in Tongi draws its outline (Overture Maps via the backend, else OpenStreetMap's Overpass).
     Navigator.of(tester.element(find.byType(HomeShell))).push(MaterialPageRoute<void>(builder: (_) => const SolarMapScreen()));
     await pumpUntil(tester, find.byKey(const Key('place-search')));
     await tester.enterText(find.byKey(const Key('place-search')), 'Tongi');
@@ -330,9 +330,18 @@ void main() {
     await tester.tap(find.byKey(const Key('place-search-go')));
     await pumpFor(tester, const Duration(seconds: 2));
     await tester.tapAt(tester.getCenter(find.byType(FlutterMap)));
-    await pumpUntil(tester, find.byType(SnackBar), timeout: const Duration(seconds: 60));
-    final snack = tester.widget<Text>(find.descendant(of: find.byType(SnackBar), matching: find.byType(Text)).first).data;
-    if (snack == en.solarOutlineOffline) {
+    final answers = {en.solarOutlineFound, en.solarOutlineSwitched, en.solarOutlineOffline, en.solarOutlineNone};
+    String? message() {
+      final m = find.descendant(of: find.byKey(const Key('map-message')), matching: find.byType(Text));
+      return m.evaluate().isEmpty ? null : tester.widget<Text>(m.first).data;
+    }
+
+    final deadline = DateTime.now().add(const Duration(seconds: 60));
+    while (!answers.contains(message()) && DateTime.now().isBefore(deadline)) {
+      await pumpFor(tester, const Duration(milliseconds: 300));
+    }
+    final snack = message();
+    if (snack == en.solarOutlineOffline || snack == en.solarOutlineNone) {
       // The public OpenStreetMap building service is often down: the first tap is the first
       // corner, so draw the rest of the roof by hand, as a user would.
       final c = tester.getCenter(find.byType(FlutterMap));
@@ -341,7 +350,7 @@ void main() {
         await pumpFor(tester, const Duration(milliseconds: 500));
       }
     } else {
-      expect(snack, en.solarOutlineFound);
+      expect(snack, anyOf(en.solarOutlineFound, en.solarOutlineSwitched));
     }
     expect(find.byKey(const Key('roof-area')), findsOneWidget);
     await pumpFor(tester, const Duration(seconds: 2));

@@ -651,7 +651,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get methodologyBody =>
-      'Scope 2 (location-based) = electricity kWh × grid emission factor. Scope 1 = diesel litres × diesel factor + gas m³ × gas factor. Results are in tonnes CO2e. Intensity is shown only for complete months with production.';
+      'Scope 2 (location-based) = electricity kWh × Bangladesh grid emission factor. Scope 1 = fuel used × that fuel\'s factor (diesel litres, natural gas m³, LPG kg, furnace oil litres; DESNZ factors). Results are in tonnes CO2e. Intensity is shown only for complete months with production. These are estimates for planning and reporting to buyers, not a certified audit.';
 
   @override
   String noteMissingData(String source) {
@@ -788,7 +788,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get solarDrawHint =>
-      'Search your area or tap the GPS button. Zoom in and tap your factory roof: the outline is drawn for you. No outline? Tap each roof corner.';
+      'Tap your factory roof and its outline is drawn for you. Drag the corners to fit it exactly, tap + on an edge to add a corner, long-press a corner to remove it.';
 
   @override
   String solarPoints(int count) {
@@ -1980,7 +1980,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get solarOutlineFound =>
-      'Roof outline found. Check that it matches your roof, then tap Continue.';
+      'Roof outline found. Drag the corners if it needs adjusting, then tap Continue.';
 
   @override
   String get solarOutlineNone =>
@@ -1989,6 +1989,25 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get solarOutlineOffline =>
       'Could not load building outlines. Tap each corner of your roof instead.';
+
+  @override
+  String get solarOutlineAttribution =>
+      'Buildings © OpenStreetMap, Overture Maps';
+
+  @override
+  String get solarNoRoofThere =>
+      'No roof outline there. Drag the corners to adjust, or tap Clear to draw by hand.';
+
+  @override
+  String get solarAdjustHint =>
+      'Drag a corner to move it, tap + on an edge to add a corner, or long-press a corner to remove it.';
+
+  @override
+  String get solarOutlineSwitched => 'Switched to this roof. Undo goes back.';
+
+  @override
+  String get solarSuggested =>
+      'We marked the roof at your factory\'s location. Drag the corners to adjust, or tap another roof.';
 
   @override
   String solarAreaApprox(String area) {

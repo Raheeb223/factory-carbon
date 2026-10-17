@@ -20,6 +20,7 @@ from app.api import Services, router
 from app.extraction.gemini_client import GeminiExtractor, build_genai_client
 from app.security import ApiError, DailyCap, RateLimiter
 from app.settings import API_VERSION, APP_VERSION, Settings, get_settings, load_app_config
+from app.solar.buildings import BuildingFootprints
 from app.solar.nasa_power import NasaPowerClient
 
 logger = logging.getLogger("app")
@@ -31,7 +32,12 @@ def _error(status: int, code: str, message: str, headers: dict[str, str] | None 
     return JSONResponse(status_code=status, content={"error": {"code": code, "message": message}}, headers=headers)
 
 
-def build_services(settings: Settings, extractor: GeminiExtractor | None = None, nasa: NasaPowerClient | None = None) -> Services:
+def build_services(
+    settings: Settings,
+    extractor: GeminiExtractor | None = None,
+    nasa: NasaPowerClient | None = None,
+    buildings: BuildingFootprints | None = None,
+) -> Services:
     config = load_app_config(settings.config_dir)
     daily_cap = DailyCap(settings.daily_gemini_cap)
     if extractor is None and settings.gemini_configured:
@@ -46,6 +52,7 @@ def build_services(settings: Settings, extractor: GeminiExtractor | None = None,
         extract_rate_limiter=RateLimiter(settings.extract_rate_limit_per_minute),
         daily_cap=daily_cap,
         nasa=nasa or NasaPowerClient(settings.nasa_power_timeout_s, settings.nasa_cache_dir),
+        buildings=buildings or BuildingFootprints(settings.buildings_timeout_s, settings.buildings_pmtiles_url),
         extractor=extractor,
         history_template=template_path.read_text(encoding="utf-8"),
     )
