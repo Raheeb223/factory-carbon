@@ -27,8 +27,25 @@ VALIDATION_NOTE = (
     "Draft emissions report for internal review. Its methodology and format have not yet been "
     "validated against the buyer's reporting requirements."
 )
-SOURCE_LABEL = {"electricity": "Grid electricity", "diesel": "Diesel", "gas": "Natural gas"}
-UNIT_LABEL = {"kWh": "kWh", "litre": "L", "m3": "m3"}
+FACILITY_LABEL = {
+    "knit": "Knit garments",
+    "woven": "Woven garments",
+    "sweater": "Sweaters",
+    "denim": "Denim",
+    "dyeing": "Dyeing and finishing",
+    "washing": "Washing",
+    "other": "Garments / textiles",
+}
+SOURCE_LABEL = {"electricity": "Grid electricity", "diesel": "Diesel", "gas": "Natural gas", "lpg": "LPG", "furnace_oil": "Furnace oil"}
+UNIT_LABEL = {"kWh": "kWh", "litre": "L", "m3": "m3", "kg": "kg"}
+# Quantity column per source in the monthly table: (header, MonthEmissions field).
+QUANTITY_COLUMNS = {
+    "electricity": ("kWh", "electricity_kwh"),
+    "diesel": ("Diesel L", "diesel_litres"),
+    "gas": ("Gas m3", "gas_m3"),
+    "lpg": ("LPG kg", "lpg_kg"),
+    "furnace_oil": ("F. oil L", "furnace_oil_litres"),
+}
 
 
 def _how_entered(b: ConfirmedBillInput) -> str:
@@ -111,8 +128,16 @@ def build_pdf(
     # ---- cover
     story += [Spacer(1, 40 * mm), Paragraph("Draft Greenhouse Gas Emissions Report", st["title"]), Paragraph("Scope 1 (direct) and Scope 2 (purchased electricity, location-based), from utility bills", st["center"]), Spacer(1, 12 * mm)]
     story.append(Paragraph(f"<b>{escape(factory.name)}</b>", st["center"]))
-    if factory.location:
-        story.append(Paragraph(escape(factory.location), st["center"]))
+    place = ", ".join(p for p in (factory.location, factory.district) if p)
+    if place:
+        story.append(Paragraph(escape(place), st["center"]))
+    profile = [
+        FACILITY_LABEL[factory.facility_type] if factory.facility_type else None,
+        f"{factory.workers:,} workers" if factory.workers is not None else None,
+        f"{factory.shifts_per_day} shift{'s' if factory.shifts_per_day != 1 else ''} per day" if factory.shifts_per_day else None,
+    ]
+    if any(profile):
+        story.append(Paragraph(escape(" | ".join(p for p in profile if p)), st["center"]))
     story += [Spacer(1, 6 * mm), Paragraph(f"Reporting period: {period}", st["center"]), Paragraph(f"Generated: {generated_at.strftime('%Y-%m-%d %H:%M UTC')}", st["center"]), Spacer(1, 10 * mm)]
     story += [Paragraph(VALIDATION_NOTE, st["center"]), Spacer(1, 6 * mm)]
     if draft:
@@ -123,14 +148,20 @@ def build_pdf(
 
     # ---- summary
     t = carbon.totals
-    names = {"electricity": "grid electricity (Scope 2)", "diesel": "diesel (Scope 1)", "gas": "natural gas (Scope 1)"}
-    present = [k for k, has in (("electricity", any(m.electricity_kwh is not None for m in carbon.months)), ("diesel", any(m.diesel_litres is not None for m in carbon.months)), ("gas", any(m.gas_m3 is not None for m in carbon.months))) if has]
+    names = {
+        "electricity": "grid electricity (Scope 2)",
+        "diesel": "diesel (Scope 1)",
+        "gas": "natural gas (Scope 1)",
+        "lpg": "LPG (Scope 1)",
+        "furnace_oil": "furnace oil (Scope 1)",
+    }
+    present = [k for k, (_, field) in QUANTITY_COLUMNS.items() if any(getattr(m, field) is not None for m in carbon.months)]
     included = ", ".join(names[k] for k in present) or "none"
     story.append(Paragraph("Summary", st["h1"]))
     summary: list[list[str]] = [
         ["Reporting period", period],
         ["Emission sources included", included],
-        ["Scope 1: direct emissions from fuel burned on site (diesel, natural gas), tCO2e", _fmt(t.scope1_t, 3)],
+        ["Scope 1: direct emissions from fuel burned on site (diesel, natural gas, LPG, furnace oil), tCO2e", _fmt(t.scope1_t, 3)],
         ["Scope 2: indirect emissions from purchased grid electricity (location-based), tCO2*", _fmt(t.scope2_t, 3)],
         ["Total (Scope 1 + Scope 2), tCO2e", _fmt(t.total_t, 3)],
         [f"Intensity, tCO2e per 1,000 {unit_label}", _fmt(t.intensity_t_per_1000_units, 4)],
@@ -146,15 +177,41 @@ def build_pdf(
         for e in carbon.errors:
             story.append(Paragraph(f"<font color='#b00020'><b>Not calculated:</b></font> {escape(e.message)}", st["body"]))
 
+    # ---- energy (buyer questionnaires such as the Higg FEM ask for energy, not only CO2)
+    energy = carbon.energy
+    if energy is not None:
+        story.append(Paragraph("Energy consumption", st["h1"]))
+        erows: list[list[object]] = [["Source", "Quantity", "kWh", "GJ", "Share"]]
+        for e in energy.by_source:
+            erows.append([
+                SOURCE_LABEL.get(e.source, e.source),
+                f"{e.quantity:,.0f} {UNIT_LABEL.get(e.unit, e.unit)}",
+                _fmt(e.kwh, 0, "-"),
+                _fmt(e.gj, 1, "-"),
+                "-" if e.share is None else f"{e.share * 100:.1f}%",
+            ])
+        erows.append(["Total", "", _fmt(energy.total_kwh, 0, "-"), _fmt(energy.total_gj, 1, "-"), "100%" if energy.complete else "-"])
+        story.append(_table(erows, [40 * mm, 38 * mm, 34 * mm, 30 * mm, 28 * mm]))
+        story.append(Paragraph(
+            "Fuels are converted at their net calorific value: "
+            + "; ".join(f"{escape(SOURCE_LABEL.get(k.replace('natural_gas', 'gas'), k))} {f.value:g} {escape(f.unit.replace('_per_', '/').replace('_', ' '))}" for k, f in energy.energy_content.items() if f.value is not None)
+            + " (derived from UK DESNZ 2026 conversion factors). 1 kWh = 0.0036 GJ.",
+            st["small"],
+        ))
+
     # ---- monthly
     story.append(Paragraph("Monthly emissions", st["h1"]))
     if carbon.months:
         story.append(Image(io.BytesIO(monthly_emissions_chart(carbon)), width=170 * mm, height=76 * mm))
         story.append(Paragraph("* month with missing sources or factors (partial). Empty months have no data and are not zero.", st["small"]))
-        rows: list[list[object]] = [["Month", "kWh", "Diesel L", "Gas m3", "Scope 1 t", "Scope 2 t", "Total t", "Complete"]]
+        # The three main sources always get a column; LPG and furnace oil only when used.
+        cols = [k for k in QUANTITY_COLUMNS if k in ("electricity", "diesel", "gas") or k in present]
+        rows: list[list[object]] = [["Month", *[QUANTITY_COLUMNS[k][0] for k in cols], "Scope 1 t", "Scope 2 t", "Total t", "Complete"]]
         for r in carbon.months:
-            rows.append([r.month, _fmt(r.electricity_kwh, 0, "-"), _fmt(r.diesel_litres, 0, "-"), _fmt(r.gas_m3, 0, "-"), _fmt(r.scope1_t, 3, "-"), _fmt(r.scope2_t, 3, "-"), _fmt(r.total_t, 3, "-"), "yes" if r.is_complete else "no"])
-        story.append(_table(rows, [18 * mm, 22 * mm, 19 * mm, 21 * mm, 21 * mm, 21 * mm, 21 * mm, 23 * mm]))
+            qty = [_fmt(getattr(r, QUANTITY_COLUMNS[k][1]), 0, "-") for k in cols]
+            rows.append([r.month, *qty, _fmt(r.scope1_t, 3, "-"), _fmt(r.scope2_t, 3, "-"), _fmt(r.total_t, 3, "-"), "yes" if r.is_complete else "no"])
+        widths = [18 * mm, 22 * mm, 19 * mm, 21 * mm, 21 * mm, 21 * mm, 21 * mm, 23 * mm] if len(cols) == 3 else [16 * mm] + [16 * mm] * len(cols) + [19 * mm, 19 * mm, 19 * mm, 17 * mm]
+        story.append(_table(rows, widths))
     else:
         story.append(Paragraph("No data.", st["body"]))
 

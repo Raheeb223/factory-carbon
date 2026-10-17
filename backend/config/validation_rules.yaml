@@ -15,9 +15,12 @@ units_ceiling:
   kWh: 5000000
   m3: 3000000
   litre: 500000
+  kg: 500000
 
 # Plausible BDT per unit, per bill type (warning if outside).
 bdt_per_unit:
   electricity: {min: 2, max: 30}
   gas: {min: 5, max: 150}
   diesel: {min: 50, max: 250}
+  lpg: {min: 60, max: 250}          # Tk per kg
+  furnace_oil: {min: 50, max: 200}  # Tk per litre

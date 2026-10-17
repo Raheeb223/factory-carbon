@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../data/backup.dart';
 import '../../data/drift_repositories.dart';
 import '../../data/providers.dart';
 import '../../domain/demo_data.dart';
@@ -40,6 +41,20 @@ class DataAdmin {
     await _ref.read(productionRepositoryProvider).deleteByOrigin(DataOrigin.demo);
     await _ref.read(actionRepositoryProvider).deleteByOrigin(DataOrigin.demo);
     await _ref.read(resultCacheRepositoryProvider).clear();
+  }
+
+  /// All local data as one backup file (see data/backup.dart).
+  Future<String> backupJson() => buildBackup(_ref.read(databaseProvider));
+
+  /// Replaces all local data with [backup]. Kept bill photos are removed because
+  /// the restored bills no longer point to them. App settings stay as they are.
+  Future<void> restore(ParsedBackup backup) async {
+    await restoreBackup(_ref.read(databaseProvider), backup);
+    try {
+      await _ref.read(imageServiceProvider).deleteAllKept();
+    } catch (_) {
+      // No kept images directory: nothing to delete.
+    }
   }
 
   /// Wipes the local database, kept images and preferences.

@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 
 from app.schemas import CarbonCalculateResponse, SolarEstimateResponse  # noqa: E402
 
-SOURCE_COLORS = {"electricity": "#2a6f97", "diesel": "#c8553d", "gas": "#e0a458"}
+SOURCE_COLORS = {"electricity": "#2a6f97", "diesel": "#c8553d", "gas": "#e0a458", "lpg": "#7b6cb0", "furnace_oil": "#5c4b3b"}
 MONTH_ABBR = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
 
 
@@ -29,8 +29,16 @@ def monthly_emissions_chart(carbon: CarbonCalculateResponse) -> bytes:
         "electricity": [r.scope2_electricity_t for r in rows],
         "diesel": [r.scope1_diesel_t for r in rows],
         "gas": [r.scope1_gas_t for r in rows],
+        "lpg": [r.scope1_lpg_t for r in rows],
+        "furnace_oil": [r.scope1_furnace_oil_t for r in rows],
     }
-    names = {"electricity": "Grid electricity (Scope 2)", "diesel": "Diesel (Scope 1)", "gas": "Natural gas (Scope 1)"}
+    names = {
+        "electricity": "Grid electricity (Scope 2)",
+        "diesel": "Diesel (Scope 1)",
+        "gas": "Natural gas (Scope 1)",
+        "lpg": "LPG (Scope 1)",
+        "furnace_oil": "Furnace oil (Scope 1)",
+    }
     fig, ax = plt.subplots(figsize=(8, 3.6))
     x = list(range(len(rows)))
     bottom = [0.0] * len(rows)

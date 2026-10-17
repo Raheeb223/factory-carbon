@@ -50,3 +50,4 @@ app.*.map.json
 # Local app config with the dev token (see env/dev.json.example)
 /env/dev.json
 /env/prod.json
+/android/build/

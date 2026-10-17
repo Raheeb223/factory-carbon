@@ -87,6 +87,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Could not reach the server. Check your internet connection and the server address in Settings.';
 
   @override
+  String get connWakingTitle => 'Connecting to the server…';
+
+  @override
+  String get connWakingBody =>
+      'The free server sleeps when nobody uses it and can take up to a minute to wake up. You can keep using the app meanwhile.';
+
+  @override
   String get errorTimeout => 'The server took too long to respond.';
 
   @override
@@ -552,7 +559,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'No confirmed data yet. Add bills or import history.';
 
   @override
-  String get carbonScope1 => 'Scope 1 (diesel + gas)';
+  String get carbonScope1 => 'Scope 1 (fuels burned on site)';
 
   @override
   String get carbonScope2 => 'Scope 2 (grid electricity)';
@@ -1072,7 +1079,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get limitationsBody =>
-      '• Scope 1 and 2 from utility bills only. No Scope 3; no coal, biomass or other fuels unless entered manually.\n• The emissions report is a draft until its method and format are checked against your buyer\'s requirements.\n• Bill-reading accuracy has only been measured on a few sample bills. Always check values.\n• Names are hidden automatically only when printed in English letters. Cover handwritten or Bangla names by hand.\n• The unusual-use check flags statistical outliers against production; it cannot identify causes and does not prove waste.\n• Measured savings compare the whole factory before and after an action; weather, product mix or other changes can also play a part.\n• Solar results are estimates only.\n• Emission factors come from published government sources (shown with source and year in the report). Update them when newer editions appear and confirm they match the buyer\'s rules.\n• The app token is weak protection, adequate for a demo only.';
+      '• Scope 1 and 2 from bills and fuel receipts: grid electricity, natural gas, diesel, LPG and furnace oil. No Scope 3, refrigerant leaks, coal or biomass.\n• The emissions report is a draft until its method and format are checked against your buyer\'s requirements.\n• Bill-reading accuracy has only been measured on a few sample bills. Always check values.\n• Names are hidden automatically only when printed in English letters. Cover handwritten or Bangla names by hand.\n• The unusual-use check flags statistical outliers against production; it cannot identify causes and does not prove waste.\n• Measured savings compare the whole factory before and after an action; weather, product mix or other changes can also play a part.\n• Solar results are estimates only.\n• Emission factors come from published government sources (shown with source and year in the report). Update them when newer editions appear and confirm they match the buyer\'s rules.\n• The app token is weak protection, adequate for a demo only.';
 
   @override
   String get demoNeedsEmpty =>
@@ -1335,7 +1342,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeScanSubtitle =>
-      'Take a photo of an electricity, gas or diesel bill. We read the numbers for you.';
+      'Take a photo of an electricity, gas, diesel, LPG or furnace oil bill. We read the numbers for you.';
 
   @override
   String get homeExplore => 'What would you like to do?';
@@ -1563,7 +1570,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tut1Body =>
-      'Tap the big + button, then the camera. Use your electricity, gas or diesel bill.';
+      'Tap \"Scan a bill\" on the home screen, then the camera. Use an electricity, gas, diesel, LPG or furnace oil bill.';
 
   @override
   String get tut2Title => 'Your name stays hidden';
@@ -1577,7 +1584,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tut3Body =>
-      'The app reads the units and the taka. If they match your bill, tap Save.';
+      'The app reads the units and the taka. If they match your bill, tick the box and tap Save.';
 
   @override
   String get tut4Title => 'Write how much you made';
@@ -1598,7 +1605,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tut6Body =>
-      'A red warning means electricity was wasted that month. The sun page shows how much solar panels can save.';
+      'A red warning means a month used more electricity than expected: check why. The Solar page shows how much solar panels can save.';
 
   @override
   String get homeHowTo => 'How to use';
@@ -1705,7 +1712,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String impactIntensityLine(String pct) {
-    return 'Electricity per unit produced: $pct% compared with before';
+    return 'Electricity per unit produced: $pct than before';
   }
 
   @override
@@ -1820,7 +1827,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String actionResult(String pct, String before, String after) {
-    return 'kWh per unit produced: $pct% ($before → $after)';
+    return 'kWh per unit produced: $pct ($before → $after)';
   }
 
   @override
@@ -2186,4 +2193,661 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get paramPanelHint =>
       'Written on the panel label or the installer\'s quote. Most new panels are 540–600 W. Not sure? Keep 550 W.';
+
+  @override
+  String get carbonPlainTitle => 'In simple words';
+
+  @override
+  String carbonSay1(String start, String end, String total, String perMonth) {
+    return 'From $start to $end, your factory released $total tonnes of CO₂, about $perMonth tonnes a month.';
+  }
+
+  @override
+  String carbonSay2(String source, String pct) {
+    return '$source causes the most: $pct% of the total.';
+  }
+
+  @override
+  String carbonSay3(String unit, String t) {
+    return 'For every 1,000 $unit you make, about $t tonnes of CO₂ is released.';
+  }
+
+  @override
+  String carbonSay4(String month, String t) {
+    return 'Highest month: $month, with $t tonnes.';
+  }
+
+  @override
+  String get carbonCalcTitle => 'How it was calculated';
+
+  @override
+  String get carbonCalcHint => 'Units on your bills × emission factor = CO₂';
+
+  @override
+  String carbonCalcLine(String amount, String unit, String factor, String per) {
+    return '$amount $unit × $factor kg per $per';
+  }
+
+  @override
+  String carbonCalcResult(String t) {
+    return '= $t t';
+  }
+
+  @override
+  String get carbonCalcTotal => 'Total';
+
+  @override
+  String get carbonCalcNote =>
+      '1 tonne (t) = 1,000 kg. The factors and their sources are listed further down.';
+
+  @override
+  String get carbonUnitKwh => 'kWh';
+
+  @override
+  String get carbonUnitLitre => 'litres';
+
+  @override
+  String get carbonUnitLitreOne => 'litre';
+
+  @override
+  String get carbonUnitM3 => 'm³';
+
+  @override
+  String get carbonCutTitle => 'Where to start';
+
+  @override
+  String carbonCutTk(String kwh, String tk, String t) {
+    return 'Using 10% less electricity would save about $kwh kWh, Tk $tk and $t tonnes of CO₂ a year.';
+  }
+
+  @override
+  String carbonCutNoTk(String kwh, String t) {
+    return 'Using 10% less electricity would save about $kwh kWh and $t tonnes of CO₂ a year.';
+  }
+
+  @override
+  String get carbonCutButton => 'See what to do';
+
+  @override
+  String get actionBestForYou => 'Best for you';
+
+  @override
+  String actionBestWhy(String source, String pct) {
+    return '$source is $pct% of your CO₂, so this helps most.';
+  }
+
+  @override
+  String get actionCostFree => 'Free';
+
+  @override
+  String get actionCostLow => 'Low cost';
+
+  @override
+  String get actionCostMedium => 'Medium cost';
+
+  @override
+  String get actionCostHigh => 'Big investment';
+
+  @override
+  String get actionCutsElectricity => 'Cuts electricity';
+
+  @override
+  String get actionCutsDiesel => 'Cuts diesel';
+
+  @override
+  String get actionCutsGas => 'Cuts gas';
+
+  @override
+  String get actionHowTo => 'How to do it';
+
+  @override
+  String get actionSuggestionsHint =>
+      'Start with the ones marked “Best for you”. Tap a card to see the steps.';
+
+  @override
+  String get actFixAirLeaksSteps =>
+      'With machines stopped (lunch or a holiday), walk the floor and listen for hissing at hoses, couplings and air guns.\nTie a tag on each leak and write it on a list.\nRepair or replace the parts, then check again every month.';
+
+  @override
+  String get actSwitchOffIdleSteps =>
+      'Choose one person on each floor to be in charge of switching off.\nSwitch off machines, lights and fans at lunch, after the last shift and on holidays.\nPut a simple checklist on the wall and sign it every day.';
+
+  @override
+  String get actLowerAirPressureSteps =>
+      'Ask the machine suppliers what air pressure each machine really needs.\nLower the compressor setting a little at a time while production keeps running.\nStop at the lowest setting where every machine still works well.';
+
+  @override
+  String get actSteamLeaksSteps =>
+      'Walk the steam lines and mark leaks and steam traps that blow steam all the time.\nRepair them and insulate bare hot pipes and valves.\nSend hot condensate water back to the boiler.';
+
+  @override
+  String get actGeneratorHoursSteps =>
+      'Keep a log book of when the generator starts and stops.\nSwitch back to grid power as soon as it returns.\nEach week, compare the log with the power-cut times.';
+
+  @override
+  String get actLedLightingSteps =>
+      'Find the lights that are on the longest (production floor, 2–3 shifts).\nReplace those tube lights and bulbs with LED first.\nChange the rest when the old ones fail.';
+
+  @override
+  String get actServoMotorsSteps =>
+      'Count the sewing machines that still have clutch motors (they hum even when nobody sews).\nAsk a supplier for a price to fit servo motors.\nStart with one line, compare its electricity, then do the rest.';
+
+  @override
+  String get actPowerFactorSteps =>
+      'Look on the electricity bill for a power-factor (PF) penalty or a low PF value.\nAsk a licensed electrician to check the capacitor bank.\nRepair or add capacitors until the penalty is gone from the bill.';
+
+  @override
+  String get actRooftopSolarSteps =>
+      'Open the Solar page and tap your roof for a free estimate.\nGet quotes from 2–3 solar companies.\nAsk an engineer to check that the roof can carry the panels.';
+
+  @override
+  String get scope1Short => 'Scope 1';
+
+  @override
+  String get scope2Short => 'Scope 2';
+
+  @override
+  String get actionTapForSteps => 'Tap a card to see the steps.';
+
+  @override
+  String importSkipped(String list) {
+    return 'Already on the phone from a bill or typed in, so these are not imported: $list.';
+  }
+
+  @override
+  String importReplaced(String list) {
+    return 'These replace values imported earlier: $list.';
+  }
+
+  @override
+  String get importNothingNew =>
+      'Everything in this file is already on the phone. There is nothing new to import.';
+
+  @override
+  String get backupGroup => 'Backup';
+
+  @override
+  String get backupSave => 'Save a backup';
+
+  @override
+  String get backupSaveHint =>
+      'One file with your factory, bills, production, actions and solar plans. Bill photos are not included. Keep it safe, e.g. in Google Drive.';
+
+  @override
+  String get backupRestore => 'Restore from backup';
+
+  @override
+  String get backupRestoreHint =>
+      'Use this on a new phone or after deleting the app.';
+
+  @override
+  String get backupNotABackup => 'This file is not a BillToGreen backup.';
+
+  @override
+  String get backupNewer =>
+      'This backup was made by a newer version of the app. Update the app first.';
+
+  @override
+  String get backupDamaged =>
+      'This backup file is damaged and cannot be restored.';
+
+  @override
+  String get backupRestoreConfirmTitle => 'Replace all data on this phone?';
+
+  @override
+  String backupRestoreConfirmBody(
+    String date,
+    String factory,
+    int bills,
+    int months,
+    int actions,
+    int plans,
+  ) {
+    return 'The backup from $date ($factory) has $bills bills covering $months months, $actions actions and $plans solar plans. Everything now on this phone will be replaced.';
+  }
+
+  @override
+  String get backupRestored => 'Backup restored.';
+
+  @override
+  String get gapsTitle => 'Missing months';
+
+  @override
+  String get gapsHint =>
+      'Reports and the electricity check are only complete when every month is entered.';
+
+  @override
+  String gapsElectricity(String months) {
+    return 'No electricity bill: $months';
+  }
+
+  @override
+  String gapsProduction(String months) {
+    return 'No production figure: $months';
+  }
+
+  @override
+  String gapsMore(int count) {
+    return '+$count more';
+  }
+
+  @override
+  String get gapsAddBill => 'Add bill';
+
+  @override
+  String get gapsAddProduction => 'Add production';
+
+  @override
+  String get periodLabel => 'Report period';
+
+  @override
+  String get periodHint =>
+      'Buyers usually ask for one year. Bangladesh\'s fiscal year runs from July to June.';
+
+  @override
+  String get periodAll => 'All data';
+
+  @override
+  String periodCalendar(String year) {
+    return '$year (January–December)';
+  }
+
+  @override
+  String periodFiscal(String label) {
+    return 'Fiscal year $label (July–June)';
+  }
+
+  @override
+  String get periodSoFar => 'year so far';
+
+  @override
+  String get compareTitle => 'Compared with a year earlier';
+
+  @override
+  String compareWith(String start, String end) {
+    return 'Same months one year earlier: $start – $end';
+  }
+
+  @override
+  String compareDown(String pct) {
+    return '$pct% lower';
+  }
+
+  @override
+  String compareUp(String pct) {
+    return '$pct% higher';
+  }
+
+  @override
+  String get compareSame => 'No change';
+
+  @override
+  String compareNote(String unit) {
+    return 'Lower CO₂ per 1,000 $unit means the factory is becoming more efficient, even if it made more.';
+  }
+
+  @override
+  String get compareGaps =>
+      'Some months have no data in one of the two periods, so this comparison is less reliable.';
+
+  @override
+  String get billTypeLpg => 'LPG';
+
+  @override
+  String get billTypeFurnaceOil => 'Furnace oil';
+
+  @override
+  String get factorLpg => 'LPG';
+
+  @override
+  String get factorFurnaceOil => 'Furnace oil';
+
+  @override
+  String get legendLpg => 'LPG';
+
+  @override
+  String get legendFurnaceOil => 'Furnace oil';
+
+  @override
+  String get importColLpg => 'LPG kg';
+
+  @override
+  String get importColFurnaceOil => 'Furnace oil L';
+
+  @override
+  String get carbonUnitKg => 'kg';
+
+  @override
+  String get actionCutsBoilerFuel => 'Cuts boiler fuel';
+
+  @override
+  String setupStep(int n, int total) {
+    return 'Step $n of $total';
+  }
+
+  @override
+  String get actionNext => 'Next';
+
+  @override
+  String get actionBack => 'Back';
+
+  @override
+  String get setupBasicsTitle => 'Your factory';
+
+  @override
+  String get setupBasicsSub =>
+      'The name and type appear on your reports to buyers.';
+
+  @override
+  String get facilityTypeLabel => 'Main product or process';
+
+  @override
+  String get facilityKnit => 'Knit';
+
+  @override
+  String get facilityWoven => 'Woven';
+
+  @override
+  String get facilitySweater => 'Sweater';
+
+  @override
+  String get facilityDenim => 'Denim';
+
+  @override
+  String get facilityDyeing => 'Dyeing & finishing';
+
+  @override
+  String get facilityWashing => 'Washing';
+
+  @override
+  String get facilityOther => 'Other';
+
+  @override
+  String get districtLabel => 'District';
+
+  @override
+  String get districtDhaka => 'Dhaka';
+
+  @override
+  String get districtGazipur => 'Gazipur';
+
+  @override
+  String get districtNarayanganj => 'Narayanganj';
+
+  @override
+  String get districtNarsingdi => 'Narsingdi';
+
+  @override
+  String get districtChattogram => 'Chattogram';
+
+  @override
+  String get districtMymensingh => 'Mymensingh';
+
+  @override
+  String get districtCumilla => 'Cumilla';
+
+  @override
+  String get districtKhulna => 'Khulna';
+
+  @override
+  String get districtOther => 'Other district';
+
+  @override
+  String get addressLabel => 'Address or area (optional)';
+
+  @override
+  String get addressHint => 'e.g. Konabari, Kashimpur';
+
+  @override
+  String get setupLocationTitle => 'Factory location';
+
+  @override
+  String get setupLocationSub =>
+      'Used for the sunlight data in the solar estimate and to open the map at your roof. You can skip this and add it later.';
+
+  @override
+  String get locGps => 'I am at the factory: use my location';
+
+  @override
+  String get locGpsBusy => 'Finding your location…';
+
+  @override
+  String get locPasteLabel => 'Or paste a Google Maps link or coordinates';
+
+  @override
+  String get locPasteHint => 'e.g. 23.9995, 90.4203';
+
+  @override
+  String get locPasteInvalid =>
+      'No coordinates found. In Google Maps, hold your finger on the factory and copy the numbers shown, or type latitude, longitude.';
+
+  @override
+  String locSet(String lat, String lon) {
+    return 'Location set: $lat, $lon';
+  }
+
+  @override
+  String get locNotSet => 'No location yet';
+
+  @override
+  String get locOutside =>
+      'This point is outside Bangladesh. Check the numbers: latitude is about 20.5–26.7 and longitude about 88–92.7.';
+
+  @override
+  String get locBothNeeded =>
+      'Enter both latitude and longitude, or clear them.';
+
+  @override
+  String get locManual => 'Type latitude and longitude';
+
+  @override
+  String get setupSkipLocation => 'Skip for now';
+
+  @override
+  String get setupProductionTitle => 'Production and energy';
+
+  @override
+  String get setupProductionSub =>
+      'This makes CO₂ per unit, reminders and suggestions fit your factory.';
+
+  @override
+  String get workersLabel => 'Number of workers (optional)';
+
+  @override
+  String get shiftsLabel => 'Shifts per day';
+
+  @override
+  String get energySourcesLabel => 'Energy the factory uses';
+
+  @override
+  String get energySourcesHint =>
+      'Tick everything that applies. You can change this later in Settings.';
+
+  @override
+  String get sourcesNeedOne => 'Choose at least one energy source.';
+
+  @override
+  String get sourceElectricity => 'Grid electricity';
+
+  @override
+  String get sourceGas => 'Natural gas';
+
+  @override
+  String get sourceDiesel => 'Diesel generator';
+
+  @override
+  String get sourceLpg => 'LPG';
+
+  @override
+  String get sourceFurnaceOil => 'Furnace oil';
+
+  @override
+  String get sourceSolar => 'Rooftop solar (installed)';
+
+  @override
+  String get reportingYearLabel => 'Reporting year';
+
+  @override
+  String get reportingCalendar => 'Jan–Dec';
+
+  @override
+  String get reportingFiscal => 'Jul–Jun (fiscal)';
+
+  @override
+  String get reportingYearHint =>
+      'Most buyers and the Higg FEM use January–December. Reports open on this year.';
+
+  @override
+  String get setupReviewTitle => 'Check your details';
+
+  @override
+  String get setupReviewSub =>
+      'Go back to change anything. Then read the privacy notice and start.';
+
+  @override
+  String get shareSummary => 'Share summary (WhatsApp)';
+
+  @override
+  String get shareSummaryHint =>
+      'A short message for the owner or management, in plain words.';
+
+  @override
+  String get shareHeading => 'CO₂ report from our utility bills';
+
+  @override
+  String shareCompare(String change, String start, String end) {
+    return 'That is $change than $start – $end.';
+  }
+
+  @override
+  String shareCost(String tk) {
+    return 'Electricity bills in this period: Tk $tk.';
+  }
+
+  @override
+  String get shareFooter =>
+      'Draft figures from bills checked by the factory. Made with BillToGreen.';
+
+  @override
+  String get targetSetTitle => 'Set a CO₂ reduction target';
+
+  @override
+  String targetSetBody(String pct) {
+    return 'Buyers increasingly ask suppliers for a target and yearly progress. A science-based pace is at least $pct% less CO₂ each year.';
+  }
+
+  @override
+  String get targetSetButton => 'Set a target';
+
+  @override
+  String get targetTitle => 'Your CO₂ target';
+
+  @override
+  String get targetEdit => 'Change target';
+
+  @override
+  String targetLine(String pct, String metric, String year, String baseline) {
+    return '$pct% less $metric by $year, compared with $baseline.';
+  }
+
+  @override
+  String targetMetricPerUnit(String unit) {
+    return 'CO₂ per 1,000 $unit';
+  }
+
+  @override
+  String get targetMetricTotal => 'total CO₂';
+
+  @override
+  String targetPerUnitShort(String unit) {
+    return 'Per 1,000 $unit';
+  }
+
+  @override
+  String get targetTotalShort => 'Total CO₂';
+
+  @override
+  String get targetOnTrack => 'On track';
+
+  @override
+  String get targetBehind => 'Behind';
+
+  @override
+  String get targetNoData => 'Not enough data yet';
+
+  @override
+  String targetNow(String change) {
+    return 'Last 12 months: $change than the baseline year.';
+  }
+
+  @override
+  String targetNeeded(String pct) {
+    return 'To stay on track: $pct% less by now.';
+  }
+
+  @override
+  String targetNoDataHint(String year) {
+    return 'Add bills for all of $year and for the latest 12 months to see progress.';
+  }
+
+  @override
+  String get targetSheetTitle => 'CO₂ reduction target';
+
+  @override
+  String get targetWhat => 'What do you want to reduce?';
+
+  @override
+  String targetPerUnitHint(String unit) {
+    return 'Fair to a growing factory: making more $unit does not count against you.';
+  }
+
+  @override
+  String get targetBaseline => 'Baseline year';
+
+  @override
+  String get targetBy => 'Target year';
+
+  @override
+  String get targetHowMuch => 'How much less?';
+
+  @override
+  String targetSbtiChip(String pct) {
+    return '$pct% (science-based)';
+  }
+
+  @override
+  String get targetPctLabel => 'Reduction';
+
+  @override
+  String targetSbtiHint(String rate, String pct) {
+    return 'Science-based targets need at least $rate% less a year: $pct% for these years.';
+  }
+
+  @override
+  String get targetRemove => 'Remove target';
+
+  @override
+  String get energyTitle => 'Energy used';
+
+  @override
+  String energyTotal(String mwh, String gj) {
+    return '$mwh MWh · $gj GJ';
+  }
+
+  @override
+  String get energyNote =>
+      'Buyer questionnaires such as the Higg FEM ask for these numbers. Fuels are counted at their net heating value; the PDF lists the conversion values and sources.';
+
+  @override
+  String get energyIncomplete =>
+      'Some fuels could not be converted to kWh, so no total is shown.';
+
+  @override
+  String homeMonthsWithData(int n, int total) {
+    return '$n of $total months have data';
+  }
+
+  @override
+  String get targetNowSame =>
+      'Last 12 months: about the same as the baseline year.';
 }

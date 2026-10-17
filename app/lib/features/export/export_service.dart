@@ -10,7 +10,7 @@ import 'package:share_plus/share_plus.dart';
 import '../../data/providers.dart';
 import '../../domain/api_models.dart';
 import '../../domain/csv_export.dart';
-import '../../domain/requests.dart';
+import '../carbon/carbon_controller.dart';
 
 /// Builds export files and hands them to the system share sheet (spec 6.5, 8.8).
 /// Files go to a temp "exports" folder that is cleared before each export.
@@ -41,8 +41,21 @@ class ExportService {
     final plans = _ref.read(solarPlansProvider).value ?? const [];
     final withResult = plans.where((p) => p.resultJson != null).toList();
     return {
-      'factory': {'name': profile?.name ?? 'Factory', 'location': (profile?.location.isEmpty ?? true) ? null : profile!.location},
-      'carbon': carbonRequest(bills: bills, production: production, productionUnitLabel: profile?.productionUnitLabel),
+      'factory': {
+        'name': profile?.name ?? 'Factory',
+        'location': (profile?.location.isEmpty ?? true) ? null : profile!.location,
+        if (profile?.facilityType != null) 'facility_type': profile!.facilityType,
+        // English district name: the report is in English for buyers.
+        if (profile?.district != null && profile!.district != 'other') 'district': profile.district![0].toUpperCase() + profile.district!.substring(1),
+        if (profile?.workers != null) 'workers': profile!.workers,
+        if (profile?.shiftsPerDay != null) 'shifts_per_day': profile!.shiftsPerDay,
+      },
+      'carbon': carbonRequests(
+        bills: bills,
+        production: production,
+        productionUnitLabel: profile?.productionUnitLabel,
+        period: _ref.read(reportPeriodProvider),
+      ).current,
       'solar': withResult.isEmpty ? null : withResult.first.resultJson,
       'contains_synthetic_data': bills.any((b) => b.isSynthetic) || production.any((p) => p.isSynthetic),
     };

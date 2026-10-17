@@ -5,15 +5,22 @@ enum BillType {
   electricity,
   gas,
   diesel,
+  lpg,
+  furnaceOil,
   unknown;
 
-  static BillType parse(String? v) => BillType.values.firstWhere((e) => e.name == v, orElse: () => BillType.unknown);
+  /// Name used in the database, API and CSV files (matches backend BillType).
+  String get wire => this == BillType.furnaceOil ? 'furnace_oil' : name;
+
+  static BillType parse(String? v) => BillType.values.firstWhere((e) => e.wire == v, orElse: () => BillType.unknown);
 
   /// Canonical unit for this energy source (matches backend CANONICAL_UNIT).
   EnergyUnit? get canonicalUnit => switch (this) {
         BillType.electricity => EnergyUnit.kWh,
         BillType.gas => EnergyUnit.m3,
         BillType.diesel => EnergyUnit.litre,
+        BillType.lpg => EnergyUnit.kg,
+        BillType.furnaceOil => EnergyUnit.litre,
         BillType.unknown => null,
       };
 }
@@ -21,7 +28,8 @@ enum BillType {
 enum EnergyUnit {
   kWh('kWh'),
   m3('m3'),
-  litre('litre');
+  litre('litre'),
+  kg('kg');
 
   const EnergyUnit(this.wire);
   final String wire;
@@ -56,16 +64,87 @@ class FactoryProfile {
     required this.lon,
     required this.productionUnitLabel,
     required this.privacyAcknowledgedAt,
+    this.facilityType,
+    this.district,
+    this.workers,
+    this.shiftsPerDay,
+    this.energySources,
+    this.reportingYear,
+    this.target,
   });
 
   final String id;
   final String name;
+
+  /// Street address or area (free text, shown on the report).
   final String location;
   final double? lat;
   final double? lon;
   final String productionUnitLabel;
   final DateTime privacyAcknowledgedAt;
+
+  /// One of [facilityTypes]; null when not given.
+  final String? facilityType;
+
+  /// One of [factoryDistricts]; null when not given.
+  final String? district;
+  final int? workers;
+  final int? shiftsPerDay;
+
+  /// Energy the factory uses ([energySourceOptions]); null = not answered, treat all as possible.
+  final Set<String>? energySources;
+
+  /// 'calendar' or 'fiscal' (July–June): the default reporting year.
+  final String? reportingYear;
+
+  /// The factory's CO2 reduction target, if one is set.
+  final ReductionTarget? target;
+
+  FactoryProfile withTarget(ReductionTarget? t) => FactoryProfile(
+        id: id,
+        name: name,
+        location: location,
+        lat: lat,
+        lon: lon,
+        productionUnitLabel: productionUnitLabel,
+        privacyAcknowledgedAt: privacyAcknowledgedAt,
+        facilityType: facilityType,
+        district: district,
+        workers: workers,
+        shiftsPerDay: shiftsPerDay,
+        energySources: energySources,
+        reportingYear: reportingYear,
+        target: t,
+      );
+
+  /// Whether the factory uses [source]; true when the question was not answered.
+  bool uses(String source) => energySources == null || energySources!.contains(source);
 }
+
+/// "Cut [metric] by [pct]% by [year] compared with [baselineYear]".
+class ReductionTarget {
+  const ReductionTarget({required this.metric, required this.pct, required this.baselineYear, required this.year});
+
+  /// 'intensity' (CO2 per 1,000 units produced) or 'total' (all CO2).
+  final String metric;
+  final double pct;
+  final int baselineYear;
+  final int year;
+
+  bool get perUnit => metric == 'intensity';
+}
+
+/// Main product / process of the facility (buyer questionnaires ask for it).
+const facilityTypes = ['knit', 'woven', 'sweater', 'denim', 'dyeing', 'washing', 'other'];
+
+/// Districts where most export garment factories are; 'other' for the rest.
+const factoryDistricts = ['dhaka', 'gazipur', 'narayanganj', 'narsingdi', 'chattogram', 'mymensingh', 'cumilla', 'khulna', 'other'];
+
+/// Energy sources a factory can use: bill types (wire names) plus on-site solar.
+const energySourceOptions = ['electricity', 'gas', 'diesel', 'lpg', 'furnace_oil', 'solar'];
+
+/// Rough bounding box of Bangladesh, used to catch mistyped coordinates.
+bool insideBangladesh(double lat, double lon) => lat >= 20.5 && lat <= 26.7 && lon >= 88.0 && lon <= 92.7;
 
 /// A confirmed bill (or manual / imported / demo entry). Only confirmed data is stored.
 class Bill {

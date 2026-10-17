@@ -19,7 +19,8 @@ const _roofZoom = 16.0;
 
 /// Find the factory (search, GPS or saved location), then tap the roof: the OSM building
 /// outline is used when there is one, otherwise the user taps the corners (spec 8.7).
-/// Satellite imagery is only offered when a provider is configured via --dart-define.
+/// Satellite imagery is offered (and shown first, as roofs are easier to trace on it)
+/// when a provider is configured via --dart-define (ARCGIS_API_KEY or SATELLITE_TILE_URL).
 class SolarMapScreen extends ConsumerStatefulWidget {
   const SolarMapScreen({super.key, this.plan, this.finder});
   final m.SolarPlan? plan;
@@ -34,7 +35,7 @@ class SolarMapScreen extends ConsumerStatefulWidget {
 class _SolarMapScreenState extends ConsumerState<SolarMapScreen> {
   late final List<LatLng> _points = [for (final p in widget.plan?.polygon ?? const <m.LatLon>[]) LatLng(p.lat, p.lon)];
   final List<List<LatLng>> _history = [];
-  bool _satellite = false;
+  late bool _satellite = ref.read(appConfigProvider).hasSatellite;
   final _map = MapController();
   final _query = TextEditingController();
   List<Place>? _results;

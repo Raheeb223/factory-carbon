@@ -1,4 +1,4 @@
-month,electricity_kwh,diesel_litres,gas_m3,production_units,electricity_cost_bdt
-2024-01,,,,,
-2024-02,,,,,
-2024-03,,,,,
+month,electricity_kwh,diesel_litres,gas_m3,production_units,electricity_cost_bdt,lpg_kg,furnace_oil_litres
+2024-01,,,,,,,
+2024-02,,,,,,,
+2024-03,,,,,,,

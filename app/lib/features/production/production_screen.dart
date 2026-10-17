@@ -5,6 +5,7 @@ import '../../core/format.dart';
 import '../../core/l10n/gen/app_localizations.dart';
 import '../../core/theme.dart';
 import '../../data/providers.dart';
+import '../../domain/data_gaps.dart';
 import '../../domain/models.dart';
 import '../../widgets/common.dart';
 import '../../widgets/ui.dart';
@@ -19,7 +20,11 @@ class ProductionScreen extends ConsumerWidget {
     final unit = unitLabel(AppLocalizations.of(context), ref.read(factoryProvider).value?.productionUnitLabel);
     final result = await showDialog<(String, double)>(
       context: context,
-      builder: (_) => _ProductionDialog(entry: entry, unit: unit),
+      builder: (_) => _ProductionDialog(
+        entry: entry,
+        unit: unit,
+        initialMonth: suggestedProductionMonth(ref.read(billsProvider).value ?? const [], ref.read(productionProvider).value ?? const []),
+      ),
     );
     if (result != null) {
       await ref.read(productionRepositoryProvider).upsertMonth(result.$1, result.$2, DataOrigin.manual);
@@ -102,9 +107,12 @@ class ProductionScreen extends ConsumerWidget {
 
 /// Month + units form. Owns its controller so it outlives the closing animation.
 class _ProductionDialog extends StatefulWidget {
-  const _ProductionDialog({required this.entry, required this.unit});
+  const _ProductionDialog({required this.entry, required this.unit, required this.initialMonth});
   final ProductionEntry? entry;
   final String unit;
+
+  /// Month shown first for a new entry.
+  final String initialMonth;
 
   @override
   State<_ProductionDialog> createState() => _ProductionDialogState();
@@ -112,7 +120,7 @@ class _ProductionDialog extends StatefulWidget {
 
 class _ProductionDialogState extends State<_ProductionDialog> {
   final _form = GlobalKey<FormState>();
-  late String _month = widget.entry?.month ?? monthOf(DateTime.now());
+  late String _month = widget.entry?.month ?? widget.initialMonth;
   late final _units = TextEditingController(text: widget.entry == null ? '' : widget.entry!.unitsProduced.toStringAsFixed(0));
 
   @override

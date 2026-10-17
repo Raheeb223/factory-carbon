@@ -1,3 +1,12 @@
+/// Esri World Imagery tiles, used for the satellite layer when ARCGIS_API_KEY is set
+/// (a free ArcGIS Location Platform key with the basemaps privilege; free monthly tile
+/// allowance, attribution required). SATELLITE_TILE_URL overrides it with another provider.
+const _arcgisKey = String.fromEnvironment('ARCGIS_API_KEY');
+const _satelliteUrl = String.fromEnvironment('SATELLITE_TILE_URL');
+const _satelliteAttribution = String.fromEnvironment('SATELLITE_TILE_ATTRIBUTION');
+const esriImageryUrl = 'https://ibasemaps-api.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}?token=';
+const esriImageryAttribution = 'Powered by Esri · Esri, Maxar, Earthstar Geographics, GIS User Community';
+
 /// Build-time configuration from `--dart-define` values. No secrets live here:
 /// APP_TOKEN is a weak shared token (see README), the Gemini key stays on the backend.
 class AppConfig {
@@ -18,8 +27,8 @@ class AppConfig {
         mapTileUrl: String.fromEnvironment('MAP_TILE_URL', defaultValue: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'),
         mapTileAttribution: String.fromEnvironment('MAP_TILE_ATTRIBUTION', defaultValue: '© OpenStreetMap contributors'),
         // Satellite imagery is off unless a provider whose terms permit this use is configured.
-        satelliteTileUrl: String.fromEnvironment('SATELLITE_TILE_URL'),
-        satelliteTileAttribution: String.fromEnvironment('SATELLITE_TILE_ATTRIBUTION'),
+        satelliteTileUrl: _satelliteUrl != '' ? _satelliteUrl : (_arcgisKey != '' ? '$esriImageryUrl$_arcgisKey' : ''),
+        satelliteTileAttribution: _satelliteUrl != '' ? _satelliteAttribution : (_arcgisKey != '' ? esriImageryAttribution : ''),
         userAgentPackageName: 'org.factorycarbon.factory_carbon',
       );
 

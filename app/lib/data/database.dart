@@ -21,6 +21,22 @@ class FactoryProfiles extends Table with SyncColumns {
   TextColumn get productionUnitLabel => text().withDefault(const Constant('pieces'))();
   DateTimeColumn get privacyAcknowledgedAt => dateTime()();
 
+  // v3: facility details. Nullable, so older rows and backups stay valid.
+  TextColumn get facilityType => text().nullable()();
+  TextColumn get district => text().nullable()();
+  IntColumn get workers => integer().nullable()();
+  IntColumn get shiftsPerDay => integer().nullable()();
+
+  /// JSON list of energy sources used; null = not answered.
+  TextColumn get energySources => text().nullable()();
+  TextColumn get reportingYear => text().nullable()();
+
+  /// Reduction target: 'intensity' (per 1,000 units) or 'total', percent, years.
+  TextColumn get targetMetric => text().nullable()();
+  RealColumn get targetPct => real().nullable()();
+  IntColumn get targetBaselineYear => integer().nullable()();
+  IntColumn get targetYear => integer().nullable()();
+
   @override
   Set<Column<Object>> get primaryKey => {id};
 }
@@ -106,13 +122,30 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? driftDatabase(name: 'factory_carbon'));
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
         onCreate: (m) => m.createAll(),
         onUpgrade: (m, from, to) async {
           if (from < 2) await m.createTable(energyActions); // v2: action plan
+          if (from < 3) {
+            // v3: facility details on the factory profile
+            for (final c in [
+              factoryProfiles.facilityType,
+              factoryProfiles.district,
+              factoryProfiles.workers,
+              factoryProfiles.shiftsPerDay,
+              factoryProfiles.energySources,
+              factoryProfiles.reportingYear,
+              factoryProfiles.targetMetric,
+              factoryProfiles.targetPct,
+              factoryProfiles.targetBaselineYear,
+              factoryProfiles.targetYear,
+            ]) {
+              await m.addColumn(factoryProfiles, c);
+            }
+          }
         },
       );
 

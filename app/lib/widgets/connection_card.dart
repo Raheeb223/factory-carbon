@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -57,11 +59,61 @@ class ConnectionCard extends ConsumerWidget {
         );
 
     return health.when(
-      loading: () => const SizedBox.shrink(),
+      loading: () => const _WakingCard(),
       error: (e, _) => card(color: scheme.error, icon: Icons.cloud_off_rounded, title: l.connOfflineTitle, body: '${l.connOfflineBody}\n${errorText(l, e)}'),
       data: (h) => h.geminiConfigured
           ? const SizedBox.shrink()
           : card(color: const Color(0xFFB45309), icon: Icons.document_scanner_outlined, title: l.connOnline, body: l.serverExtractionOff),
+    );
+  }
+}
+
+/// Shown when the server is slow to answer the first check: the free hosting plan sleeps
+/// when unused and takes up to a minute to wake. Appears only after a few seconds.
+class _WakingCard extends StatefulWidget {
+  const _WakingCard();
+
+  @override
+  State<_WakingCard> createState() => _WakingCardState();
+}
+
+class _WakingCardState extends State<_WakingCard> {
+  var _show = false;
+  late final Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer(const Duration(seconds: 3), () => setState(() => _show = true));
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_show) return const SizedBox.shrink();
+    final l = AppLocalizations.of(context);
+    final t = Theme.of(context).textTheme;
+    final color = Theme.of(context).colorScheme.primary;
+    return SoftCard(
+      key: const Key('connection-waking'),
+      color: color.withValues(alpha: 0.06),
+      borderColor: color.withValues(alpha: 0.25),
+      child: Row(children: [
+        const SizedBox(width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2.5)),
+        const SizedBox(width: 14),
+        Expanded(
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(l.connWakingTitle, style: t.titleSmall),
+            const SizedBox(height: 2),
+            Text(l.connWakingBody, style: t.bodySmall?.copyWith(height: 1.35)),
+          ]),
+        ),
+      ]),
     );
   }
 }

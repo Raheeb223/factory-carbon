@@ -65,6 +65,10 @@ void main() {
     await tester.enterText(find.byKey(const Key('factory-name')), 'Rahman Knit');
     await tester.testTextInput.receiveAction(TextInputAction.done);
     await tester.pump();
+    for (var i = 0; i < 3; i++) {
+      await tapScrolled(tester, find.byKey(const Key('onboarding-next')));
+      await settle(tester);
+    }
     await tapScrolled(tester, find.byKey(const Key('onboarding-save')));
     await settle(tester);
     expect(find.text('Please confirm you have read the privacy notice.'), findsOneWidget);
@@ -138,6 +142,30 @@ void main() {
     await teardownDb(tester, db);
   });
 
+  testWidgets('review: changing the bill type also switches the unit shown', (tester) async {
+    final db = memoryDb();
+    final x = _extraction();
+    await tester.pumpWidget(
+      testApp(
+        ReviewScreen(extraction: x, warnings: const [], imageBytes: null, extracted: x.bill),
+        overrides: testOverrides(db: db),
+      ),
+    );
+    await settle(tester);
+    await tapScrolled(tester, find.byKey(const Key('input-bill_type')));
+    await tester.tap(find.text('Diesel').last);
+    await settle(tester);
+    expect(find.descendant(of: find.byKey(const Key('input-unit')), matching: find.text('litre')), findsOneWidget);
+
+    await tapScrolled(tester, find.byKey(const Key('review-confirm')));
+    await tapScrolled(tester, find.byKey(const Key('review-save')));
+    await settle(tester);
+    final bills = (await tester.runAsync(() => DriftBillRepository(db).all()))!;
+    expect(bills.single.billType, BillType.diesel);
+    expect(bills.single.unit, EnergyUnit.litre);
+    await teardownDb(tester, db);
+  });
+
   testWidgets('manual entry requires a bill type and valid month', (tester) async {
     final db = memoryDb();
     await tester.pumpWidget(
@@ -173,16 +201,19 @@ void main() {
     );
     await waitFor(tester, find.byKey(const Key('factor-not-set')));
     expect(find.textContaining('grid electricity emission factor is not set'), findsOneWidget);
-    expect(find.byKey(const Key('carbon-stale')), findsOneWidget);
-    await _scrollTo(tester, find.byKey(const Key('unverified-badge')), delta: 200);
-    await _scrollTo(tester, find.byKey(const Key('carbon-refresh')), delta: -300);
-
-    await tester.tap(find.byKey(const Key('carbon-refresh')));
+    // The saved result is out of date, so the report recalculates by itself on opening.
     await settle(tester);
     final sent = adapter.requests.singleWhere((r) => r.path == '/v1/carbon/calculate');
     final body = sent.data as Map<String, dynamic>;
     expect((body['bills'] as List<dynamic>).single, containsPair('billing_month', '2024-05'));
     expect(find.byKey(const Key('carbon-stale')), findsNothing);
+    await _scrollTo(tester, find.byKey(const Key('unverified-badge')), delta: 200);
+    await _scrollTo(tester, find.byKey(const Key('carbon-refresh')), delta: -300);
+
+    // The button still recalculates on demand.
+    await tester.tap(find.byKey(const Key('carbon-refresh')));
+    await settle(tester);
+    expect(adapter.requests.where((r) => r.path == '/v1/carbon/calculate'), hasLength(2));
     await teardownDb(tester, db);
   });
 

@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../domain/geo.dart';
 import '../../domain/models.dart';
@@ -37,8 +40,9 @@ abstract interface class PlaceFinder {
 /// OpenStreetMap services: Nominatim for search (one request per user action, as its usage
 /// policy requires; no search-as-you-type) and Overpass for building footprints.
 class OsmPlaceFinder implements PlaceFinder {
-  OsmPlaceFinder({Dio? dio})
-      : _dio = dio ??
+  OsmPlaceFinder({Dio? dio, BuildingCache? cache})
+      : _cache = cache ?? BuildingCache(),
+        _dio = dio ??
             Dio(BaseOptions(
               connectTimeout: const Duration(seconds: 15),
               receiveTimeout: const Duration(seconds: 30),
@@ -46,11 +50,18 @@ class OsmPlaceFinder implements PlaceFinder {
             ));
 
   final Dio _dio;
+  final BuildingCache _cache;
+
+  /// The whole outline lookup gives up after this, so the user can tap the corners instead
+  /// of waiting on overloaded public servers.
+  static const outlineBudget = Duration(seconds: 12);
 
   /// Public Overpass mirrors are often overloaded (504) or reject POST, so the same GET query
   /// goes to several at once and the first good answer wins.
+  /// Checked 2026-10-17: often only one of them answers, so keep several.
   static const _overpass = [
     'https://overpass-api.de/api/interpreter',
+    'https://overpass.private.coffee/api/interpreter',
     'https://overpass.kumi.systems/api/interpreter',
     'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
   ];
@@ -85,17 +96,29 @@ class OsmPlaceFinder implements PlaceFinder {
 
   @override
   Future<List<LatLon>?> buildingAt(LatLon tap) async {
+    // Outlines fetched before are kept on the phone, so a roof found once still works
+    // when the Overpass servers are down (or there is no internet).
+    final cached = await _cache.near(tap);
+    final fromCache = cached == null ? null : pickBuilding(cached, tap);
+    if (fromCache != null) return fromCache;
+
     // "around" measures distance to a building's outline, so a wide radius is needed for a
     // tap in the middle of a big shed; the containing outline is then chosen locally.
-    final query = '[out:json][timeout:15];way["building"](around:150,${tap.lat},${tap.lon});out geom;';
+    final query = '[out:json][timeout:10];way["building"](around:150,${tap.lat},${tap.lon});out geom;';
+    final deadline = DateTime.now().add(outlineBudget);
+    Future<List<List<LatLon>>> round() => _firstSuccess([for (final url in _overpass) () => _outlines(url, query)]).timeout(deadline.difference(DateTime.now()));
     List<List<LatLon>> outlines;
     try {
-      outlines = await _firstSuccess([for (final url in _overpass) () => _outlines(url, query)]);
+      outlines = await round();
+    } on TimeoutException {
+      rethrow;
     } catch (_) {
-      // busy mirrors usually free a slot within seconds
-      await Future<void>.delayed(const Duration(seconds: 3));
-      outlines = await _firstSuccess([for (final url in _overpass) () => _outlines(url, query)]);
+      // busy mirrors usually free a slot within seconds; retry only while time is left
+      if (deadline.difference(DateTime.now()) < const Duration(seconds: 5)) rethrow;
+      await Future<void>.delayed(const Duration(seconds: 2));
+      outlines = await round();
     }
+    unawaited(_cache.add(tap, outlines));
     return pickBuilding(outlines, tap);
   }
 
@@ -103,7 +126,7 @@ class OsmPlaceFinder implements PlaceFinder {
     final res = await _dio.get<Map<String, dynamic>>(
       url,
       queryParameters: {'data': query},
-      options: Options(receiveTimeout: const Duration(seconds: 20)),
+      options: Options(receiveTimeout: const Duration(seconds: 10)),
     );
     final elements = res.data?['elements'];
     if (elements is! List) throw const FormatException('no elements');
@@ -148,6 +171,60 @@ class OsmPlaceFinder implements PlaceFinder {
       final last = await Geolocator.getLastKnownPosition();
       if (last != null) return LatLon(last.latitude, last.longitude);
       throw const GpsException(GpsProblem.failed);
+    }
+  }
+}
+
+/// Building outlines already downloaded, saved in a small JSON file on the phone.
+class BuildingCache {
+  BuildingCache({Future<File> Function()? file}) : _file = file ?? _defaultFile;
+
+  final Future<File> Function() _file;
+  List<({LatLon at, List<List<LatLon>> outlines})>? _entries;
+
+  /// Areas kept; each is one 150 m lookup, a few kB.
+  static const maxEntries = 40;
+
+  /// A tap this close to an earlier lookup is answered from it (the lookup covers 150 m).
+  static const reuseWithinM = 100.0;
+
+  static Future<File> _defaultFile() async => File('${(await getApplicationSupportDirectory()).path}/building_outlines.json');
+
+  Future<List<({LatLon at, List<List<LatLon>> outlines})>> _load() async {
+    if (_entries != null) return _entries!;
+    try {
+      final f = await _file();
+      final raw = await f.exists() ? jsonDecode(await f.readAsString()) as List<dynamic> : const [];
+      LatLon pt(dynamic p) => LatLon(((p as List<dynamic>)[0] as num).toDouble(), (p[1] as num).toDouble());
+      _entries = [
+        for (final e in raw.cast<Map<String, dynamic>>())
+          (at: pt(e['at']), outlines: [for (final o in e['outlines'] as List<dynamic>) [for (final p in o as List<dynamic>) pt(p)]]),
+      ];
+    } catch (_) {
+      _entries = [];
+    }
+    return _entries!;
+  }
+
+  Future<List<List<LatLon>>?> near(LatLon tap) async {
+    for (final e in (await _load()).reversed) {
+      if (distanceM(e.at, tap) <= reuseWithinM) return e.outlines;
+    }
+    return null;
+  }
+
+  Future<void> add(LatLon at, List<List<LatLon>> outlines) async {
+    if (outlines.isEmpty) return;
+    final entries = await _load()
+      ..add((at: at, outlines: outlines));
+    if (entries.length > maxEntries) entries.removeRange(0, entries.length - maxEntries);
+    try {
+      List<double> pt(LatLon p) => [p.lat, p.lon];
+      await (await _file()).writeAsString(jsonEncode([
+        for (final e in entries) {'at': pt(e.at), 'outlines': [for (final o in e.outlines) [for (final p in o) pt(p)]]},
+      ]));
+    } catch (_) {
+      // the cache is only a convenience
     }
   }
 }

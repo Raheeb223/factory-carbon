@@ -87,6 +87,13 @@ class AppLocalizationsBn extends AppLocalizations {
       'সার্ভারে সংযোগ করা যায়নি। ইন্টারনেট সংযোগ এবং সেটিংসে সার্ভারের ঠিকানা পরীক্ষা করুন।';
 
   @override
+  String get connWakingTitle => 'সার্ভারের সাথে সংযোগ হচ্ছে…';
+
+  @override
+  String get connWakingBody =>
+      'বিনামূল্যের সার্ভারটি কেউ ব্যবহার না করলে ঘুমিয়ে থাকে, চালু হতে এক মিনিট পর্যন্ত লাগতে পারে। এর মধ্যে আপনি অ্যাপটি ব্যবহার করতে পারেন।';
+
+  @override
   String get errorTimeout => 'সার্ভার উত্তর দিতে অনেক সময় নিয়েছে।';
 
   @override
@@ -548,7 +555,7 @@ class AppLocalizationsBn extends AppLocalizations {
       'এখনও নিশ্চিত করা কোনো তথ্য নেই। বিল যোগ করুন বা পুরোনো তথ্য ইমপোর্ট করুন।';
 
   @override
-  String get carbonScope1 => 'স্কোপ ১ (ডিজেল + গ্যাস)';
+  String get carbonScope1 => 'স্কোপ ১ (কারখানায় পোড়ানো জ্বালানি)';
 
   @override
   String get carbonScope2 => 'স্কোপ ২ (গ্রিড বিদ্যুৎ)';
@@ -1069,7 +1076,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get limitationsBody =>
-      '• শুধু ইউটিলিটি বিল থেকে স্কোপ ১ ও ২। স্কোপ ৩ নেই; হাতে না লিখলে কয়লা, বায়োমাস বা অন্য জ্বালানি নেই।\n• ক্রেতার চাহিদার সাথে পদ্ধতি ও ফরম্যাট মিলিয়ে না নেওয়া পর্যন্ত নির্গমন রিপোর্টটি খসড়া।\n• বিল পড়ার নির্ভুলতা মাত্র কয়েকটি নমুনা বিলে মাপা হয়েছে। সবসময় মান যাচাই করুন।\n• শুধু ইংরেজি অক্ষরে ছাপানো নাম নিজে থেকে ঢাকা হয়। হাতে লেখা বা বাংলা নাম নিজে ঢেকে দিন।\n• অস্বাভাবিক ব্যবহারের যাচাই উৎপাদনের তুলনায় পরিসংখ্যানগত ব্যতিক্রম দেখায়; কারণ বলতে পারে না এবং অপচয় প্রমাণ করে না।\n• মাপা সাশ্রয় কাজের আগে ও পরে পুরো কারখানার তুলনা; আবহাওয়া, পণ্যের ধরন বা অন্য পরিবর্তনেরও ভূমিকা থাকতে পারে।\n• সোলারের ফল শুধু অনুমান।\n• নির্গমন গুণক প্রকাশিত সরকারি উৎস থেকে নেওয়া (রিপোর্টে উৎস ও বছরসহ দেখানো)। নতুন সংস্করণ এলে হালনাগাদ করুন এবং ক্রেতার নিয়মের সাথে মিলিয়ে নিন।\n• অ্যাপ টোকেন দুর্বল সুরক্ষা, শুধু ডেমোর জন্য যথেষ্ট।';
+      '• শুধু বিল ও জ্বালানির রসিদ থেকে স্কোপ ১ ও ২: গ্রিডের বিদ্যুৎ, প্রাকৃতিক গ্যাস, ডিজেল, এলপিজি ও ফার্নেস অয়েল। স্কোপ ৩, রেফ্রিজারেন্ট লিক, কয়লা বা বায়োমাস ধরা হয় না।\n• ক্রেতার চাহিদার সাথে পদ্ধতি ও ফরম্যাট মিলিয়ে না নেওয়া পর্যন্ত নির্গমন রিপোর্টটি খসড়া।\n• বিল পড়ার নির্ভুলতা মাত্র কয়েকটি নমুনা বিলে মাপা হয়েছে। সবসময় মান যাচাই করুন।\n• শুধু ইংরেজি অক্ষরে ছাপানো নাম নিজে থেকে ঢাকা হয়। হাতে লেখা বা বাংলা নাম নিজে ঢেকে দিন।\n• অস্বাভাবিক ব্যবহারের যাচাই উৎপাদনের তুলনায় পরিসংখ্যানগত ব্যতিক্রম দেখায়; কারণ বলতে পারে না এবং অপচয় প্রমাণ করে না।\n• মাপা সাশ্রয় কাজের আগে ও পরে পুরো কারখানার তুলনা; আবহাওয়া, পণ্যের ধরন বা অন্য পরিবর্তনেরও ভূমিকা থাকতে পারে।\n• সোলারের ফল শুধু অনুমান।\n• নির্গমন গুণক প্রকাশিত সরকারি উৎস থেকে নেওয়া (রিপোর্টে উৎস ও বছরসহ দেখানো)। নতুন সংস্করণ এলে হালনাগাদ করুন এবং ক্রেতার নিয়মের সাথে মিলিয়ে নিন।\n• অ্যাপ টোকেন দুর্বল সুরক্ষা, শুধু ডেমোর জন্য যথেষ্ট।';
 
   @override
   String get demoNeedsEmpty =>
@@ -1330,7 +1337,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get homeScanSubtitle =>
-      'বিদ্যুৎ, গ্যাস বা ডিজেল বিলের ছবি তুলুন। সংখ্যাগুলো আমরা পড়ে দেব।';
+      'বিদ্যুৎ, গ্যাস, ডিজেল, এলপিজি বা ফার্নেস অয়েলের বিলের ছবি তুলুন। সংখ্যাগুলো আমরা পড়ে দেব।';
 
   @override
   String get homeExplore => 'আপনি কী করতে চান?';
@@ -1556,7 +1563,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get tut1Body =>
-      'বড় + বোতামে চাপুন, তারপর ক্যামেরা। বিদ্যুৎ, গ্যাস বা ডিজেলের বিল নিন।';
+      'হোম পাতায় \"বিল স্ক্যান করুন\"-এ চাপুন, তারপর ক্যামেরা। বিদ্যুৎ, গ্যাস, ডিজেল, এলপিজি বা ফার্নেস অয়েলের বিল নিন।';
 
   @override
   String get tut2Title => 'আপনার নাম লুকানো থাকে';
@@ -1570,7 +1577,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get tut3Body =>
-      'অ্যাপ ইউনিট আর টাকা পড়ে নেয়। বিলের সাথে মিললে \'সংরক্ষণ\' চাপুন।';
+      'অ্যাপ ইউনিট আর টাকা পড়ে নেয়। বিলের সাথে মিললে বাক্সে টিক দিয়ে \'সংরক্ষণ\' চাপুন।';
 
   @override
   String get tut4Title => 'কত তৈরি করলেন লিখুন';
@@ -1591,7 +1598,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get tut6Body =>
-      'লাল সতর্কতা মানে ওই মাসে বিদ্যুৎ অপচয় হয়েছে। সূর্যের পাতা দেখায় সোলার প্যানেল কত টাকা বাঁচাতে পারে।';
+      'লাল সতর্কতা মানে কোনো মাসে প্রত্যাশার চেয়ে বেশি বিদ্যুৎ লেগেছে: কারণ খুঁজে দেখুন। সোলার পাতা দেখায় সোলার প্যানেল কত টাকা বাঁচাতে পারে।';
 
   @override
   String get homeHowTo => 'কীভাবে ব্যবহার করবেন';
@@ -1697,7 +1704,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String impactIntensityLine(String pct) {
-    return 'প্রতি ইউনিট উৎপাদনে বিদ্যুৎ: আগের তুলনায় $pct%';
+    return 'প্রতি ইউনিট উৎপাদনে বিদ্যুৎ: আগের চেয়ে $pct';
   }
 
   @override
@@ -1810,7 +1817,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String actionResult(String pct, String before, String after) {
-    return 'প্রতি ইউনিট উৎপাদনে kWh: $pct% ($before → $after)';
+    return 'প্রতি ইউনিট উৎপাদনে kWh: $pct ($before → $after)';
   }
 
   @override
@@ -2172,4 +2179,659 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get paramPanelHint =>
       'প্যানেলের লেবেলে বা কোটেশনে লেখা থাকে। নতুন প্যানেল সাধারণত ৫৪০–৬০০ W। নিশ্চিত না হলে ৫৫০ W রাখুন।';
+
+  @override
+  String get carbonPlainTitle => 'সহজ কথায়';
+
+  @override
+  String carbonSay1(String start, String end, String total, String perMonth) {
+    return '$start থেকে $end পর্যন্ত আপনার কারখানা $total টন CO₂ ছেড়েছে, মাসে প্রায় $perMonth টন।';
+  }
+
+  @override
+  String carbonSay2(String source, String pct) {
+    return 'সবচেয়ে বেশি আসে $source থেকে: মোটের $pct%।';
+  }
+
+  @override
+  String carbonSay3(String unit, String t) {
+    return 'প্রতি ১,০০০ $unit তৈরিতে প্রায় $t টন CO₂ বের হয়।';
+  }
+
+  @override
+  String carbonSay4(String month, String t) {
+    return 'সবচেয়ে বেশি মাস: $month, $t টন।';
+  }
+
+  @override
+  String get carbonCalcTitle => 'কীভাবে হিসাব করা হলো';
+
+  @override
+  String get carbonCalcHint => 'বিলের ইউনিট × নির্গমন গুণক = CO₂';
+
+  @override
+  String carbonCalcLine(String amount, String unit, String factor, String per) {
+    return '$amount $unit × প্রতি $per-এ $factor kg';
+  }
+
+  @override
+  String carbonCalcResult(String t) {
+    return '= $t টন';
+  }
+
+  @override
+  String get carbonCalcTotal => 'মোট';
+
+  @override
+  String get carbonCalcNote =>
+      '১ টন = ১,০০০ kg। গুণক ও তার উৎস নিচে দেওয়া আছে।';
+
+  @override
+  String get carbonUnitKwh => 'kWh';
+
+  @override
+  String get carbonUnitLitre => 'লিটার';
+
+  @override
+  String get carbonUnitLitreOne => 'লিটার';
+
+  @override
+  String get carbonUnitM3 => 'm³';
+
+  @override
+  String get carbonCutTitle => 'কোথা থেকে শুরু করবেন';
+
+  @override
+  String carbonCutTk(String kwh, String tk, String t) {
+    return 'বিদ্যুৎ ১০% কম ব্যবহার করলে বছরে প্রায় $kwh kWh, $tk টাকা এবং $t টন CO₂ কমবে।';
+  }
+
+  @override
+  String carbonCutNoTk(String kwh, String t) {
+    return 'বিদ্যুৎ ১০% কম ব্যবহার করলে বছরে প্রায় $kwh kWh এবং $t টন CO₂ কমবে।';
+  }
+
+  @override
+  String get carbonCutButton => 'কী করবেন দেখুন';
+
+  @override
+  String get actionBestForYou => 'আপনার জন্য সেরা';
+
+  @override
+  String actionBestWhy(String source, String pct) {
+    return 'আপনার CO₂-এর $pct% আসে $source থেকে, তাই এটি সবচেয়ে কাজে দেবে।';
+  }
+
+  @override
+  String get actionCostFree => 'বিনা খরচে';
+
+  @override
+  String get actionCostLow => 'কম খরচ';
+
+  @override
+  String get actionCostMedium => 'মাঝারি খরচ';
+
+  @override
+  String get actionCostHigh => 'বড় বিনিয়োগ';
+
+  @override
+  String get actionCutsElectricity => 'বিদ্যুৎ কমায়';
+
+  @override
+  String get actionCutsDiesel => 'ডিজেল কমায়';
+
+  @override
+  String get actionCutsGas => 'গ্যাস কমায়';
+
+  @override
+  String get actionHowTo => 'কীভাবে করবেন';
+
+  @override
+  String get actionSuggestionsHint =>
+      '“আপনার জন্য সেরা” চিহ্নিতগুলো দিয়ে শুরু করুন। ধাপগুলো দেখতে কার্ডে চাপুন।';
+
+  @override
+  String get actFixAirLeaksSteps =>
+      'মেশিন বন্ধ থাকার সময় (দুপুরের বিরতি বা ছুটির দিনে) ফ্লোরে হেঁটে হোস, কাপলিং ও এয়ার গানে হিস হিস শব্দ শুনুন।\nপ্রতিটি লিকে একটি ট্যাগ বেঁধে তালিকায় লিখুন।\nযন্ত্রাংশ মেরামত বা বদলান, তারপর প্রতি মাসে আবার পরীক্ষা করুন।';
+
+  @override
+  String get actSwitchOffIdleSteps =>
+      'প্রতি ফ্লোরে একজনকে বন্ধ করার দায়িত্ব দিন।\nদুপুরের বিরতিতে, শেষ শিফটের পরে ও ছুটির দিনে মেশিন, লাইট ও ফ্যান বন্ধ করুন।\nদেয়ালে একটি সহজ চেকলিস্ট লাগিয়ে প্রতিদিন সই করুন।';
+
+  @override
+  String get actLowerAirPressureSteps =>
+      'মেশিন সরবরাহকারীর কাছে জেনে নিন প্রতিটি মেশিনের আসলে কত বাতাসের চাপ লাগে।\nউৎপাদন চালু রেখে কম্প্রেসরের সেটিং অল্প অল্প করে কমান।\nসব মেশিন ভালোভাবে চলে এমন সবচেয়ে কম সেটিংয়ে থামুন।';
+
+  @override
+  String get actSteamLeaksSteps =>
+      'স্টিম লাইন ধরে হেঁটে লিক ও সবসময় স্টিম ছাড়ে এমন স্টিম ট্র্যাপ চিহ্নিত করুন।\nসেগুলো মেরামত করুন এবং খোলা গরম পাইপ ও ভালভে ইনসুলেশন দিন।\nগরম কনডেনসেট পানি বয়লারে ফেরত পাঠান।';
+
+  @override
+  String get actGeneratorHoursSteps =>
+      'জেনারেটর কখন চালু ও বন্ধ হয় তা একটি লগ বইয়ে লিখুন।\nগ্রিডের বিদ্যুৎ ফিরলেই সঙ্গে সঙ্গে গ্রিডে ফিরে যান।\nপ্রতি সপ্তাহে লগটি লোডশেডিংয়ের সময়ের সঙ্গে মিলিয়ে দেখুন।';
+
+  @override
+  String get actLedLightingSteps =>
+      'যে লাইটগুলো সবচেয়ে বেশি সময় জ্বলে (উৎপাদন ফ্লোর, ২–৩ শিফট) সেগুলো খুঁজে বের করুন।\nআগে সেই টিউবলাইট ও বাল্ব LED দিয়ে বদলান।\nবাকিগুলো পুরনোটা নষ্ট হলে বদলান।';
+
+  @override
+  String get actServoMotorsSteps =>
+      'কোন সেলাই মেশিনে এখনও ক্লাচ মোটর আছে গুনে দেখুন (সেলাই না করলেও এগুলো চলতে থাকে)।\nসার্ভো মোটর লাগানোর জন্য সরবরাহকারীর কাছে দাম চান।\nএক লাইনে শুরু করুন, বিদ্যুৎ তুলনা করুন, তারপর বাকিগুলোতে লাগান।';
+
+  @override
+  String get actPowerFactorSteps =>
+      'বিদ্যুৎ বিলে পাওয়ার ফ্যাক্টর (PF) জরিমানা বা কম PF আছে কিনা দেখুন।\nলাইসেন্সধারী ইলেকট্রিশিয়ান দিয়ে ক্যাপাসিটর ব্যাংক পরীক্ষা করান।\nবিল থেকে জরিমানা না যাওয়া পর্যন্ত ক্যাপাসিটর মেরামত করুন বা যোগ করুন।';
+
+  @override
+  String get actRooftopSolarSteps =>
+      'সোলার পাতায় গিয়ে আপনার ছাদে চাপ দিয়ে বিনামূল্যে অনুমান দেখুন।\n২–৩টি সোলার কোম্পানির কাছ থেকে কোটেশন নিন।\nছাদ প্যানেলের ভার নিতে পারবে কিনা একজন প্রকৌশলীকে দিয়ে পরীক্ষা করান।';
+
+  @override
+  String get scope1Short => 'স্কোপ ১';
+
+  @override
+  String get scope2Short => 'স্কোপ ২';
+
+  @override
+  String get actionTapForSteps => 'ধাপগুলো দেখতে কার্ডে চাপুন।';
+
+  @override
+  String importSkipped(String list) {
+    return 'বিল বা হাতে লেখা থেকে এগুলো আগেই ফোনে আছে, তাই ইমপোর্ট হবে না: $list।';
+  }
+
+  @override
+  String importReplaced(String list) {
+    return 'এগুলো আগে ইমপোর্ট করা মানের জায়গায় বসবে: $list।';
+  }
+
+  @override
+  String get importNothingNew =>
+      'এই ফাইলের সব তথ্য আগেই ফোনে আছে। নতুন করে ইমপোর্ট করার কিছু নেই।';
+
+  @override
+  String get backupGroup => 'ব্যাকআপ';
+
+  @override
+  String get backupSave => 'ব্যাকআপ রাখুন';
+
+  @override
+  String get backupSaveHint =>
+      'একটি ফাইলে আপনার কারখানা, বিল, উৎপাদন, পদক্ষেপ ও সোলার পরিকল্পনা থাকবে। বিলের ছবি থাকবে না। ফাইলটি নিরাপদে রাখুন, যেমন Google Drive-এ।';
+
+  @override
+  String get backupRestore => 'ব্যাকআপ থেকে ফিরিয়ে আনুন';
+
+  @override
+  String get backupRestoreHint =>
+      'নতুন ফোনে বা অ্যাপ মুছে ফেলার পরে এটি ব্যবহার করুন।';
+
+  @override
+  String get backupNotABackup => 'এটি BillToGreen-এর ব্যাকআপ ফাইল নয়।';
+
+  @override
+  String get backupNewer =>
+      'এই ব্যাকআপটি অ্যাপের নতুন সংস্করণে তৈরি। আগে অ্যাপ আপডেট করুন।';
+
+  @override
+  String get backupDamaged => 'ব্যাকআপ ফাইলটি নষ্ট, তাই ফিরিয়ে আনা যাচ্ছে না।';
+
+  @override
+  String get backupRestoreConfirmTitle => 'এই ফোনের সব তথ্য বদলে দেবেন?';
+
+  @override
+  String backupRestoreConfirmBody(
+    String date,
+    String factory,
+    int bills,
+    int months,
+    int actions,
+    int plans,
+  ) {
+    return '$date তারিখের ব্যাকআপে ($factory) $months মাসের $billsটি বিল, $actionsটি পদক্ষেপ ও $plansটি সোলার পরিকল্পনা আছে। এই ফোনে এখন যা আছে সব বদলে যাবে।';
+  }
+
+  @override
+  String get backupRestored => 'ব্যাকআপ ফিরিয়ে আনা হয়েছে।';
+
+  @override
+  String get gapsTitle => 'যে মাসগুলোর তথ্য নেই';
+
+  @override
+  String get gapsHint =>
+      'প্রতিটি মাসের তথ্য দিলে তবেই রিপোর্ট ও বিদ্যুৎ যাচাই পূর্ণ হয়।';
+
+  @override
+  String gapsElectricity(String months) {
+    return 'বিদ্যুৎ বিল নেই: $months';
+  }
+
+  @override
+  String gapsProduction(String months) {
+    return 'উৎপাদনের হিসাব নেই: $months';
+  }
+
+  @override
+  String gapsMore(int count) {
+    return 'আরও $countটি';
+  }
+
+  @override
+  String get gapsAddBill => 'বিল যোগ করুন';
+
+  @override
+  String get gapsAddProduction => 'উৎপাদন যোগ করুন';
+
+  @override
+  String get periodLabel => 'রিপোর্টের সময়কাল';
+
+  @override
+  String get periodHint =>
+      'ক্রেতারা সাধারণত এক বছরের হিসাব চান। বাংলাদেশের অর্থবছর জুলাই থেকে জুন।';
+
+  @override
+  String get periodAll => 'সব তথ্য';
+
+  @override
+  String periodCalendar(String year) {
+    return '$year (জানুয়ারি–ডিসেম্বর)';
+  }
+
+  @override
+  String periodFiscal(String label) {
+    return 'অর্থবছর $label (জুলাই–জুন)';
+  }
+
+  @override
+  String get periodSoFar => 'বছরের এ পর্যন্ত';
+
+  @override
+  String get compareTitle => 'এক বছর আগের তুলনায়';
+
+  @override
+  String compareWith(String start, String end) {
+    return 'এক বছর আগের একই মাসগুলো: $start – $end';
+  }
+
+  @override
+  String compareDown(String pct) {
+    return '$pct% কম';
+  }
+
+  @override
+  String compareUp(String pct) {
+    return '$pct% বেশি';
+  }
+
+  @override
+  String get compareSame => 'কোনো পরিবর্তন নেই';
+
+  @override
+  String compareNote(String unit) {
+    return 'প্রতি ১,০০০ $unit-এ CO₂ কমলে বোঝা যায় কারখানা আরও দক্ষ হচ্ছে, উৎপাদন বাড়লেও।';
+  }
+
+  @override
+  String get compareGaps =>
+      'দুটি সময়ের যেকোনো একটিতে কিছু মাসের তথ্য নেই, তাই এই তুলনা কম নির্ভরযোগ্য।';
+
+  @override
+  String get billTypeLpg => 'এলপিজি';
+
+  @override
+  String get billTypeFurnaceOil => 'ফার্নেস অয়েল';
+
+  @override
+  String get factorLpg => 'এলপিজি';
+
+  @override
+  String get factorFurnaceOil => 'ফার্নেস অয়েল';
+
+  @override
+  String get legendLpg => 'এলপিজি';
+
+  @override
+  String get legendFurnaceOil => 'ফার্নেস অয়েল';
+
+  @override
+  String get importColLpg => 'এলপিজি কেজি';
+
+  @override
+  String get importColFurnaceOil => 'ফার্নেস অয়েল লিটার';
+
+  @override
+  String get carbonUnitKg => 'কেজি';
+
+  @override
+  String get actionCutsBoilerFuel => 'বয়লারের জ্বালানি কমায়';
+
+  @override
+  String setupStep(int n, int total) {
+    return 'ধাপ $n / $total';
+  }
+
+  @override
+  String get actionNext => 'পরবর্তী';
+
+  @override
+  String get actionBack => 'পেছনে';
+
+  @override
+  String get setupBasicsTitle => 'আপনার কারখানা';
+
+  @override
+  String get setupBasicsSub =>
+      'নাম ও ধরন ক্রেতাদের দেওয়া রিপোর্টে দেখানো হবে।';
+
+  @override
+  String get facilityTypeLabel => 'প্রধান পণ্য বা প্রক্রিয়া';
+
+  @override
+  String get facilityKnit => 'নিট';
+
+  @override
+  String get facilityWoven => 'ওভেন';
+
+  @override
+  String get facilitySweater => 'সোয়েটার';
+
+  @override
+  String get facilityDenim => 'ডেনিম';
+
+  @override
+  String get facilityDyeing => 'ডাইং ও ফিনিশিং';
+
+  @override
+  String get facilityWashing => 'ওয়াশিং';
+
+  @override
+  String get facilityOther => 'অন্যান্য';
+
+  @override
+  String get districtLabel => 'জেলা';
+
+  @override
+  String get districtDhaka => 'ঢাকা';
+
+  @override
+  String get districtGazipur => 'গাজীপুর';
+
+  @override
+  String get districtNarayanganj => 'নারায়ণগঞ্জ';
+
+  @override
+  String get districtNarsingdi => 'নরসিংদী';
+
+  @override
+  String get districtChattogram => 'চট্টগ্রাম';
+
+  @override
+  String get districtMymensingh => 'ময়মনসিংহ';
+
+  @override
+  String get districtCumilla => 'কুমিল্লা';
+
+  @override
+  String get districtKhulna => 'খুলনা';
+
+  @override
+  String get districtOther => 'অন্য জেলা';
+
+  @override
+  String get addressLabel => 'ঠিকানা বা এলাকা (ঐচ্ছিক)';
+
+  @override
+  String get addressHint => 'যেমন: কোনাবাড়ী, কাশিমপুর';
+
+  @override
+  String get setupLocationTitle => 'কারখানার অবস্থান';
+
+  @override
+  String get setupLocationSub =>
+      'সোলার হিসাবের সূর্যালোকের তথ্য এবং ম্যাপে আপনার ছাদ খুলতে এটি লাগে। চাইলে এখন বাদ দিয়ে পরে যোগ করতে পারেন।';
+
+  @override
+  String get locGps => 'আমি কারখানায় আছি: আমার অবস্থান নিন';
+
+  @override
+  String get locGpsBusy => 'আপনার অবস্থান খোঁজা হচ্ছে…';
+
+  @override
+  String get locPasteLabel => 'অথবা Google Maps লিংক বা স্থানাঙ্ক পেস্ট করুন';
+
+  @override
+  String get locPasteHint => 'যেমন: 23.9995, 90.4203';
+
+  @override
+  String get locPasteInvalid =>
+      'কোনো স্থানাঙ্ক পাওয়া যায়নি। Google Maps-এ কারখানার ওপর আঙুল চেপে ধরে দেখানো সংখ্যাগুলো কপি করুন, অথবা অক্ষাংশ, দ্রাঘিমাংশ লিখুন।';
+
+  @override
+  String locSet(String lat, String lon) {
+    return 'অবস্থান ঠিক হয়েছে: $lat, $lon';
+  }
+
+  @override
+  String get locNotSet => 'এখনো অবস্থান দেওয়া হয়নি';
+
+  @override
+  String get locOutside =>
+      'এই স্থানটি বাংলাদেশের বাইরে। সংখ্যাগুলো দেখুন: অক্ষাংশ প্রায় ২০.৫–২৬.৭ এবং দ্রাঘিমাংশ প্রায় ৮৮–৯২.৭।';
+
+  @override
+  String get locBothNeeded =>
+      'অক্ষাংশ ও দ্রাঘিমাংশ দুটোই দিন, অথবা মুছে ফেলুন।';
+
+  @override
+  String get locManual => 'অক্ষাংশ ও দ্রাঘিমাংশ লিখুন';
+
+  @override
+  String get setupSkipLocation => 'এখন বাদ দিন';
+
+  @override
+  String get setupProductionTitle => 'উৎপাদন ও জ্বালানি';
+
+  @override
+  String get setupProductionSub =>
+      'এতে প্রতি ইউনিটে CO₂, রিমাইন্ডার ও পরামর্শ আপনার কারখানার সাথে মিলবে।';
+
+  @override
+  String get workersLabel => 'শ্রমিকের সংখ্যা (ঐচ্ছিক)';
+
+  @override
+  String get shiftsLabel => 'দিনে কয় শিফট';
+
+  @override
+  String get energySourcesLabel => 'কারখানা যে জ্বালানি ব্যবহার করে';
+
+  @override
+  String get energySourcesHint =>
+      'যা যা প্রযোজ্য সব টিক দিন। পরে সেটিংসে বদলাতে পারবেন।';
+
+  @override
+  String get sourcesNeedOne => 'অন্তত একটি জ্বালানি বেছে নিন।';
+
+  @override
+  String get sourceElectricity => 'গ্রিডের বিদ্যুৎ';
+
+  @override
+  String get sourceGas => 'প্রাকৃতিক গ্যাস';
+
+  @override
+  String get sourceDiesel => 'ডিজেল জেনারেটর';
+
+  @override
+  String get sourceLpg => 'এলপিজি';
+
+  @override
+  String get sourceFurnaceOil => 'ফার্নেস অয়েল';
+
+  @override
+  String get sourceSolar => 'ছাদে সোলার (বসানো আছে)';
+
+  @override
+  String get reportingYearLabel => 'রিপোর্টের বছর';
+
+  @override
+  String get reportingCalendar => 'জানু–ডিসে';
+
+  @override
+  String get reportingFiscal => 'জুলাই–জুন (অর্থবছর)';
+
+  @override
+  String get reportingYearHint =>
+      'বেশিরভাগ ক্রেতা ও Higg FEM জানুয়ারি–ডিসেম্বর ব্যবহার করে। রিপোর্ট এই বছর দিয়ে খুলবে।';
+
+  @override
+  String get setupReviewTitle => 'তথ্যগুলো মিলিয়ে নিন';
+
+  @override
+  String get setupReviewSub =>
+      'কিছু বদলাতে পেছনে যান। তারপর গোপনীয়তার নোটিশ পড়ে শুরু করুন।';
+
+  @override
+  String get shareSummary => 'সারসংক্ষেপ শেয়ার করুন (হোয়াটসঅ্যাপ)';
+
+  @override
+  String get shareSummaryHint =>
+      'মালিক বা ব্যবস্থাপনার জন্য সহজ ভাষায় একটি ছোট বার্তা।';
+
+  @override
+  String get shareHeading => 'আমাদের ইউটিলিটি বিল থেকে CO₂ রিপোর্ট';
+
+  @override
+  String shareCompare(String change, String start, String end) {
+    return 'এটি $start – $end-এর চেয়ে $change।';
+  }
+
+  @override
+  String shareCost(String tk) {
+    return 'এই সময়ের বিদ্যুৎ বিল: $tk টাকা।';
+  }
+
+  @override
+  String get shareFooter =>
+      'কারখানার যাচাই করা বিল থেকে খসড়া হিসাব। BillToGreen দিয়ে তৈরি।';
+
+  @override
+  String get targetSetTitle => 'CO₂ কমানোর লক্ষ্য ঠিক করুন';
+
+  @override
+  String targetSetBody(String pct) {
+    return 'ক্রেতারা এখন সরবরাহকারীদের কাছে লক্ষ্য ও প্রতি বছরের অগ্রগতি জানতে চান। বিজ্ঞানভিত্তিক গতি হলো প্রতি বছর অন্তত $pct% কম CO₂।';
+  }
+
+  @override
+  String get targetSetButton => 'লক্ষ্য ঠিক করুন';
+
+  @override
+  String get targetTitle => 'আপনার CO₂ লক্ষ্য';
+
+  @override
+  String get targetEdit => 'লক্ষ্য বদলান';
+
+  @override
+  String targetLine(String pct, String metric, String year, String baseline) {
+    return '$baseline-এর তুলনায় $year সালের মধ্যে $metric $pct% কম।';
+  }
+
+  @override
+  String targetMetricPerUnit(String unit) {
+    return 'প্রতি ১,০০০ $unit-এ CO₂';
+  }
+
+  @override
+  String get targetMetricTotal => 'মোট CO₂';
+
+  @override
+  String targetPerUnitShort(String unit) {
+    return 'প্রতি ১,০০০ $unit';
+  }
+
+  @override
+  String get targetTotalShort => 'মোট CO₂';
+
+  @override
+  String get targetOnTrack => 'ঠিক পথে আছে';
+
+  @override
+  String get targetBehind => 'পিছিয়ে আছে';
+
+  @override
+  String get targetNoData => 'এখনো যথেষ্ট তথ্য নেই';
+
+  @override
+  String targetNow(String change) {
+    return 'গত ১২ মাস: ভিত্তি বছরের চেয়ে $change।';
+  }
+
+  @override
+  String targetNeeded(String pct) {
+    return 'ঠিক পথে থাকতে এখন পর্যন্ত $pct% কম হওয়া দরকার।';
+  }
+
+  @override
+  String targetNoDataHint(String year) {
+    return 'অগ্রগতি দেখতে পুরো $year সালের এবং গত ১২ মাসের বিল যোগ করুন।';
+  }
+
+  @override
+  String get targetSheetTitle => 'CO₂ কমানোর লক্ষ্য';
+
+  @override
+  String get targetWhat => 'কী কমাতে চান?';
+
+  @override
+  String targetPerUnitHint(String unit) {
+    return 'বাড়ন্ত কারখানার জন্য ন্যায্য: বেশি $unit বানালে তা আপনার বিপক্ষে যায় না।';
+  }
+
+  @override
+  String get targetBaseline => 'ভিত্তি বছর';
+
+  @override
+  String get targetBy => 'লক্ষ্যের বছর';
+
+  @override
+  String get targetHowMuch => 'কতটা কম?';
+
+  @override
+  String targetSbtiChip(String pct) {
+    return '$pct% (বিজ্ঞানভিত্তিক)';
+  }
+
+  @override
+  String get targetPctLabel => 'কমানোর পরিমাণ';
+
+  @override
+  String targetSbtiHint(String rate, String pct) {
+    return 'বিজ্ঞানভিত্তিক লক্ষ্যে বছরে অন্তত $rate% কমাতে হয়: এই বছরগুলোর জন্য $pct%।';
+  }
+
+  @override
+  String get targetRemove => 'লক্ষ্য মুছে দিন';
+
+  @override
+  String get energyTitle => 'ব্যবহৃত জ্বালানি';
+
+  @override
+  String energyTotal(String mwh, String gj) {
+    return '$mwh মেগাওয়াট-ঘণ্টা · $gj গিগাজুল';
+  }
+
+  @override
+  String get energyNote =>
+      'Higg FEM-এর মতো ক্রেতাদের প্রশ্নপত্রে এই সংখ্যাগুলো চাওয়া হয়। জ্বালানি তার নিট তাপমান ধরে গোনা হয়েছে; PDF-এ রূপান্তরের মান ও উৎস দেওয়া আছে।';
+
+  @override
+  String get energyIncomplete =>
+      'কিছু জ্বালানি kWh-এ রূপান্তর করা যায়নি, তাই মোট দেখানো হলো না।';
+
+  @override
+  String homeMonthsWithData(int n, int total) {
+    return '$total মাসের মধ্যে $n মাসের তথ্য আছে';
+  }
+
+  @override
+  String get targetNowSame => 'গত ১২ মাস: ভিত্তি বছরের প্রায় সমান।';
 }

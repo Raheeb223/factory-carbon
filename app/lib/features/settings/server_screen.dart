@@ -48,7 +48,7 @@ class _ServerScreenState extends ConsumerState<ServerScreen> {
     });
     final config = _candidate();
     final client = widget.clientFactory?.call(config) ??
-        ApiClient(config, dio: Dio(BaseOptions(baseUrl: config.apiBaseUrl, connectTimeout: const Duration(seconds: 8), receiveTimeout: const Duration(seconds: 15))));
+        ApiClient(config, dio: Dio(BaseOptions(baseUrl: config.apiBaseUrl, connectTimeout: const Duration(seconds: 15), receiveTimeout: const Duration(seconds: 75))));
     try {
       final h = await client.health();
       _ok = true;

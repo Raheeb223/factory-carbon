@@ -1,8 +1,8 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Factory Energy & Carbon API",
-    "description": "Stateless backend for the Factory Energy & Carbon mobile app. Every /v1 request needs the X-App-Token header.",
+    "title": "BillToGreen API",
+    "description": "Stateless backend for the BillToGreen mobile app. Every /v1 request needs the X-App-Token header.",
     "version": "0.1.0"
   },
   "paths": {
@@ -1353,6 +1353,16 @@
             },
             "type": "array",
             "title": "Methodology"
+          },
+          "energy": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EnergySummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -1506,7 +1516,9 @@
             "enum": [
               "electricity",
               "gas",
-              "diesel"
+              "diesel",
+              "lpg",
+              "furnace_oil"
             ],
             "title": "Bill Type"
           },
@@ -1520,7 +1532,8 @@
             "enum": [
               "kWh",
               "m3",
-              "litre"
+              "litre",
+              "kg"
             ],
             "title": "Unit"
           },
@@ -1553,6 +1566,18 @@
             },
             "type": "array",
             "title": "User Edited Fields"
+          },
+          "confirmed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 40
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confirmed At"
           }
         },
         "additionalProperties": false,
@@ -1627,6 +1652,131 @@
         ],
         "title": "DataQualityNote"
       },
+      "EnergySourceLine": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "enum": [
+              "electricity",
+              "gas",
+              "diesel",
+              "lpg",
+              "furnace_oil"
+            ],
+            "title": "Source"
+          },
+          "quantity": {
+            "type": "number",
+            "title": "Quantity"
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "kWh",
+              "m3",
+              "litre",
+              "kg"
+            ],
+            "title": "Unit"
+          },
+          "kwh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kwh"
+          },
+          "gj": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gj"
+          },
+          "share": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Share"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source",
+          "quantity",
+          "unit",
+          "kwh",
+          "gj",
+          "share"
+        ],
+        "title": "EnergySourceLine",
+        "description": "Energy used from one source in the period (net calorific value for fuels)."
+      },
+      "EnergySummary": {
+        "properties": {
+          "by_source": {
+            "items": {
+              "$ref": "#/components/schemas/EnergySourceLine"
+            },
+            "type": "array",
+            "title": "By Source"
+          },
+          "total_kwh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Kwh"
+          },
+          "total_gj": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Gj"
+          },
+          "energy_content": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/FactorInfo"
+            },
+            "type": "object",
+            "title": "Energy Content"
+          },
+          "complete": {
+            "type": "boolean",
+            "title": "Complete"
+          }
+        },
+        "type": "object",
+        "required": [
+          "by_source",
+          "total_kwh",
+          "total_gj",
+          "complete"
+        ],
+        "title": "EnergySummary"
+      },
       "ErrorBody": {
         "properties": {
           "code": {
@@ -1695,6 +1845,8 @@
               "electricity",
               "gas",
               "diesel",
+              "lpg",
+              "furnace_oil",
               "unknown"
             ],
             "title": "Bill Type"
@@ -1764,7 +1916,8 @@
                 "enum": [
                   "kWh",
                   "m3",
-                  "litre"
+                  "litre",
+                  "kg"
                 ]
               },
               {
@@ -1921,6 +2074,17 @@
               }
             ],
             "title": "Notes"
+          },
+          "gases": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gases"
           }
         },
         "type": "object",
@@ -1954,6 +2118,64 @@
               }
             ],
             "title": "Location"
+          },
+          "facility_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "knit",
+                  "woven",
+                  "sweater",
+                  "denim",
+                  "dyeing",
+                  "washing",
+                  "other"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Facility Type"
+          },
+          "district": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 60
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "District"
+          },
+          "workers": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 1000000.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Workers"
+          },
+          "shifts_per_day": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 3.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Shifts Per Day"
           }
         },
         "additionalProperties": false,
@@ -2041,6 +2263,30 @@
           "placeholders"
         ],
         "title": "HealthResponse"
+      },
+      "Inspection": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "detail": {
+            "type": "string",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "title",
+          "detail"
+        ],
+        "title": "Inspection",
+        "description": "A practical check for a flagged month. `code` lets the app localize; text is English."
       },
       "LatLon": {
         "properties": {
@@ -2173,6 +2419,50 @@
           "is_complete": {
             "type": "boolean",
             "title": "Is Complete"
+          },
+          "lpg_kg": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lpg Kg"
+          },
+          "furnace_oil_litres": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Furnace Oil Litres"
+          },
+          "scope1_lpg_t": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scope1 Lpg T"
+          },
+          "scope1_furnace_oil_t": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scope1 Furnace Oil T"
           },
           "missing": {
             "items": {
@@ -2631,6 +2921,19 @@
             ],
             "title": "Performance Ratio"
           },
+          "shading_loss": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMaximum": 0.9,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Shading Loss"
+          },
           "degradation_per_year": {
             "anyOf": [
               {
@@ -2716,6 +3019,22 @@
               }
             ],
             "title": "Analysis Years"
+          },
+          "roof_structure": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "unknown",
+                  "ok",
+                  "needs_work"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Roof Structure"
           }
         },
         "additionalProperties": false,
@@ -2942,6 +3261,24 @@
             },
             "type": "object",
             "title": "Model Summary"
+          },
+          "baseline_kwh_per_unit": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Baseline Kwh Per Unit"
+          },
+          "inspections": {
+            "items": {
+              "$ref": "#/components/schemas/Inspection"
+            },
+            "type": "array",
+            "title": "Inspections"
           }
         },
         "type": "object",
@@ -3104,6 +3441,28 @@
               }
             ],
             "title": "Excess Cost Bdt"
+          },
+          "kwh_per_unit": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kwh Per Unit"
+          },
+          "expected_kwh_per_unit": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Kwh Per Unit"
           }
         },
         "type": "object",

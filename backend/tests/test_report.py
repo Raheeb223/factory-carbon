@@ -90,3 +90,36 @@ def test_pdf_is_a_traceable_draft() -> None:
     assert "Source data (audit trail)" in text
     assert "manager corrected: consumed units" in text and "Typed in by manager" in text
     assert "2026-10-11" in text
+
+
+def test_pdf_lists_lpg_and_furnace_oil_when_used() -> None:
+    c, _ = make_client()
+    bills = _bills() + [
+        {"billing_month": "2024-02", "bill_type": "lpg", "consumed_units": 450, "unit": "kg"},
+        {"billing_month": "2024-03", "bill_type": "furnace_oil", "consumed_units": 1200, "unit": "litre"},
+    ]
+    payload = _payload()
+    payload["carbon"] = {**payload["carbon"], "bills": bills}  # type: ignore[dict-item]
+    r = c.post("/v1/report/pdf", headers=AUTH, json=payload)
+    assert r.status_code == 200, r.text
+    text = "\n".join(_pages(r.content))
+    assert "LPG (Scope 1)" in text and "furnace oil (Scope 1)" in text
+    assert "LPG kg" in text and "F. oil L" in text
+
+
+def test_pdf_cover_shows_facility_profile() -> None:
+    c, _ = make_client()
+    payload = _payload(factory={"name": "Test Garments Ltd", "location": "Konabari", "district": "Gazipur", "facility_type": "knit", "workers": 1200, "shifts_per_day": 2})
+    r = c.post("/v1/report/pdf", headers=AUTH, json=payload)
+    assert r.status_code == 200, r.text
+    cover = _pages(r.content)[0]
+    assert "Konabari, Gazipur" in cover
+    assert "Knit garments | 1,200 workers | 2 shifts per day" in cover
+
+
+def test_pdf_has_energy_table() -> None:
+    c, _ = make_client()
+    r = c.post("/v1/report/pdf", headers=AUTH, json=_payload())
+    text = "\n".join(_pages(r.content))
+    assert "Energy consumption" in text
+    assert "net calorific value" in text

@@ -9,6 +9,8 @@ FACTOR_FOR_SOURCE: dict[SourceType, str] = {
     "electricity": "grid_electricity",
     "diesel": "diesel",
     "gas": "natural_gas",
+    "lpg": "lpg",
+    "furnace_oil": "furnace_oil",
 }
 
 

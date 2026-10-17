@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +9,7 @@ import '../tutorial/tutorial_screen.dart';
 import '../../core/format.dart';
 import '../../core/l10n/gen/app_localizations.dart';
 import '../../core/theme.dart';
+import '../../data/backup.dart';
 import '../../data/providers.dart';
 import '../../widgets/common.dart';
 import '../../widgets/language_switch.dart';
@@ -138,6 +142,33 @@ class SettingsScreen extends ConsumerWidget {
                   },
                 ),
               ]),
+              group(l.backupGroup, [
+                tile(
+                  key: const Key('backup-save'),
+                  icon: Icons.backup_rounded,
+                  color: FeatureColors.carbon,
+                  title: l.backupSave,
+                  subtitle: Text(l.backupSaveHint),
+                  threeLine: true,
+                  onTap: () async {
+                    try {
+                      final json = await admin.backupJson();
+                      final day = DateTime.now().toIso8601String().substring(0, 10);
+                      await ref.read(exportServiceProvider).shareText(json, 'billtogreen-backup-$day.json', 'application/json');
+                    } catch (e) {
+                      if (context.mounted) showSnack(context, errorText(l, e));
+                    }
+                  },
+                ),
+                tile(
+                  key: const Key('backup-restore'),
+                  icon: Icons.settings_backup_restore_rounded,
+                  color: FeatureColors.import,
+                  title: l.backupRestore,
+                  subtitle: Text(l.backupRestoreHint),
+                  onTap: () => restoreFromFile(context, ref),
+                ),
+              ]),
               group(l.settingsLoadDemo, [
                 tile(
                   key: const Key('load-demo'),
@@ -186,4 +217,52 @@ class SettingsScreen extends ConsumerWidget {
       ),
     );
   }
+}
+
+/// Picks a backup file, shows what it holds and replaces all local data after confirmation.
+Future<void> restoreFromFile(BuildContext context, WidgetRef ref, {Future<String?> Function()? readFile}) async {
+  final l = AppLocalizations.of(context);
+  final String? text;
+  try {
+    text = readFile != null
+        ? await readFile()
+        : await () async {
+            final files = await FilePicker.pickFiles(type: FileType.any);
+            if (files.isEmpty) return null;
+            return utf8.decode(await files.first.readAsBytes(), allowMalformed: true);
+          }();
+  } catch (e) {
+    if (context.mounted) showSnack(context, errorText(l, e));
+    return;
+  }
+  if (text == null || !context.mounted) return;
+  final ParsedBackup backup;
+  try {
+    backup = parseBackup(text);
+  } on BackupException catch (e) {
+    showSnack(context, switch (e.error) {
+      BackupError.notABackup => l.backupNotABackup,
+      BackupError.newerVersion => l.backupNewer,
+      BackupError.damaged => l.backupDamaged,
+    });
+    return;
+  }
+  final fmt = Fmt.of(context);
+  final ok = await confirmDialog(
+    context,
+    title: l.backupRestoreConfirmTitle,
+    body: l.backupRestoreConfirmBody(
+      fmt.date(backup.createdAt),
+      backup.factoryName ?? '-',
+      backup.bills.length,
+      backup.billMonths,
+      backup.actions.length,
+      backup.solarPlans.length,
+    ),
+    confirm: l.backupRestore,
+    destructive: true,
+  );
+  if (!ok || !context.mounted) return;
+  await ref.read(dataAdminProvider).restore(backup);
+  if (context.mounted) showSnack(context, l.backupRestored);
 }

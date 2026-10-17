@@ -27,7 +27,7 @@ final _addressWords = RegExp(
 );
 // Words on the parts of a bill we need to read. Such a line is never covered.
 final _billWords = RegExp(
-  r'(unit|kwh|\bkw\b|reading|amount|total|bill|month|date|\bdue\b|vat|tariff|charge|demand|taka|\btk\b|bdt|energy|consum|payable|previous|present|current|meter|usage|used|period|rate|\bnet\b|\bgas\b|diesel|lit(re|er)|ltr|\bm3\b|fuel|factor|peak|load|arrear|surcharge|principal|paid|payment|issue|industrial|commercial|domestic|residential|category|class|sanction)',
+  r'(unit|kwh|\bkw\b|reading|amount|total|bill|month|date|\bdue\b|vat|tariff|charge|demand|taka|\btk\b|bdt|energy|consum|payable|previous|present|current|meter|usage|used|period|rate|\bnet\b|\bgas\b|diesel|lit(re|er)|ltr|\bm3\b|fuel|\blpg\b|cylinder|furnace|\boil\b|\bkg\b|factor|peak|load|arrear|surcharge|principal|paid|payment|issue|industrial|commercial|domestic|residential|category|class|sanction)',
   caseSensitive: false,
 );
 final _digit = RegExp(r'[0-9০-৯]');

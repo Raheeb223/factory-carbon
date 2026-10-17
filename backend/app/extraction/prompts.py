@@ -1,10 +1,10 @@
 """Version-controlled extraction prompt (spec 6.1). Bump PROMPT_VERSION on any change."""
 
-PROMPT_VERSION = "2026-10-11.1"
+PROMPT_VERSION = "2026-10-17.1"
 
 EXTRACTION_PROMPT = """\
-You read one photographed or scanned utility bill from Bangladesh (electricity, gas
-or diesel/fuel receipt) and return its data as JSON matching the given schema.
+You read one photographed or scanned utility bill from Bangladesh (electricity, gas,
+or a diesel, LPG or furnace oil purchase receipt) and return its data as JSON matching the given schema.
 
 Rules, in priority order:
 1. Read ONLY the top section of the page (the customer's copy). Bills often repeat
@@ -26,13 +26,16 @@ Rules, in priority order:
    numbers, consumer/account numbers or bank details, in any field including `notes`.
 
 Field guidance:
-- bill_type: "electricity", "gas", "diesel" or "unknown".
+- bill_type: "electricity", "gas" (piped natural gas), "diesel", "lpg" (LPG cylinders
+  or bulk LPG), "furnace_oil" (furnace oil / heavy fuel oil / HFO) or "unknown".
 - utility_name: the utility or company that issued the bill (e.g. a distribution
   company name), not the customer.
 - total_amount_bdt: the current month's payable amount in Bangladeshi Taka (BDT),
   not arrears and not the late-payment amount. If the bill prints both a bill-month
   total and a rounded net payable, use the net payable and mention the other in notes.
-- unit: "kWh" for electricity, "m3" for gas, "litre" for diesel, or null if unclear.
+- unit: "kWh" for electricity, "m3" for gas, "litre" for diesel and furnace oil, "kg"
+  for LPG, or null if unclear. For LPG cylinders, consumed_units is the total LPG weight
+  in kg (number of cylinders x kg per cylinder) only when both are printed.
 - tariff_code: the tariff category printed on the bill (e.g. "LT-A", "LT-B").
 - sanctioned_load_kw: sanctioned/contracted load in kW if printed.
 - field_confidence: for every field you return a non-null value, give "high",

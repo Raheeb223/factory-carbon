@@ -20,6 +20,8 @@ IconData billIcon(BillType t) => switch (t) {
   BillType.electricity => Icons.bolt,
   BillType.gas => Icons.local_fire_department_outlined,
   BillType.diesel => Icons.local_gas_station_outlined,
+  BillType.lpg => Icons.propane_tank_outlined,
+  BillType.furnaceOil => Icons.oil_barrel_outlined,
   BillType.unknown => Icons.help_outline,
 };
 
@@ -27,6 +29,8 @@ Color billColor(BillType t) => switch (t) {
   BillType.electricity => const Color(0xFF3B82F6), // brighter than the chart blue, readable in dark mode
   BillType.gas => SeriesColors.gas,
   BillType.diesel => SeriesColors.diesel,
+  BillType.lpg => SeriesColors.lpg,
+  BillType.furnaceOil => SeriesColors.furnaceOil,
   BillType.unknown => Colors.grey,
 };
 
@@ -142,7 +146,15 @@ class _BillsScreenState extends ConsumerState<BillsScreen> {
                           scrollDirection: Axis.horizontal,
                           padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
                           children: [
-                            for (final t in <BillType?>[null, BillType.electricity, BillType.gas, BillType.diesel])
+                            for (final t in <BillType?>[
+                              null,
+                              BillType.electricity,
+                              BillType.gas,
+                              BillType.diesel,
+                              // LPG and furnace oil only when the factory has such bills.
+                              for (final extra in const [BillType.lpg, BillType.furnaceOil])
+                                if (all.any((b) => b.billType == extra)) extra,
+                            ])
                               Padding(
                                 padding: const EdgeInsets.only(right: 8),
                                 child: ChoiceChip(

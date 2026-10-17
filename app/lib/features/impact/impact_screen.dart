@@ -7,6 +7,7 @@ import '../../core/l10n/gen/app_localizations.dart';
 import '../../core/theme.dart';
 import '../../data/drift_repositories.dart';
 import '../../data/providers.dart';
+import '../../domain/carbon_summary.dart';
 import '../../domain/impact.dart';
 import '../../domain/models.dart';
 import '../../domain/requests.dart';
@@ -15,6 +16,7 @@ import '../../widgets/common.dart';
 import '../../widgets/month_picker.dart';
 import '../../widgets/ui.dart';
 import '../carbon/carbon_controller.dart';
+import '../carbon/carbon_screen.dart' show sourceLabel;
 import '../production/production_screen.dart';
 import 'action_catalog.dart';
 
@@ -162,7 +164,7 @@ class ImpactView extends ConsumerWidget {
                 ),
               ],
             ),
-            if (kind != null && !a.done) ...[const SizedBox(height: 8), Text(actionCodeHow(l, a.code), style: tt.bodySmall?.copyWith(height: 1.35))],
+            if (kind != null && !a.done) ...[const SizedBox(height: 10), ActionSteps(steps: actionCodeSteps(l, a.code))],
             if (own != null) ...[
               const SizedBox(height: 8),
               Text(_impactLine(l, fmt, own), style: tt.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
@@ -188,10 +190,15 @@ class ImpactView extends ConsumerWidget {
       );
     }
 
-    final suggestions = [
+    final profile = ref.watch(factoryProvider).value;
+    final carbon = ref.watch(carbonResultProvider)?.result;
+    final summary = carbon == null ? null : CarbonSummary(carbon);
+    final big = summary?.biggest;
+    final suggestions = rankActions([
       for (final k in actionCatalog)
-        if (!inPlan.contains(k.code)) k,
-    ];
+        if (!inPlan.contains(k.code) && actionFits(k.code, profile)) k.code,
+    ], summary);
+    final best = big == null ? const <String>{} : suggestions.where((c) => actionSources(c).contains(big.source)).take(3).toSet();
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 14, 16, 32),
@@ -270,33 +277,18 @@ class ImpactView extends ConsumerWidget {
             ),
           ),
         for (final a in actions) actionCard(a),
-        if (suggestions.isNotEmpty) SectionHeader(l.actionSuggestions),
-        for (final k in suggestions)
-          SoftCard(
-            key: Key('suggest-${k.code}'),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                IconBlob(k.icon, color: FeatureColors.import, size: 40),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(actionCodeTitle(l, k.code), style: tt.titleSmall),
-                      const SizedBox(height: 2),
-                      Text(actionCodeHow(l, k.code), style: tt.bodySmall?.copyWith(height: 1.35)),
-                    ],
-                  ),
-                ),
-                IconButton.filledTonal(
-                  key: Key('suggest-add-${k.code}'),
-                  tooltip: l.actionAddToPlan,
-                  onPressed: () => addToPlan(ref, context, k.code),
-                  icon: const Icon(Icons.add_rounded),
-                ),
-              ],
-            ),
+        if (suggestions.isNotEmpty) ...[
+          SectionHeader(l.actionSuggestions),
+          Padding(
+            padding: const EdgeInsets.only(left: 4, right: 4, bottom: 6),
+            child: Text(best.isEmpty ? l.actionTapForSteps : l.actionSuggestionsHint, style: tt.bodySmall),
+          ),
+        ],
+        for (final code in suggestions)
+          _SuggestionCard(
+            code: code,
+            why: best.contains(code) ? l.actionBestWhy(sourceLabel(l, big!.source), fmt.number(summary!.share(big) * 100)) : null,
+            onAdd: () => addToPlan(ref, context, code),
           ),
       ],
     );
@@ -304,7 +296,7 @@ class ImpactView extends ConsumerWidget {
 
   static String _impactLine(AppLocalizations l, Fmt fmt, Impact i) => switch (i.status) {
     ImpactStatus.measured => l.actionResult(
-      fmt.number(i.changePct, decimals: 1),
+      changeWords(l, fmt, i.changePct),
       fmt.number(i.baselineKwhPerUnit, decimals: 3),
       fmt.number(i.afterKwhPerUnit, decimals: 3),
     ),
@@ -313,6 +305,108 @@ class ImpactView extends ConsumerWidget {
     ImpactStatus.noProduction => l.impactNeedProduction,
     ImpactStatus.planned => '',
   };
+}
+
+/// Numbered "how to do it" steps.
+class ActionSteps extends StatelessWidget {
+  const ActionSteps({super.key, required this.steps});
+  final List<String> steps;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final fmt = Fmt.of(context);
+    final tt = Theme.of(context).textTheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(l.actionHowTo, style: tt.labelLarge),
+        const SizedBox(height: 4),
+        for (final (i, step) in steps.indexed)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 3),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CircleAvatar(
+                  radius: 11,
+                  backgroundColor: FeatureColors.carbon.withValues(alpha: 0.15),
+                  child: Text(fmt.number((i + 1).toDouble()), style: tt.labelSmall?.copyWith(fontWeight: FontWeight.w800)),
+                ),
+                const SizedBox(width: 10),
+                Expanded(child: Text(step, style: tt.bodyMedium?.copyWith(height: 1.35))),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+/// A suggested action: title with cost and what it cuts; tap to see the steps.
+class _SuggestionCard extends StatelessWidget {
+  const _SuggestionCard({required this.code, required this.why, required this.onAdd});
+  final String code;
+
+  /// Why it is recommended for this factory; null when it is not a top pick.
+  final String? why;
+  final VoidCallback onAdd;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final tt = Theme.of(context).textTheme;
+    final kind = actionKind(code)!;
+    final cost = switch (actionCost(code)) {
+      ActionCost.free => (l.actionCostFree, const Color(0xFF16A34A)),
+      ActionCost.low => (l.actionCostLow, const Color(0xFF0D9488)),
+      ActionCost.medium => (l.actionCostMedium, const Color(0xFFD97706)),
+      ActionCost.high => (l.actionCostHigh, const Color(0xFFDC2626)),
+    };
+    final cuts = switch (actionSource(code)) {
+      CarbonSource.electricity => (l.actionCutsElectricity, SeriesColors.electricity),
+      CarbonSource.diesel => (l.actionCutsDiesel, SeriesColors.diesel),
+      CarbonSource.gas || CarbonSource.lpg || CarbonSource.furnaceOil => (l.actionCutsBoilerFuel, SeriesColors.gas),
+    };
+    return SoftCard(
+      key: Key('suggest-$code'),
+      padding: EdgeInsets.zero,
+      borderColor: why != null ? FeatureColors.carbon.withValues(alpha: 0.5) : null,
+      child: Theme(
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        child: ExpansionTile(
+          tilePadding: const EdgeInsets.fromLTRB(14, 6, 8, 6),
+          childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
+          leading: IconBlob(kind.icon, color: why != null ? FeatureColors.carbon : FeatureColors.import, size: 40),
+          title: Text(actionCodeTitle(l, code), style: tt.titleSmall),
+          subtitle: Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: Wrap(spacing: 6, runSpacing: 6, children: [
+              if (why != null) StatusPill(text: l.actionBestForYou, color: FeatureColors.carbon, icon: Icons.star_rounded),
+              StatusPill(text: cost.$1, color: cost.$2),
+              StatusPill(text: cuts.$1, color: cuts.$2),
+            ]),
+          ),
+          trailing: IconButton.filledTonal(
+            key: Key('suggest-add-$code'),
+            tooltip: l.actionAddToPlan,
+            onPressed: onAdd,
+            icon: const Icon(Icons.add_rounded),
+          ),
+          expandedCrossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (why != null) ...[
+              Text(why!, style: tt.bodyMedium?.copyWith(fontWeight: FontWeight.w700, color: FeatureColors.carbon)),
+              const SizedBox(height: 8),
+            ],
+            ActionSteps(steps: actionCodeSteps(l, code)),
+            const SizedBox(height: 10),
+            FilledButton.icon(onPressed: onAdd, icon: const Icon(Icons.add_task_rounded), label: Text(l.actionAddToPlan)),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 /// Headline: money, electricity and CO2 saved since the first completed action.
@@ -372,7 +466,7 @@ class _ImpactHero extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           if (impact.savedBdt != null) Text(l.impactKwhLine(fmt.number(saved)), style: white.copyWith(fontWeight: FontWeight.w700)),
-          Text(l.impactIntensityLine(fmt.number(impact.changePct, decimals: 1)), style: white),
+          Text(l.impactIntensityLine(changeWords(l, fmt, impact.changePct)), style: white),
           const SizedBox(height: 4),
           StatusPill(
             text: impact.settled ? l.impactMeasuredMonths(impact.monthsAfter) : l.impactEarly(impact.monthsAfter),
@@ -502,4 +596,11 @@ class ImpactScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+/// "13% lower" / "5% higher" / "No change" for a percent change (negative = less).
+String changeWords(AppLocalizations l, Fmt fmt, double? pct) {
+  if (pct == null) return l.notAvailable;
+  if (pct.abs() < 0.5) return l.compareSame;
+  return pct < 0 ? l.compareDown(fmt.number(-pct)) : l.compareUp(fmt.number(pct));
 }

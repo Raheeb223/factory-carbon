@@ -71,3 +71,9 @@ List<LatLon>? pickBuilding(List<List<LatLon>> outlines, LatLon tap) {
   }
   return best;
 }
+
+/// Straight-line distance in metres between two nearby points (local flat projection).
+double distanceM(LatLon a, LatLon b) {
+  final (x, y) = _toMetres([a, b])[1];
+  return math.sqrt(x * x + y * y);
+}

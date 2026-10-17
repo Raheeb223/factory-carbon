@@ -10,14 +10,14 @@ from pydantic import BaseModel, ConfigDict, Field
 MONTH_PATTERN = r"^\d{4}-(0[1-9]|1[0-2])$"
 Month = Annotated[str, Field(pattern=MONTH_PATTERN, examples=["2024-05"])]
 
-BillType = Literal["electricity", "gas", "diesel", "unknown"]
-SourceType = Literal["electricity", "gas", "diesel"]
-UnitType = Literal["kWh", "m3", "litre"]
+BillType = Literal["electricity", "gas", "diesel", "lpg", "furnace_oil", "unknown"]
+SourceType = Literal["electricity", "gas", "diesel", "lpg", "furnace_oil"]
+UnitType = Literal["kWh", "m3", "litre", "kg"]
 Confidence = Literal["high", "medium", "low"]
 FactorStatus = Literal["verified", "PLACEHOLDER"]
 DataOrigin = Literal["bill_image", "manual", "imported", "demo"]
 
-CANONICAL_UNIT: dict[str, str] = {"electricity": "kWh", "gas": "m3", "diesel": "litre"}
+CANONICAL_UNIT: dict[str, str] = {"electricity": "kWh", "gas": "m3", "diesel": "litre", "lpg": "kg", "furnace_oil": "litre"}
 
 EXTRACTED_FIELDS: tuple[str, ...] = (
     "bill_type",
@@ -162,9 +162,33 @@ class MonthEmissions(BaseModel):
     scope2_t: float | None
     total_t: float | None
     is_complete: bool
+    lpg_kg: float | None = None
+    furnace_oil_litres: float | None = None
+    scope1_lpg_t: float | None = None
+    scope1_furnace_oil_t: float | None = None
     missing: list[str]
     production_units: float | None
     intensity_t_per_1000_units: float | None
+
+
+class EnergySourceLine(BaseModel):
+    """Energy used from one source in the period (net calorific value for fuels)."""
+
+    source: SourceType
+    quantity: float
+    unit: UnitType
+    kwh: float | None
+    gj: float | None
+    share: float | None
+
+
+class EnergySummary(BaseModel):
+    by_source: list[EnergySourceLine]
+    total_kwh: float | None
+    total_gj: float | None
+    # Conversion values used, with source (electricity needs none).
+    energy_content: dict[str, FactorInfo] = Field(default_factory=dict)
+    complete: bool
 
 
 class CarbonTotals(BaseModel):
@@ -195,6 +219,7 @@ class CarbonCalculateResponse(BaseModel):
     data_quality_notes: list[DataQualityNote]
     production_unit_label: str | None
     methodology: list[str]
+    energy: EnergySummary | None = None
 
 
 # ---------------------------------------------------------------- waste
@@ -356,9 +381,16 @@ class SolarDefaultsResponse(BaseModel):
 # ---------------------------------------------------------------- report
 
 
+FacilityType = Literal["knit", "woven", "sweater", "denim", "dyeing", "washing", "other"]
+
+
 class FactoryInfo(StrictModel):
     name: str = Field(min_length=1, max_length=120)
     location: str | None = Field(default=None, max_length=200)
+    facility_type: FacilityType | None = None
+    district: str | None = Field(default=None, max_length=60)
+    workers: int | None = Field(default=None, ge=0, le=1_000_000)
+    shifts_per_day: int | None = Field(default=None, ge=1, le=3)
 
 
 class ReportPdfRequest(StrictModel):

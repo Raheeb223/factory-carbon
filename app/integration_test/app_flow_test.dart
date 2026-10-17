@@ -130,8 +130,22 @@ void main() {
     await pumpUntil(tester, find.byKey(const Key('factory-name')));
     await tester.enterText(find.byKey(const Key('factory-name')), 'Rahman Knit Ltd');
     await tester.testTextInput.receiveAction(TextInputAction.done);
-    await tapVisible(tester, find.byKey(const Key('unit-dozens')));
+    await tapVisible(tester, find.byKey(const Key('facility-knit')));
     await shot(tester, '04_setup');
+    await tapVisible(tester, find.byKey(const Key('onboarding-next')));
+    await pumpFor(tester, const Duration(milliseconds: 600));
+    // Location: paste coordinates (GPS needs a permission prompt).
+    await tester.enterText(find.byKey(const Key('loc-paste')), '23.9995, 90.4203');
+    await tapVisible(tester, find.byKey(const Key('loc-paste-go')));
+    await pumpUntil(tester, find.textContaining('23.99950'));
+    await shot(tester, '04b_location');
+    await tapVisible(tester, find.byKey(const Key('onboarding-next')));
+    await pumpFor(tester, const Duration(milliseconds: 600));
+    await tapVisible(tester, find.byKey(const Key('unit-dozens')));
+    await tapVisible(tester, find.byKey(const Key('source-gas')));
+    await shot(tester, '04c_energy');
+    await tapVisible(tester, find.byKey(const Key('onboarding-next')));
+    await pumpFor(tester, const Duration(milliseconds: 600));
     await tapVisible(tester, find.byKey(const Key('privacy-ack')));
     await tapVisible(tester, find.byKey(const Key('onboarding-save')));
     await pumpUntil(tester, find.byType(NavigationBar));
@@ -244,6 +258,19 @@ void main() {
     Navigator.of(tester.element(find.byKey(const Key('co2-sheet')))).pop();
     await pumpFor(tester, const Duration(milliseconds: 800));
     final carbonList = find.descendant(of: find.byType(CarbonView), matching: find.byType(Scrollable)).first;
+    // Energy in MWh/GJ, then set a reduction target and see its progress from the real backend.
+    await tester.scrollUntilVisible(find.byKey(const Key('energy-total')), 300, scrollable: carbonList);
+    await shot(tester, '12c_energy');
+    await tester.scrollUntilVisible(find.byKey(const Key('target-set')), -300, scrollable: carbonList);
+    await tapVisible(tester, find.byKey(const Key('target-set')));
+    await pumpUntil(tester, find.byKey(const Key('target-pct-20')));
+    await shot(tester, '12d_target_sheet');
+    await tester.tap(find.byKey(const Key('target-pct-20')));
+    await tester.pump();
+    await tester.tap(find.byKey(const Key('target-save')));
+    await pumpUntil(tester, find.byKey(const Key('target-status')), timeout: const Duration(seconds: 60));
+    await tester.ensureVisible(find.byKey(const Key('target-card')));
+    await shot(tester, '12e_target');
     await tester.scrollUntilVisible(find.byKey(const Key('export-pdf')), 300, scrollable: carbonList);
     await shot(tester, '13_carbon_scrolled');
 
@@ -305,7 +332,17 @@ void main() {
     await tester.tapAt(tester.getCenter(find.byType(FlutterMap)));
     await pumpUntil(tester, find.byType(SnackBar), timeout: const Duration(seconds: 60));
     final snack = tester.widget<Text>(find.descendant(of: find.byType(SnackBar), matching: find.byType(Text)).first).data;
-    expect(snack, en.solarOutlineFound);
+    if (snack == en.solarOutlineOffline) {
+      // The public OpenStreetMap building service is often down: the first tap is the first
+      // corner, so draw the rest of the roof by hand, as a user would.
+      final c = tester.getCenter(find.byType(FlutterMap));
+      for (final o in const [Offset(120, 0), Offset(120, 90), Offset(0, 90)]) {
+        await tester.tapAt(c + o);
+        await pumpFor(tester, const Duration(milliseconds: 500));
+      }
+    } else {
+      expect(snack, en.solarOutlineFound);
+    }
     expect(find.byKey(const Key('roof-area')), findsOneWidget);
     await pumpFor(tester, const Duration(seconds: 2));
     await shot(tester, '15_map_roof');

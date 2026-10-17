@@ -56,18 +56,19 @@ String actionCodeTitle(AppLocalizations l, String code) => switch (code) {
   _ => code,
 };
 
-String actionCodeHow(AppLocalizations l, String code) => switch (code) {
-  'fix_air_leaks' => l.actFixAirLeaksHow,
-  'switch_off_idle' => l.actSwitchOffIdleHow,
-  'lower_air_pressure' => l.actLowerAirPressureHow,
-  'steam_leaks' => l.actSteamLeaksHow,
-  'generator_hours' => l.actGeneratorHoursHow,
-  'led_lighting' => l.actLedLightingHow,
-  'servo_motors' => l.actServoMotorsHow,
-  'power_factor' => l.actPowerFactorHow,
-  'rooftop_solar' => l.actRooftopSolarHow,
+/// Numbered steps for a catalog action (one line per step).
+List<String> actionCodeSteps(AppLocalizations l, String code) => switch (code) {
+  'fix_air_leaks' => l.actFixAirLeaksSteps,
+  'switch_off_idle' => l.actSwitchOffIdleSteps,
+  'lower_air_pressure' => l.actLowerAirPressureSteps,
+  'steam_leaks' => l.actSteamLeaksSteps,
+  'generator_hours' => l.actGeneratorHoursSteps,
+  'led_lighting' => l.actLedLightingSteps,
+  'servo_motors' => l.actServoMotorsSteps,
+  'power_factor' => l.actPowerFactorSteps,
+  'rooftop_solar' => l.actRooftopSolarSteps,
   _ => '',
-};
+}.split('\n').where((e) => e.trim().isNotEmpty).toList();
 
 /// Localized inspection for a detector code; the server's English text as fallback.
 (String, String) inspectionText(AppLocalizations l, String code, String title, String detail) => switch (code) {

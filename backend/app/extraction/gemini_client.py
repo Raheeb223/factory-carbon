@@ -31,7 +31,7 @@ _CONFIDENCE = {"type": "string", "enum": ["high", "medium", "low"]}
 RESPONSE_JSON_SCHEMA: dict[str, Any] = {
     "type": "object",
     "properties": {
-        "bill_type": {"type": "string", "enum": ["electricity", "gas", "diesel", "unknown"]},
+        "bill_type": {"type": "string", "enum": ["electricity", "gas", "diesel", "lpg", "furnace_oil", "unknown"]},
         "utility_name": _NULLABLE_STRING,
         "billing_month": {**_NULLABLE_STRING, "description": "YYYY-MM"},
         "period_start": {**_NULLABLE_STRING, "description": "ISO date YYYY-MM-DD"},
@@ -39,7 +39,7 @@ RESPONSE_JSON_SCHEMA: dict[str, Any] = {
         "consumed_units": {**_NULLABLE_NUMBER, "description": "printed consumed units"},
         # Enum fields are optional (omitted = unknown) because `null` inside `enum` is
         # not in the documented schema subset.
-        "unit": {"type": "string", "enum": ["kWh", "m3", "litre"]},
+        "unit": {"type": "string", "enum": ["kWh", "m3", "litre", "kg"]},
         "total_amount_bdt": _NULLABLE_NUMBER,
         "tariff_code": _NULLABLE_STRING,
         "sanctioned_load_kw": _NULLABLE_NUMBER,
@@ -93,7 +93,7 @@ def _as_iso_date(v: Any) -> date | None:
 def parse_model_output(raw: dict[str, Any]) -> ExtractedBill:
     """Convert raw model JSON into an ExtractedBill. Invalid values become null."""
     bill_type = raw.get("bill_type")
-    if bill_type not in ("electricity", "gas", "diesel", "unknown"):
+    if bill_type not in ("electricity", "gas", "diesel", "lpg", "furnace_oil", "unknown"):
         bill_type = "unknown"
     month = raw.get("billing_month")
     unit = raw.get("unit")
@@ -113,7 +113,7 @@ def parse_model_output(raw: dict[str, Any]) -> ExtractedBill:
         period_start=_as_iso_date(raw.get("period_start")),
         period_end=_as_iso_date(raw.get("period_end")),
         consumed_units=_as_number(raw.get("consumed_units")),
-        unit=unit if unit in ("kWh", "m3", "litre") else None,
+        unit=unit if unit in ("kWh", "m3", "litre", "kg") else None,
         total_amount_bdt=_as_number(raw.get("total_amount_bdt")),
         tariff_code=text("tariff_code", 40),
         sanctioned_load_kw=_as_number(raw.get("sanctioned_load_kw")),

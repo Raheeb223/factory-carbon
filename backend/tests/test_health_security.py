@@ -96,4 +96,4 @@ def test_validation_error_does_not_echo_input(client: TestClient) -> None:
 def test_history_template(client: TestClient) -> None:
     r = client.get("/v1/templates/history.csv", headers=AUTH)
     assert r.status_code == 200
-    assert r.text.splitlines()[0] == "month,electricity_kwh,diesel_litres,gas_m3,production_units,electricity_cost_bdt"
+    assert r.text.splitlines()[0] == "month,electricity_kwh,diesel_litres,gas_m3,production_units,electricity_cost_bdt,lpg_kg,furnace_oil_litres"
