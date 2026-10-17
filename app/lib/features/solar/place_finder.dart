@@ -61,8 +61,9 @@ class OsmPlaceFinder implements PlaceFinder {
   /// of waiting on overloaded public servers.
   static const outlineBudget = Duration(seconds: 12);
 
-  /// Time allowed for the app's server before falling back to Overpass.
-  static const serverBudget = Duration(seconds: 10);
+  /// Time allowed for the app's server before falling back to Overpass (its first lookup in
+  /// a new area reads a few map tiles from Overture).
+  static const serverBudget = Duration(seconds: 20);
 
   /// Public Overpass mirrors are often overloaded (504) or reject POST, so the same GET query
   /// goes to several at once and the first good answer wins.

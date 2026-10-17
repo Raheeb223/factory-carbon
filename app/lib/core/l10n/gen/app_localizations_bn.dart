@@ -1985,7 +1985,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get solarNoRoofThere =>
-      'সেখানে কোনো ছাদের সীমানা নেই। কোণগুলো টেনে ঠিক করুন, অথবা হাতে আঁকতে \'মুছুন\' চাপুন।';
+      'সেখানে কোনো ছাদের সীমানা নেই। কোণগুলো টেনে ঠিক করুন, অথবা হাতে আঁকতে \'সব মুছুন\' চাপুন।';
 
   @override
   String get solarAdjustHint =>
@@ -1993,7 +1993,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get solarOutlineSwitched =>
-      'এই ছাদটি বেছে নেওয়া হয়েছে। আগেরটিতে ফিরতে \'আগের অবস্থা\' চাপুন।';
+      'এই ছাদটি বেছে নেওয়া হয়েছে। আগেরটিতে ফিরতে \'ফেরত যান\' বোতাম চাপুন।';
 
   @override
   String get solarSuggested =>

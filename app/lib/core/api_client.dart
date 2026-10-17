@@ -120,7 +120,7 @@ class ApiClient {
   Future<List<List<LatLon>>> buildingsNear(LatLon at, {Duration? timeout}) => _guard(() async {
         final res = await _dio.get<dynamic>(
           '/v1/solar/buildings',
-          queryParameters: {'lat': at.lat, 'lon': at.lon},
+          queryParameters: {'lat': at.lat, 'lon': at.lon, 'radius_m': 60},
           options: timeout == null ? null : Options(receiveTimeout: timeout),
         );
         return [

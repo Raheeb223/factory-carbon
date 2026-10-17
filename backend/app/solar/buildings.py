@@ -19,6 +19,7 @@ import math
 import threading
 import time
 from collections import OrderedDict
+from concurrent.futures import ThreadPoolExecutor
 from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
@@ -156,6 +157,15 @@ class BuildingFootprints:
                 self._tiles.popitem(last=False)
         return out
 
+    def warm(self, lat: float = 23.81, lon: float = 90.41) -> None:
+        """Fetch the archive's header, directories and one Dhaka tile ahead of the first user
+        (the first lookup otherwise pays for all of them). Errors are only logged."""
+        try:
+            self.near(lat, lon, radius_m=10)
+            logger.info("buildings_warm ok")
+        except Exception as e:  # noqa: BLE001 - best effort
+            logger.warning("buildings_warm_failed type=%s", type(e).__name__)
+
     # -- query ----------------------------------------------------------------------------
 
     def near(self, lat: float, lon: float, radius_m: float = 150.0) -> list[Building]:
@@ -166,8 +176,13 @@ class BuildingFootprints:
         r_tiles = radius_m / tile_m
         xs = range(math.floor(fx - r_tiles), math.floor(fx + r_tiles) + 1)
         ys = range(math.floor(fy - r_tiles), math.floor(fy + r_tiles) + 1)
+        tiles = [(x, y) for x in xs for y in ys]
         try:
-            features = [f for x in xs for y in ys for f in self._tile(ZOOM, x, y)]
+            if len(tiles) == 1:
+                features = self._tile(ZOOM, *tiles[0])
+            else:  # neighbouring tiles at once: each is a few round trips
+                with ThreadPoolExecutor(max_workers=len(tiles)) as pool:
+                    features = [f for fs in pool.map(lambda t: self._tile(ZOOM, *t), tiles) for f in fs]
         except httpx.TimeoutException as e:
             raise ApiError(504, "buildings_timeout", "The building outline service did not respond in time. Tap the roof corners instead.") from e
         except (httpx.HTTPError, ValueError, OSError) as e:
