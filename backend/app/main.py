@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import threading
 from collections.abc import Awaitable, Callable
 
 from fastapi import FastAPI, Request
@@ -133,4 +134,7 @@ def create_default_app() -> FastAPI:
         logger.error("Invalid environment variable(s): %s. Check their values in the host's settings.", bad)
         raise SystemExit(1) from None
     logger.info("Starting: gemini_configured=%s app_token_set=%s", settings.gemini_configured, bool(settings.app_token and settings.app_token.get_secret_value()))
-    return create_app()
+    app = create_app()
+    # load the building-outline index in the background so the first roof tap is quick
+    threading.Thread(target=app.state.services.buildings.warm, name="buildings-warm", daemon=True).start()
+    return app
