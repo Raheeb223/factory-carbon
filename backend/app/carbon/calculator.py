@@ -12,7 +12,7 @@ from __future__ import annotations
 from collections import defaultdict
 from collections.abc import Iterable
 
-from app.carbon.factors import all_factor_info, factor_for
+from app.carbon.factors import all_factor_info, factor_for, factor_info
 from app.schemas import (
     CANONICAL_UNIT,
     CalculationError,
@@ -20,24 +20,33 @@ from app.schemas import (
     CarbonCalculateResponse,
     CarbonTotals,
     DataQualityNote,
+    EnergySourceLine,
+    EnergySummary,
     MonthEmissions,
     SourceType,
 )
 from app.security import ApiError
-from app.settings import EmissionFactors
+from app.settings import EmissionFactors, EnergyContent
 
-SOURCES: tuple[SourceType, ...] = ("electricity", "diesel", "gas")
-SOURCE_LABEL: dict[SourceType, str] = {"electricity": "grid electricity", "diesel": "diesel", "gas": "natural gas"}
+SOURCES: tuple[SourceType, ...] = ("electricity", "diesel", "gas", "lpg", "furnace_oil")
+SCOPE1_SOURCES: tuple[SourceType, ...] = ("diesel", "gas", "lpg", "furnace_oil")
+SOURCE_LABEL: dict[SourceType, str] = {
+    "electricity": "grid electricity",
+    "diesel": "diesel",
+    "gas": "natural gas",
+    "lpg": "LPG",
+    "furnace_oil": "furnace oil",
+}
 
 METHODOLOGY = [
     "Scope 2 (location-based) = electricity kWh x grid emission factor (kg CO2e/kWh) / 1000.",
-    "Scope 1 = diesel litres x diesel factor (kg CO2e/L) / 1000 + gas m3 x gas factor (kg CO2e/m3) / 1000.",
+    "Scope 1 = diesel litres x diesel factor (kg CO2e/L) / 1000 + gas m3 x gas factor (kg CO2e/m3) / 1000 + LPG kg x LPG factor (kg CO2e/kg) / 1000 + furnace oil litres x furnace oil factor (kg CO2e/L) / 1000.",
     "Total = Scope 1 + Scope 2, in tonnes CO2e (tCO2e).",
     "Intensity = total tCO2e / units produced x 1,000, only for months with complete data and production.",
     "Months without data are shown as empty (null), never as zero.",
     "Only quantities from bills confirmed by the user, manual entries and imported history are used.",
     "Bill photos are read by AI (Google Gemini); every value is shown to the factory manager, who checks or corrects it before it is saved. Unconfirmed AI output is never used. The report lists each entry and how it was entered.",
-    "The Bangladesh grid factor covers CO2 only; the diesel and natural gas factors are CO2e (CO2 + CH4 + N2O). Totals are reported as tCO2e.",
+    "The Bangladesh grid factor covers CO2 only; the fuel factors (diesel, natural gas, LPG, furnace oil) are CO2e (CO2 + CH4 + N2O). Totals are reported as tCO2e.",
 ]
 
 
@@ -62,7 +71,43 @@ def _sum_or_none(values: Iterable[float | None]) -> float | None:
     return sum(present) if present else None
 
 
-def calculate(req: CarbonCalculateRequest, factors: EmissionFactors) -> CarbonCalculateResponse:
+ENERGY_CONTENT_FOR: dict[SourceType, str] = {"diesel": "diesel", "gas": "natural_gas", "lpg": "lpg", "furnace_oil": "furnace_oil"}
+KWH_TO_GJ = 0.0036
+
+
+def energy_summary(qty: dict[SourceType, dict[str, float]], energy: EnergyContent | None) -> EnergySummary | None:
+    """Energy used per source in kWh and GJ (net calorific value for fuels)."""
+    lines: list[EnergySourceLine] = []
+    info = {}
+    for s in SOURCES:
+        amount = sum(qty[s].values()) if qty[s] else None
+        if amount is None:
+            continue
+        if s == "electricity":
+            kwh: float | None = amount
+        else:
+            name = ENERGY_CONTENT_FOR[s]
+            cv = getattr(energy, name) if energy is not None else None
+            kwh = amount * cv.value if cv is not None and cv.value is not None else None
+            if cv is not None:
+                info[name] = factor_info(name, cv)
+        lines.append(EnergySourceLine(source=s, quantity=_r(amount, 3) or 0.0, unit=CANONICAL_UNIT[s], kwh=_r(kwh, 1), gj=_r(kwh * KWH_TO_GJ if kwh is not None else None, 3), share=None))  # type: ignore[arg-type]
+    if not lines:
+        return None
+    complete = all(line.kwh is not None for line in lines)
+    total = sum(line.kwh for line in lines if line.kwh is not None)
+    for line in lines:
+        line.share = _r(line.kwh / total, 4) if complete and total > 0 and line.kwh is not None else None
+    return EnergySummary(
+        by_source=lines,
+        total_kwh=_r(total, 1) if complete else None,
+        total_gj=_r(total * KWH_TO_GJ, 3) if complete else None,
+        energy_content=info,
+        complete=complete,
+    )
+
+
+def calculate(req: CarbonCalculateRequest, factors: EmissionFactors, energy: EnergyContent | None = None) -> CarbonCalculateResponse:
     for b in req.bills:
         if b.unit != CANONICAL_UNIT[b.bill_type]:
             raise ApiError(
@@ -132,7 +177,7 @@ def calculate(req: CarbonCalculateRequest, factors: EmissionFactors) -> CarbonCa
                 missing.append(f"{s}:factor_not_set")
             else:
                 t[s] = amount * f / 1000.0
-        scope1 = _sum_or_none([t.get("diesel"), t.get("gas")])
+        scope1 = _sum_or_none([t.get(s) for s in SCOPE1_SOURCES])
         scope2 = t.get("electricity")
         total = _sum_or_none([scope1, scope2])
         complete = bool(tracked) and not missing and total is not None
@@ -147,6 +192,10 @@ def calculate(req: CarbonCalculateRequest, factors: EmissionFactors) -> CarbonCa
                 scope2_electricity_t=_r(t.get("electricity")),
                 scope1_diesel_t=_r(t.get("diesel")),
                 scope1_gas_t=_r(t.get("gas")),
+                lpg_kg=_r(qty["lpg"].get(month), 3),
+                furnace_oil_litres=_r(qty["furnace_oil"].get(month), 3),
+                scope1_lpg_t=_r(t.get("lpg")),
+                scope1_furnace_oil_t=_r(t.get("furnace_oil")),
                 scope1_t=_r(scope1),
                 scope2_t=_r(scope2),
                 total_t=_r(total),
@@ -185,6 +234,7 @@ def calculate(req: CarbonCalculateRequest, factors: EmissionFactors) -> CarbonCa
         data_quality_notes=notes,
         production_unit_label=req.production_unit_label,
         methodology=METHODOLOGY,
+        energy=energy_summary(qty, energy),
     )
 
 

@@ -117,6 +117,115 @@ class $FactoryProfilesTable extends FactoryProfiles
         type: DriftSqlType.dateTime,
         requiredDuringInsert: true,
       );
+  static const VerificationMeta _facilityTypeMeta = const VerificationMeta(
+    'facilityType',
+  );
+  @override
+  late final GeneratedColumn<String> facilityType = GeneratedColumn<String>(
+    'facility_type',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _districtMeta = const VerificationMeta(
+    'district',
+  );
+  @override
+  late final GeneratedColumn<String> district = GeneratedColumn<String>(
+    'district',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _workersMeta = const VerificationMeta(
+    'workers',
+  );
+  @override
+  late final GeneratedColumn<int> workers = GeneratedColumn<int>(
+    'workers',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _shiftsPerDayMeta = const VerificationMeta(
+    'shiftsPerDay',
+  );
+  @override
+  late final GeneratedColumn<int> shiftsPerDay = GeneratedColumn<int>(
+    'shifts_per_day',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _energySourcesMeta = const VerificationMeta(
+    'energySources',
+  );
+  @override
+  late final GeneratedColumn<String> energySources = GeneratedColumn<String>(
+    'energy_sources',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _reportingYearMeta = const VerificationMeta(
+    'reportingYear',
+  );
+  @override
+  late final GeneratedColumn<String> reportingYear = GeneratedColumn<String>(
+    'reporting_year',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _targetMetricMeta = const VerificationMeta(
+    'targetMetric',
+  );
+  @override
+  late final GeneratedColumn<String> targetMetric = GeneratedColumn<String>(
+    'target_metric',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _targetPctMeta = const VerificationMeta(
+    'targetPct',
+  );
+  @override
+  late final GeneratedColumn<double> targetPct = GeneratedColumn<double>(
+    'target_pct',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _targetBaselineYearMeta =
+      const VerificationMeta('targetBaselineYear');
+  @override
+  late final GeneratedColumn<int> targetBaselineYear = GeneratedColumn<int>(
+    'target_baseline_year',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _targetYearMeta = const VerificationMeta(
+    'targetYear',
+  );
+  @override
+  late final GeneratedColumn<int> targetYear = GeneratedColumn<int>(
+    'target_year',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -129,6 +238,16 @@ class $FactoryProfilesTable extends FactoryProfiles
     lon,
     productionUnitLabel,
     privacyAcknowledgedAt,
+    facilityType,
+    district,
+    workers,
+    shiftsPerDay,
+    energySources,
+    reportingYear,
+    targetMetric,
+    targetPct,
+    targetBaselineYear,
+    targetYear,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -215,6 +334,84 @@ class $FactoryProfilesTable extends FactoryProfiles
     } else if (isInserting) {
       context.missing(_privacyAcknowledgedAtMeta);
     }
+    if (data.containsKey('facility_type')) {
+      context.handle(
+        _facilityTypeMeta,
+        facilityType.isAcceptableOrUnknown(
+          data['facility_type']!,
+          _facilityTypeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('district')) {
+      context.handle(
+        _districtMeta,
+        district.isAcceptableOrUnknown(data['district']!, _districtMeta),
+      );
+    }
+    if (data.containsKey('workers')) {
+      context.handle(
+        _workersMeta,
+        workers.isAcceptableOrUnknown(data['workers']!, _workersMeta),
+      );
+    }
+    if (data.containsKey('shifts_per_day')) {
+      context.handle(
+        _shiftsPerDayMeta,
+        shiftsPerDay.isAcceptableOrUnknown(
+          data['shifts_per_day']!,
+          _shiftsPerDayMeta,
+        ),
+      );
+    }
+    if (data.containsKey('energy_sources')) {
+      context.handle(
+        _energySourcesMeta,
+        energySources.isAcceptableOrUnknown(
+          data['energy_sources']!,
+          _energySourcesMeta,
+        ),
+      );
+    }
+    if (data.containsKey('reporting_year')) {
+      context.handle(
+        _reportingYearMeta,
+        reportingYear.isAcceptableOrUnknown(
+          data['reporting_year']!,
+          _reportingYearMeta,
+        ),
+      );
+    }
+    if (data.containsKey('target_metric')) {
+      context.handle(
+        _targetMetricMeta,
+        targetMetric.isAcceptableOrUnknown(
+          data['target_metric']!,
+          _targetMetricMeta,
+        ),
+      );
+    }
+    if (data.containsKey('target_pct')) {
+      context.handle(
+        _targetPctMeta,
+        targetPct.isAcceptableOrUnknown(data['target_pct']!, _targetPctMeta),
+      );
+    }
+    if (data.containsKey('target_baseline_year')) {
+      context.handle(
+        _targetBaselineYearMeta,
+        targetBaselineYear.isAcceptableOrUnknown(
+          data['target_baseline_year']!,
+          _targetBaselineYearMeta,
+        ),
+      );
+    }
+    if (data.containsKey('target_year')) {
+      context.handle(
+        _targetYearMeta,
+        targetYear.isAcceptableOrUnknown(data['target_year']!, _targetYearMeta),
+      );
+    }
     return context;
   }
 
@@ -264,6 +461,46 @@ class $FactoryProfilesTable extends FactoryProfiles
         DriftSqlType.dateTime,
         data['${effectivePrefix}privacy_acknowledged_at'],
       )!,
+      facilityType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}facility_type'],
+      ),
+      district: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}district'],
+      ),
+      workers: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}workers'],
+      ),
+      shiftsPerDay: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}shifts_per_day'],
+      ),
+      energySources: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}energy_sources'],
+      ),
+      reportingYear: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}reporting_year'],
+      ),
+      targetMetric: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}target_metric'],
+      ),
+      targetPct: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}target_pct'],
+      ),
+      targetBaselineYear: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}target_baseline_year'],
+      ),
+      targetYear: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}target_year'],
+      ),
     );
   }
 
@@ -285,6 +522,20 @@ class FactoryProfileRow extends DataClass
   final double? lon;
   final String productionUnitLabel;
   final DateTime privacyAcknowledgedAt;
+  final String? facilityType;
+  final String? district;
+  final int? workers;
+  final int? shiftsPerDay;
+
+  /// JSON list of energy sources used; null = not answered.
+  final String? energySources;
+  final String? reportingYear;
+
+  /// Reduction target: 'intensity' (per 1,000 units) or 'total', percent, years.
+  final String? targetMetric;
+  final double? targetPct;
+  final int? targetBaselineYear;
+  final int? targetYear;
   const FactoryProfileRow({
     required this.id,
     required this.createdAt,
@@ -296,6 +547,16 @@ class FactoryProfileRow extends DataClass
     this.lon,
     required this.productionUnitLabel,
     required this.privacyAcknowledgedAt,
+    this.facilityType,
+    this.district,
+    this.workers,
+    this.shiftsPerDay,
+    this.energySources,
+    this.reportingYear,
+    this.targetMetric,
+    this.targetPct,
+    this.targetBaselineYear,
+    this.targetYear,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -314,6 +575,36 @@ class FactoryProfileRow extends DataClass
     }
     map['production_unit_label'] = Variable<String>(productionUnitLabel);
     map['privacy_acknowledged_at'] = Variable<DateTime>(privacyAcknowledgedAt);
+    if (!nullToAbsent || facilityType != null) {
+      map['facility_type'] = Variable<String>(facilityType);
+    }
+    if (!nullToAbsent || district != null) {
+      map['district'] = Variable<String>(district);
+    }
+    if (!nullToAbsent || workers != null) {
+      map['workers'] = Variable<int>(workers);
+    }
+    if (!nullToAbsent || shiftsPerDay != null) {
+      map['shifts_per_day'] = Variable<int>(shiftsPerDay);
+    }
+    if (!nullToAbsent || energySources != null) {
+      map['energy_sources'] = Variable<String>(energySources);
+    }
+    if (!nullToAbsent || reportingYear != null) {
+      map['reporting_year'] = Variable<String>(reportingYear);
+    }
+    if (!nullToAbsent || targetMetric != null) {
+      map['target_metric'] = Variable<String>(targetMetric);
+    }
+    if (!nullToAbsent || targetPct != null) {
+      map['target_pct'] = Variable<double>(targetPct);
+    }
+    if (!nullToAbsent || targetBaselineYear != null) {
+      map['target_baseline_year'] = Variable<int>(targetBaselineYear);
+    }
+    if (!nullToAbsent || targetYear != null) {
+      map['target_year'] = Variable<int>(targetYear);
+    }
     return map;
   }
 
@@ -329,6 +620,36 @@ class FactoryProfileRow extends DataClass
       lon: lon == null && nullToAbsent ? const Value.absent() : Value(lon),
       productionUnitLabel: Value(productionUnitLabel),
       privacyAcknowledgedAt: Value(privacyAcknowledgedAt),
+      facilityType: facilityType == null && nullToAbsent
+          ? const Value.absent()
+          : Value(facilityType),
+      district: district == null && nullToAbsent
+          ? const Value.absent()
+          : Value(district),
+      workers: workers == null && nullToAbsent
+          ? const Value.absent()
+          : Value(workers),
+      shiftsPerDay: shiftsPerDay == null && nullToAbsent
+          ? const Value.absent()
+          : Value(shiftsPerDay),
+      energySources: energySources == null && nullToAbsent
+          ? const Value.absent()
+          : Value(energySources),
+      reportingYear: reportingYear == null && nullToAbsent
+          ? const Value.absent()
+          : Value(reportingYear),
+      targetMetric: targetMetric == null && nullToAbsent
+          ? const Value.absent()
+          : Value(targetMetric),
+      targetPct: targetPct == null && nullToAbsent
+          ? const Value.absent()
+          : Value(targetPct),
+      targetBaselineYear: targetBaselineYear == null && nullToAbsent
+          ? const Value.absent()
+          : Value(targetBaselineYear),
+      targetYear: targetYear == null && nullToAbsent
+          ? const Value.absent()
+          : Value(targetYear),
     );
   }
 
@@ -352,6 +673,16 @@ class FactoryProfileRow extends DataClass
       privacyAcknowledgedAt: serializer.fromJson<DateTime>(
         json['privacyAcknowledgedAt'],
       ),
+      facilityType: serializer.fromJson<String?>(json['facilityType']),
+      district: serializer.fromJson<String?>(json['district']),
+      workers: serializer.fromJson<int?>(json['workers']),
+      shiftsPerDay: serializer.fromJson<int?>(json['shiftsPerDay']),
+      energySources: serializer.fromJson<String?>(json['energySources']),
+      reportingYear: serializer.fromJson<String?>(json['reportingYear']),
+      targetMetric: serializer.fromJson<String?>(json['targetMetric']),
+      targetPct: serializer.fromJson<double?>(json['targetPct']),
+      targetBaselineYear: serializer.fromJson<int?>(json['targetBaselineYear']),
+      targetYear: serializer.fromJson<int?>(json['targetYear']),
     );
   }
   @override
@@ -370,6 +701,16 @@ class FactoryProfileRow extends DataClass
       'privacyAcknowledgedAt': serializer.toJson<DateTime>(
         privacyAcknowledgedAt,
       ),
+      'facilityType': serializer.toJson<String?>(facilityType),
+      'district': serializer.toJson<String?>(district),
+      'workers': serializer.toJson<int?>(workers),
+      'shiftsPerDay': serializer.toJson<int?>(shiftsPerDay),
+      'energySources': serializer.toJson<String?>(energySources),
+      'reportingYear': serializer.toJson<String?>(reportingYear),
+      'targetMetric': serializer.toJson<String?>(targetMetric),
+      'targetPct': serializer.toJson<double?>(targetPct),
+      'targetBaselineYear': serializer.toJson<int?>(targetBaselineYear),
+      'targetYear': serializer.toJson<int?>(targetYear),
     };
   }
 
@@ -384,6 +725,16 @@ class FactoryProfileRow extends DataClass
     Value<double?> lon = const Value.absent(),
     String? productionUnitLabel,
     DateTime? privacyAcknowledgedAt,
+    Value<String?> facilityType = const Value.absent(),
+    Value<String?> district = const Value.absent(),
+    Value<int?> workers = const Value.absent(),
+    Value<int?> shiftsPerDay = const Value.absent(),
+    Value<String?> energySources = const Value.absent(),
+    Value<String?> reportingYear = const Value.absent(),
+    Value<String?> targetMetric = const Value.absent(),
+    Value<double?> targetPct = const Value.absent(),
+    Value<int?> targetBaselineYear = const Value.absent(),
+    Value<int?> targetYear = const Value.absent(),
   }) => FactoryProfileRow(
     id: id ?? this.id,
     createdAt: createdAt ?? this.createdAt,
@@ -395,6 +746,22 @@ class FactoryProfileRow extends DataClass
     lon: lon.present ? lon.value : this.lon,
     productionUnitLabel: productionUnitLabel ?? this.productionUnitLabel,
     privacyAcknowledgedAt: privacyAcknowledgedAt ?? this.privacyAcknowledgedAt,
+    facilityType: facilityType.present ? facilityType.value : this.facilityType,
+    district: district.present ? district.value : this.district,
+    workers: workers.present ? workers.value : this.workers,
+    shiftsPerDay: shiftsPerDay.present ? shiftsPerDay.value : this.shiftsPerDay,
+    energySources: energySources.present
+        ? energySources.value
+        : this.energySources,
+    reportingYear: reportingYear.present
+        ? reportingYear.value
+        : this.reportingYear,
+    targetMetric: targetMetric.present ? targetMetric.value : this.targetMetric,
+    targetPct: targetPct.present ? targetPct.value : this.targetPct,
+    targetBaselineYear: targetBaselineYear.present
+        ? targetBaselineYear.value
+        : this.targetBaselineYear,
+    targetYear: targetYear.present ? targetYear.value : this.targetYear,
   );
   FactoryProfileRow copyWithCompanion(FactoryProfilesCompanion data) {
     return FactoryProfileRow(
@@ -412,6 +779,30 @@ class FactoryProfileRow extends DataClass
       privacyAcknowledgedAt: data.privacyAcknowledgedAt.present
           ? data.privacyAcknowledgedAt.value
           : this.privacyAcknowledgedAt,
+      facilityType: data.facilityType.present
+          ? data.facilityType.value
+          : this.facilityType,
+      district: data.district.present ? data.district.value : this.district,
+      workers: data.workers.present ? data.workers.value : this.workers,
+      shiftsPerDay: data.shiftsPerDay.present
+          ? data.shiftsPerDay.value
+          : this.shiftsPerDay,
+      energySources: data.energySources.present
+          ? data.energySources.value
+          : this.energySources,
+      reportingYear: data.reportingYear.present
+          ? data.reportingYear.value
+          : this.reportingYear,
+      targetMetric: data.targetMetric.present
+          ? data.targetMetric.value
+          : this.targetMetric,
+      targetPct: data.targetPct.present ? data.targetPct.value : this.targetPct,
+      targetBaselineYear: data.targetBaselineYear.present
+          ? data.targetBaselineYear.value
+          : this.targetBaselineYear,
+      targetYear: data.targetYear.present
+          ? data.targetYear.value
+          : this.targetYear,
     );
   }
 
@@ -427,7 +818,17 @@ class FactoryProfileRow extends DataClass
           ..write('lat: $lat, ')
           ..write('lon: $lon, ')
           ..write('productionUnitLabel: $productionUnitLabel, ')
-          ..write('privacyAcknowledgedAt: $privacyAcknowledgedAt')
+          ..write('privacyAcknowledgedAt: $privacyAcknowledgedAt, ')
+          ..write('facilityType: $facilityType, ')
+          ..write('district: $district, ')
+          ..write('workers: $workers, ')
+          ..write('shiftsPerDay: $shiftsPerDay, ')
+          ..write('energySources: $energySources, ')
+          ..write('reportingYear: $reportingYear, ')
+          ..write('targetMetric: $targetMetric, ')
+          ..write('targetPct: $targetPct, ')
+          ..write('targetBaselineYear: $targetBaselineYear, ')
+          ..write('targetYear: $targetYear')
           ..write(')'))
         .toString();
   }
@@ -444,6 +845,16 @@ class FactoryProfileRow extends DataClass
     lon,
     productionUnitLabel,
     privacyAcknowledgedAt,
+    facilityType,
+    district,
+    workers,
+    shiftsPerDay,
+    energySources,
+    reportingYear,
+    targetMetric,
+    targetPct,
+    targetBaselineYear,
+    targetYear,
   );
   @override
   bool operator ==(Object other) =>
@@ -458,7 +869,17 @@ class FactoryProfileRow extends DataClass
           other.lat == this.lat &&
           other.lon == this.lon &&
           other.productionUnitLabel == this.productionUnitLabel &&
-          other.privacyAcknowledgedAt == this.privacyAcknowledgedAt);
+          other.privacyAcknowledgedAt == this.privacyAcknowledgedAt &&
+          other.facilityType == this.facilityType &&
+          other.district == this.district &&
+          other.workers == this.workers &&
+          other.shiftsPerDay == this.shiftsPerDay &&
+          other.energySources == this.energySources &&
+          other.reportingYear == this.reportingYear &&
+          other.targetMetric == this.targetMetric &&
+          other.targetPct == this.targetPct &&
+          other.targetBaselineYear == this.targetBaselineYear &&
+          other.targetYear == this.targetYear);
 }
 
 class FactoryProfilesCompanion extends UpdateCompanion<FactoryProfileRow> {
@@ -472,6 +893,16 @@ class FactoryProfilesCompanion extends UpdateCompanion<FactoryProfileRow> {
   final Value<double?> lon;
   final Value<String> productionUnitLabel;
   final Value<DateTime> privacyAcknowledgedAt;
+  final Value<String?> facilityType;
+  final Value<String?> district;
+  final Value<int?> workers;
+  final Value<int?> shiftsPerDay;
+  final Value<String?> energySources;
+  final Value<String?> reportingYear;
+  final Value<String?> targetMetric;
+  final Value<double?> targetPct;
+  final Value<int?> targetBaselineYear;
+  final Value<int?> targetYear;
   final Value<int> rowid;
   const FactoryProfilesCompanion({
     this.id = const Value.absent(),
@@ -484,6 +915,16 @@ class FactoryProfilesCompanion extends UpdateCompanion<FactoryProfileRow> {
     this.lon = const Value.absent(),
     this.productionUnitLabel = const Value.absent(),
     this.privacyAcknowledgedAt = const Value.absent(),
+    this.facilityType = const Value.absent(),
+    this.district = const Value.absent(),
+    this.workers = const Value.absent(),
+    this.shiftsPerDay = const Value.absent(),
+    this.energySources = const Value.absent(),
+    this.reportingYear = const Value.absent(),
+    this.targetMetric = const Value.absent(),
+    this.targetPct = const Value.absent(),
+    this.targetBaselineYear = const Value.absent(),
+    this.targetYear = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   FactoryProfilesCompanion.insert({
@@ -497,6 +938,16 @@ class FactoryProfilesCompanion extends UpdateCompanion<FactoryProfileRow> {
     this.lon = const Value.absent(),
     this.productionUnitLabel = const Value.absent(),
     required DateTime privacyAcknowledgedAt,
+    this.facilityType = const Value.absent(),
+    this.district = const Value.absent(),
+    this.workers = const Value.absent(),
+    this.shiftsPerDay = const Value.absent(),
+    this.energySources = const Value.absent(),
+    this.reportingYear = const Value.absent(),
+    this.targetMetric = const Value.absent(),
+    this.targetPct = const Value.absent(),
+    this.targetBaselineYear = const Value.absent(),
+    this.targetYear = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        createdAt = Value(createdAt),
@@ -514,6 +965,16 @@ class FactoryProfilesCompanion extends UpdateCompanion<FactoryProfileRow> {
     Expression<double>? lon,
     Expression<String>? productionUnitLabel,
     Expression<DateTime>? privacyAcknowledgedAt,
+    Expression<String>? facilityType,
+    Expression<String>? district,
+    Expression<int>? workers,
+    Expression<int>? shiftsPerDay,
+    Expression<String>? energySources,
+    Expression<String>? reportingYear,
+    Expression<String>? targetMetric,
+    Expression<double>? targetPct,
+    Expression<int>? targetBaselineYear,
+    Expression<int>? targetYear,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -529,6 +990,17 @@ class FactoryProfilesCompanion extends UpdateCompanion<FactoryProfileRow> {
         'production_unit_label': productionUnitLabel,
       if (privacyAcknowledgedAt != null)
         'privacy_acknowledged_at': privacyAcknowledgedAt,
+      if (facilityType != null) 'facility_type': facilityType,
+      if (district != null) 'district': district,
+      if (workers != null) 'workers': workers,
+      if (shiftsPerDay != null) 'shifts_per_day': shiftsPerDay,
+      if (energySources != null) 'energy_sources': energySources,
+      if (reportingYear != null) 'reporting_year': reportingYear,
+      if (targetMetric != null) 'target_metric': targetMetric,
+      if (targetPct != null) 'target_pct': targetPct,
+      if (targetBaselineYear != null)
+        'target_baseline_year': targetBaselineYear,
+      if (targetYear != null) 'target_year': targetYear,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -544,6 +1016,16 @@ class FactoryProfilesCompanion extends UpdateCompanion<FactoryProfileRow> {
     Value<double?>? lon,
     Value<String>? productionUnitLabel,
     Value<DateTime>? privacyAcknowledgedAt,
+    Value<String?>? facilityType,
+    Value<String?>? district,
+    Value<int?>? workers,
+    Value<int?>? shiftsPerDay,
+    Value<String?>? energySources,
+    Value<String?>? reportingYear,
+    Value<String?>? targetMetric,
+    Value<double?>? targetPct,
+    Value<int?>? targetBaselineYear,
+    Value<int?>? targetYear,
     Value<int>? rowid,
   }) {
     return FactoryProfilesCompanion(
@@ -558,6 +1040,16 @@ class FactoryProfilesCompanion extends UpdateCompanion<FactoryProfileRow> {
       productionUnitLabel: productionUnitLabel ?? this.productionUnitLabel,
       privacyAcknowledgedAt:
           privacyAcknowledgedAt ?? this.privacyAcknowledgedAt,
+      facilityType: facilityType ?? this.facilityType,
+      district: district ?? this.district,
+      workers: workers ?? this.workers,
+      shiftsPerDay: shiftsPerDay ?? this.shiftsPerDay,
+      energySources: energySources ?? this.energySources,
+      reportingYear: reportingYear ?? this.reportingYear,
+      targetMetric: targetMetric ?? this.targetMetric,
+      targetPct: targetPct ?? this.targetPct,
+      targetBaselineYear: targetBaselineYear ?? this.targetBaselineYear,
+      targetYear: targetYear ?? this.targetYear,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -599,6 +1091,36 @@ class FactoryProfilesCompanion extends UpdateCompanion<FactoryProfileRow> {
         privacyAcknowledgedAt.value,
       );
     }
+    if (facilityType.present) {
+      map['facility_type'] = Variable<String>(facilityType.value);
+    }
+    if (district.present) {
+      map['district'] = Variable<String>(district.value);
+    }
+    if (workers.present) {
+      map['workers'] = Variable<int>(workers.value);
+    }
+    if (shiftsPerDay.present) {
+      map['shifts_per_day'] = Variable<int>(shiftsPerDay.value);
+    }
+    if (energySources.present) {
+      map['energy_sources'] = Variable<String>(energySources.value);
+    }
+    if (reportingYear.present) {
+      map['reporting_year'] = Variable<String>(reportingYear.value);
+    }
+    if (targetMetric.present) {
+      map['target_metric'] = Variable<String>(targetMetric.value);
+    }
+    if (targetPct.present) {
+      map['target_pct'] = Variable<double>(targetPct.value);
+    }
+    if (targetBaselineYear.present) {
+      map['target_baseline_year'] = Variable<int>(targetBaselineYear.value);
+    }
+    if (targetYear.present) {
+      map['target_year'] = Variable<int>(targetYear.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -618,6 +1140,16 @@ class FactoryProfilesCompanion extends UpdateCompanion<FactoryProfileRow> {
           ..write('lon: $lon, ')
           ..write('productionUnitLabel: $productionUnitLabel, ')
           ..write('privacyAcknowledgedAt: $privacyAcknowledgedAt, ')
+          ..write('facilityType: $facilityType, ')
+          ..write('district: $district, ')
+          ..write('workers: $workers, ')
+          ..write('shiftsPerDay: $shiftsPerDay, ')
+          ..write('energySources: $energySources, ')
+          ..write('reportingYear: $reportingYear, ')
+          ..write('targetMetric: $targetMetric, ')
+          ..write('targetPct: $targetPct, ')
+          ..write('targetBaselineYear: $targetBaselineYear, ')
+          ..write('targetYear: $targetYear, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -3718,6 +4250,16 @@ typedef $$FactoryProfilesTableCreateCompanionBuilder =
       Value<double?> lon,
       Value<String> productionUnitLabel,
       required DateTime privacyAcknowledgedAt,
+      Value<String?> facilityType,
+      Value<String?> district,
+      Value<int?> workers,
+      Value<int?> shiftsPerDay,
+      Value<String?> energySources,
+      Value<String?> reportingYear,
+      Value<String?> targetMetric,
+      Value<double?> targetPct,
+      Value<int?> targetBaselineYear,
+      Value<int?> targetYear,
       Value<int> rowid,
     });
 typedef $$FactoryProfilesTableUpdateCompanionBuilder =
@@ -3732,6 +4274,16 @@ typedef $$FactoryProfilesTableUpdateCompanionBuilder =
       Value<double?> lon,
       Value<String> productionUnitLabel,
       Value<DateTime> privacyAcknowledgedAt,
+      Value<String?> facilityType,
+      Value<String?> district,
+      Value<int?> workers,
+      Value<int?> shiftsPerDay,
+      Value<String?> energySources,
+      Value<String?> reportingYear,
+      Value<String?> targetMetric,
+      Value<double?> targetPct,
+      Value<int?> targetBaselineYear,
+      Value<int?> targetYear,
       Value<int> rowid,
     });
 
@@ -3791,6 +4343,56 @@ class $$FactoryProfilesTableFilterComposer
 
   ColumnFilters<DateTime> get privacyAcknowledgedAt => $composableBuilder(
     column: $table.privacyAcknowledgedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get facilityType => $composableBuilder(
+    column: $table.facilityType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get district => $composableBuilder(
+    column: $table.district,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get workers => $composableBuilder(
+    column: $table.workers,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get shiftsPerDay => $composableBuilder(
+    column: $table.shiftsPerDay,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get energySources => $composableBuilder(
+    column: $table.energySources,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get reportingYear => $composableBuilder(
+    column: $table.reportingYear,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get targetMetric => $composableBuilder(
+    column: $table.targetMetric,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get targetPct => $composableBuilder(
+    column: $table.targetPct,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get targetBaselineYear => $composableBuilder(
+    column: $table.targetBaselineYear,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get targetYear => $composableBuilder(
+    column: $table.targetYear,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -3853,6 +4455,56 @@ class $$FactoryProfilesTableOrderingComposer
     column: $table.privacyAcknowledgedAt,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get facilityType => $composableBuilder(
+    column: $table.facilityType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get district => $composableBuilder(
+    column: $table.district,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get workers => $composableBuilder(
+    column: $table.workers,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get shiftsPerDay => $composableBuilder(
+    column: $table.shiftsPerDay,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get energySources => $composableBuilder(
+    column: $table.energySources,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get reportingYear => $composableBuilder(
+    column: $table.reportingYear,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get targetMetric => $composableBuilder(
+    column: $table.targetMetric,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get targetPct => $composableBuilder(
+    column: $table.targetPct,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get targetBaselineYear => $composableBuilder(
+    column: $table.targetBaselineYear,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get targetYear => $composableBuilder(
+    column: $table.targetYear,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$FactoryProfilesTableAnnotationComposer
@@ -3895,6 +4547,50 @@ class $$FactoryProfilesTableAnnotationComposer
 
   GeneratedColumn<DateTime> get privacyAcknowledgedAt => $composableBuilder(
     column: $table.privacyAcknowledgedAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get facilityType => $composableBuilder(
+    column: $table.facilityType,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get district =>
+      $composableBuilder(column: $table.district, builder: (column) => column);
+
+  GeneratedColumn<int> get workers =>
+      $composableBuilder(column: $table.workers, builder: (column) => column);
+
+  GeneratedColumn<int> get shiftsPerDay => $composableBuilder(
+    column: $table.shiftsPerDay,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get energySources => $composableBuilder(
+    column: $table.energySources,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get reportingYear => $composableBuilder(
+    column: $table.reportingYear,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get targetMetric => $composableBuilder(
+    column: $table.targetMetric,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get targetPct =>
+      $composableBuilder(column: $table.targetPct, builder: (column) => column);
+
+  GeneratedColumn<int> get targetBaselineYear => $composableBuilder(
+    column: $table.targetBaselineYear,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get targetYear => $composableBuilder(
+    column: $table.targetYear,
     builder: (column) => column,
   );
 }
@@ -3946,6 +4642,16 @@ class $$FactoryProfilesTableTableManager
                 Value<double?> lon = const Value.absent(),
                 Value<String> productionUnitLabel = const Value.absent(),
                 Value<DateTime> privacyAcknowledgedAt = const Value.absent(),
+                Value<String?> facilityType = const Value.absent(),
+                Value<String?> district = const Value.absent(),
+                Value<int?> workers = const Value.absent(),
+                Value<int?> shiftsPerDay = const Value.absent(),
+                Value<String?> energySources = const Value.absent(),
+                Value<String?> reportingYear = const Value.absent(),
+                Value<String?> targetMetric = const Value.absent(),
+                Value<double?> targetPct = const Value.absent(),
+                Value<int?> targetBaselineYear = const Value.absent(),
+                Value<int?> targetYear = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => FactoryProfilesCompanion(
                 id: id,
@@ -3958,6 +4664,16 @@ class $$FactoryProfilesTableTableManager
                 lon: lon,
                 productionUnitLabel: productionUnitLabel,
                 privacyAcknowledgedAt: privacyAcknowledgedAt,
+                facilityType: facilityType,
+                district: district,
+                workers: workers,
+                shiftsPerDay: shiftsPerDay,
+                energySources: energySources,
+                reportingYear: reportingYear,
+                targetMetric: targetMetric,
+                targetPct: targetPct,
+                targetBaselineYear: targetBaselineYear,
+                targetYear: targetYear,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -3972,6 +4688,16 @@ class $$FactoryProfilesTableTableManager
                 Value<double?> lon = const Value.absent(),
                 Value<String> productionUnitLabel = const Value.absent(),
                 required DateTime privacyAcknowledgedAt,
+                Value<String?> facilityType = const Value.absent(),
+                Value<String?> district = const Value.absent(),
+                Value<int?> workers = const Value.absent(),
+                Value<int?> shiftsPerDay = const Value.absent(),
+                Value<String?> energySources = const Value.absent(),
+                Value<String?> reportingYear = const Value.absent(),
+                Value<String?> targetMetric = const Value.absent(),
+                Value<double?> targetPct = const Value.absent(),
+                Value<int?> targetBaselineYear = const Value.absent(),
+                Value<int?> targetYear = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => FactoryProfilesCompanion.insert(
                 id: id,
@@ -3984,6 +4710,16 @@ class $$FactoryProfilesTableTableManager
                 lon: lon,
                 productionUnitLabel: productionUnitLabel,
                 privacyAcknowledgedAt: privacyAcknowledgedAt,
+                facilityType: facilityType,
+                district: district,
+                workers: workers,
+                shiftsPerDay: shiftsPerDay,
+                energySources: energySources,
+                reportingYear: reportingYear,
+                targetMetric: targetMetric,
+                targetPct: targetPct,
+                targetBaselineYear: targetBaselineYear,
+                targetYear: targetYear,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

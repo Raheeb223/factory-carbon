@@ -1,4 +1,5 @@
 {
   "API_BASE_URL": "http://10.0.2.2:8000",
-  "APP_TOKEN": "same value as APP_TOKEN in backend/.env"
+  "APP_TOKEN": "same value as APP_TOKEN in backend/.env",
+  "ARCGIS_API_KEY": ""
 }

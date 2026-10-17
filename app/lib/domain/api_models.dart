@@ -135,6 +135,10 @@ class MonthEmissions {
     required this.missing,
     this.productionUnits,
     this.intensity,
+    this.lpgKg,
+    this.furnaceOilLitres,
+    this.scope1LpgT,
+    this.scope1FurnaceOilT,
   });
 
   factory MonthEmissions.fromJson(Map<String, dynamic> j) => MonthEmissions(
@@ -152,6 +156,10 @@ class MonthEmissions {
         missing: _strings(j['missing']),
         productionUnits: _d(j['production_units']),
         intensity: _d(j['intensity_t_per_1000_units']),
+        lpgKg: _d(j['lpg_kg']),
+        furnaceOilLitres: _d(j['furnace_oil_litres']),
+        scope1LpgT: _d(j['scope1_lpg_t']),
+        scope1FurnaceOilT: _d(j['scope1_furnace_oil_t']),
       );
 
   final String month;
@@ -168,6 +176,10 @@ class MonthEmissions {
   final List<String> missing;
   final double? productionUnits;
   final double? intensity;
+  final double? lpgKg;
+  final double? furnaceOilLitres;
+  final double? scope1LpgT;
+  final double? scope1FurnaceOilT;
 }
 
 class CarbonTotals {
@@ -212,6 +224,7 @@ class CarbonResult {
     required this.errors,
     required this.notes,
     required this.methodology,
+    this.energy,
   });
 
   factory CarbonResult.fromJson(Map<String, dynamic> j) => CarbonResult(
@@ -224,6 +237,7 @@ class CarbonResult {
         errors: (j['errors'] as List<dynamic>).map((e) => CalculationError.fromJson(_map(e))).toList(),
         notes: (j['data_quality_notes'] as List<dynamic>).map((e) => DataQualityNote.fromJson(_map(e))).toList(),
         methodology: _strings(j['methodology']),
+        energy: j['energy'] == null ? null : EnergySummary.fromJson(_map(j['energy'])),
       );
 
   final String? periodStart;
@@ -235,6 +249,41 @@ class CarbonResult {
   final List<CalculationError> errors;
   final List<DataQualityNote> notes;
   final List<String> methodology;
+
+  /// Energy used per source in kWh and GJ; null from older servers or without data.
+  final EnergySummary? energy;
+}
+
+class EnergyLine {
+  const EnergyLine({required this.source, required this.quantity, required this.unit, this.kwh, this.gj, this.share});
+  factory EnergyLine.fromJson(Map<String, dynamic> j) => EnergyLine(
+        source: BillType.parse(j['source'] as String?),
+        quantity: (j['quantity'] as num).toDouble(),
+        unit: j['unit'] as String,
+        kwh: _d(j['kwh']),
+        gj: _d(j['gj']),
+        share: _d(j['share']),
+      );
+  final BillType source;
+  final double quantity;
+  final String unit;
+  final double? kwh;
+  final double? gj;
+  final double? share;
+}
+
+class EnergySummary {
+  const EnergySummary({required this.lines, this.totalKwh, this.totalGj, required this.complete});
+  factory EnergySummary.fromJson(Map<String, dynamic> j) => EnergySummary(
+        lines: (j['by_source'] as List<dynamic>).map((e) => EnergyLine.fromJson(_map(e))).toList(),
+        totalKwh: _d(j['total_kwh']),
+        totalGj: _d(j['total_gj']),
+        complete: j['complete'] as bool? ?? false,
+      );
+  final List<EnergyLine> lines;
+  final double? totalKwh;
+  final double? totalGj;
+  final bool complete;
 }
 
 // ------------------------------------------------------------------ waste

@@ -5,10 +5,19 @@ From utility bills to a greener factory (formerly "Factory Energy & Carbon").
 A mobile app for Bangladeshi garment factories. Photograph utility bills and get:
 
 1. **Structured bill data** read by Gemini, with a **mandatory human review** before anything is used. Printed names and addresses are found on the phone (ML Kit, offline) and covered with black boxes before the photo is sent.
-2. A **traceable draft emissions report** (Scope 1 direct + Scope 2 purchased electricity, location-based): reporting period, sources included, factors with source, year and gases covered, and an audit trail of every bill and how it was entered. PDF or CSV.
+2. A **traceable draft emissions report** (Scope 1 direct from natural gas, diesel, LPG and furnace oil + Scope 2 purchased electricity, location-based) for a chosen **reporting year** (calendar year or Bangladesh fiscal year, compared with the year before): reporting period, sources included, factors with source, year and gases covered, and an audit trail of every bill and how it was entered. PDF or CSV.
 3. **Unusual electricity use (anomalies)**: months that used more electricity than expected *for the units produced*, with kWh per unit, an estimated extra cost and an ordered inspection checklist. An anomaly is not called waste until normal causes are ruled out.
 4. A **rooftop solar estimate**. Find the factory by place search, pasted coordinates or GPS, then tap the roof: the building outline comes from OpenStreetMap, or the user taps the corners. The calculation then accounts for shading, roof strength, installation cost, tariff and self-consumption, and the output is labelled an estimate.
 5. **Actions and measured savings**: an action plan, and savings measured afterwards from the factory's own bills (production-adjusted), in Tk, kWh and CO2, with payback and the benefit to the wider community.
+6. **Missing months reminder**: Home lists recent months (last 12) without an electricity bill or production figure, with a shortcut to add them, because gaps make the report understate CO2 and stop the electricity check.
+7. **Backup and restore** (Settings → Backup): one JSON file with the factory profile, bills, production, actions and solar plans (no bill photos, no settings or server token) to keep in Drive or move to a new phone. Restoring replaces all data on the phone after a confirmation that shows what the backup holds.
+
+8. **Factory setup in four short steps**: the factory (name, product type, district), its location (GPS "I am at the factory", a pasted Google Maps link, or typed coordinates, checked to be inside Bangladesh), production and energy (unit, workers, shifts, which fuels are used, calendar or fiscal reporting year), then a summary with the privacy notice. Suggestions only show actions that fit the fuels used, and reports open on the chosen kind of year. Facility type, district, workers and shifts appear on the PDF cover.
+9. **CO2 reduction target**: per 1,000 units or total, against a baseline year, with a science-based option (SBTi minimum pace, 4.2% a year). Progress uses the latest 12 months against the baseline year, with the reduction needed by now on a straight line to the target year ("On track" or "Behind").
+10. **Energy used in kWh and GJ** by source (fuels at net calorific value derived from the DESNZ 2026 factors, `backend/config/energy_content.yaml`), as buyer questionnaires such as the Higg FEM ask for it. On the report and in the PDF.
+11. **Easier everyday use**: reports and the electricity check update by themselves when opened after data changed; a **Listen** button reads the plain-words report aloud; **Share summary** sends a short WhatsApp message in the app's language for the owner or management.
+
+History import never double-counts: values from bill photos or typed in are kept and the file's value for that month is skipped; values imported earlier are replaced. The preview lists both before anything is saved.
 
 For people who find reading hard: a picture tutorial with a **Listen** button (Bangla/English text-to-speech), one-tap choices instead of typing, and the CO2 figure explained in plain words (kg, trees, what Scope 1 and 2 mean).
 
@@ -116,12 +125,13 @@ cd app && BACKEND_URL=http://127.0.0.1:8765 APP_TOKEN=dev flutter test test/cont
 | `APP_TOKEN` | empty | Default shared token sent as `X-App-Token` (also editable in Settings) |
 | `MAP_TILE_URL` | `https://tile.openstreetmap.org/{z}/{x}/{y}.png` | Street map tiles |
 | `MAP_TILE_ATTRIBUTION` | `© OpenStreetMap contributors` | Shown on the map |
-| `SATELLITE_TILE_URL` | empty (off) | Optional satellite layer |
+| `ARCGIS_API_KEY` | empty (off) | Turns on the satellite layer with Esri World Imagery (see below) |
+| `SATELLITE_TILE_URL` | empty (off) | Another satellite provider; overrides `ARCGIS_API_KEY` |
 | `SATELLITE_TILE_ATTRIBUTION` | empty | Required if satellite is set |
 
 **Map tiles.** The default is OpenStreetMap's standard tiles. Their [tile usage policy](https://operations.osmfoundation.org/policies/tiles/) allows light use with an identifying User-Agent (set) and visible attribution (shown). It forbids bulk or offline downloading (not done) and gives no service guarantee. Building outlines are visible at high zoom, which is enough to trace a roof.
 
-**Place search and roof outlines.** Search uses OpenStreetMap's [Nominatim](https://operations.osmfoundation.org/policies/nominatim/): limited to Bangladesh, one request per press of the search button (no search-as-you-type, as the policy requires), with an identifying User-Agent. Typed or pasted coordinates (including a Google Maps link) skip the search. Tapping the roof asks the [Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API) for building footprints within 150 m and uses the smallest one containing the tap. When no building is mapped there, or the service is down, the user taps the corners. The GPS button asks for location permission only when it is pressed. Like the tiles, these are free community services with no guarantee; a pilot should use a paid or self-hosted geocoder. A **satellite layer is off by default**: I could not confirm a free satellite source whose terms allow this use. Enable it only with a provider whose terms you have accepted, typically with an API key in the URL. Before a pilot, switch to a commercial or self-hosted tile provider.
+**Place search and roof outlines.** Search uses OpenStreetMap's [Nominatim](https://operations.osmfoundation.org/policies/nominatim/): limited to Bangladesh, one request per press of the search button (no search-as-you-type, as the policy requires), with an identifying User-Agent. Typed or pasted coordinates (including a Google Maps link) skip the search. Tapping the roof asks the [Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API) for building footprints within 150 m and uses the smallest one containing the tap. When no building is mapped there, or the service is down, the user taps the corners. The GPS button asks for location permission only when it is pressed. Like the tiles, these are free community services with no guarantee; a pilot should use a paid or self-hosted geocoder. A **satellite layer** makes roofs much easier to trace and is shown first when configured. It is off until you add a key: create a free [ArcGIS Location Platform](https://location.arcgis.com/pricing/) account (the free tier includes 2,000,000 basemap tiles a month), make an API key with the *basemaps* privilege, and put it in `env/dev.json` as `ARCGIS_API_KEY`. The app then uses Esri World Imagery with the required attribution. Any other provider whose terms you have accepted can be set with `SATELLITE_TILE_URL` and `SATELLITE_TILE_ATTRIBUTION`. Before a pilot, switch to a commercial or self-hosted tile provider.
 
 ## Configuration (backend, env vars only)
 
@@ -183,7 +193,7 @@ After deploying, build the app with `--dart-define=API_BASE_URL=https://<your-ho
 ## How each part works
 
 - **Extraction (spec 6.1).** The Google Gen AI SDK (`google-genai`) calls `generate_content` with the image and a version-controlled prompt (`prompts.py`). Settings: `temperature=0`, JSON output constrained by a flat JSON Schema (only keywords the Gemini docs list as supported). Up to 3 retries with exponential backoff, no retry on 4xx. Anything unparseable becomes `null`. Server-side checks return warnings and never block. Run `python -m scripts.eval_extraction` for per-field accuracy against `data/ground_truth/*.json`.
-- **Carbon (6.2).** Scope 2 = kWh × grid factor; Scope 1 = litres × diesel factor + m³ × gas factor. Months without data are `null`. A source whose factor is not set returns an explicit `factor_not_set` error and `null` values; the other sources are still calculated.
+- **Carbon (6.2).** Scope 2 = kWh × grid factor; Scope 1 = diesel litres × diesel factor + gas m³ × gas factor + LPG kg × LPG factor + furnace oil litres × furnace oil factor. The app sends a reporting period (calendar year, Bangladesh fiscal year July–June, or all data); a year still in progress stops at the latest month with data and is compared with the same months one year earlier. Months without data are `null`. A source whose factor is not set returns an explicit `factor_not_set` error and `null` values; the other sources are still calculated.
 - **Unusual use / anomalies (6.3).** A transparent baseline, not a black-box model: monthly data is too sparse for ML.
   - With 6+ months of electricity and production: OLS of `kWh ~ production` (statsmodels), i.e. expected kWh = a + b × units produced, with a leave-one-out 95% prediction interval. A factory making 20% more garments is expected to use more electricity and is not flagged for it (tested).
   - Each month also reports kWh per unit and the expected kWh per unit; flagged months get an estimated extra cost (excess kWh × average price) and an ordered checklist: rule out production, hours and weather first, then compressed air, idle machines, boiler/steam, generator.
@@ -206,12 +216,15 @@ After deploying, build the app with `--dart-define=API_BASE_URL=https://<your-ho
 | Factor | Value | Source |
 |---|---|---|
 | `grid_electricity` | 0.62 kg CO2/kWh | Department of Environment, Govt. of Bangladesh (Article 6 DNA), letter Ref. 22.02.0000.063.61.009.23-37, 23 Jan 2025: 0.62 tCO2/MWh for FY 2020-21 and 2021-22 |
-| `diesel` | 2.66155 kg CO2e/L | UK DESNZ GHG Conversion Factors 2025, "Diesel (100% mineral diesel)" (Bangladesh diesel has no biofuel blend) |
-| `natural_gas` | 2.06672 kg CO2e/m³ | UK DESNZ GHG Conversion Factors 2025, "Natural gas" |
+| `diesel` | 2.66155 kg CO2e/L | UK DESNZ GHG Conversion Factors 2026, "Diesel (100% mineral diesel)" (Bangladesh diesel has no biofuel blend; unchanged from 2025) |
+| `natural_gas` | 2.02633 kg CO2e/m³ | UK DESNZ GHG Conversion Factors 2026, "Natural gas" (2025 edition: 2.06672) |
+| `lpg` | 2.93936 kg CO2e/kg | UK DESNZ GHG Conversion Factors 2026, "LPG", per tonne ÷ 1,000 (LPG is sold by cylinder weight in Bangladesh) |
+| `furnace_oil` | 3.17492 kg CO2e/L | UK DESNZ GHG Conversion Factors 2026, "Fuel oil" (residual/heavy fuel oil, sold in Bangladesh as furnace oil) |
 
 Each value was checked against the original document or spreadsheet; the YAML `notes` give the exact reference and cross-checks.
 - The grid factor is CO2-only and is the national factor published for carbon-market use.
-- The gas factor reflects UK gas composition. An IPCC-default derivation for Bangladesh gas is 5–8% lower.
+- The gas factor reflects UK gas composition. An IPCC-default derivation for Bangladesh gas is 4–6% lower.
+- The latest edition is applied to all months. DESNZ suggests the edition matching the activity year; for these fuels the 2025 and 2026 editions differ by at most 2% (gas).
 - Replace these when newer editions are published, or if a buyer prescribes a different dataset.
 
 The solar rules of thumb (usable fraction 0.6, 7 m²/kWp, PR 0.78, degradation 0.5%/yr) are the values set in `SPEC.md` 6.4. Capex and O&M have no default and must come from a supplier quote.
@@ -229,7 +242,7 @@ The solar rules of thumb (usable fraction 0.6, 7 m²/kWp, PR 0.78, degradation 0
 
 ## Known limitations
 
-- Scope 1 and 2 from utility bills only. No Scope 3; no coal, biomass or captive-generator fuel unless entered manually.
+- Scope 1 and 2 from bills and fuel receipts only (grid electricity, natural gas, diesel, LPG, furnace oil). No Scope 3, no refrigerant leaks, coal or biomass. Gas burned in a captive generator is counted as natural gas.
 - Extraction accuracy is measured only on the bills in `backend/data/sample_bills/`. The BPDB sample image is not in the repo yet, so the eval script has not been run against Gemini.
 - The anomaly detector flags statistical outliers against production and cannot identify causes.
 - Measured savings compare the whole factory before and after; weather, product mix or other changes can also contribute.

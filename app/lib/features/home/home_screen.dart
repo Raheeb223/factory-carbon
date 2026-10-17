@@ -6,6 +6,7 @@ import '../../core/format.dart';
 import '../../core/l10n/gen/app_localizations.dart';
 import '../../core/theme.dart';
 import '../../data/providers.dart';
+import '../../domain/data_gaps.dart';
 import '../../domain/impact.dart';
 import '../../widgets/co2_explainer.dart';
 import '../../widgets/common.dart';
@@ -18,6 +19,7 @@ import '../impact/impact_screen.dart';
 import '../import_history/import_screen.dart';
 import '../production/production_screen.dart';
 import '../settings/data_admin.dart';
+import '../target/target_card.dart';
 import '../tutorial/tutorial_screen.dart';
 import '../waste/waste_controller.dart';
 import 'home_shell.dart';
@@ -127,7 +129,9 @@ class HomeScreen extends ConsumerWidget {
               ),
             ),
             Text(
-              '${fmt.month(carbon.result.periodStart ?? '')} – ${fmt.month(carbon.result.periodEnd ?? '')}',
+              '${fmt.month(carbon.result.periodStart ?? '')} – ${fmt.month(carbon.result.periodEnd ?? '')}'
+              // Say how many months really have data, so a part year is not read as a full one.
+              '${totals.monthsWithData < totals.monthsInPeriod ? ' · ${l.homeMonthsWithData(totals.monthsWithData, totals.monthsInPeriod)}' : ''}',
               style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 12.5),
             ),
             const SizedBox(height: 8),
@@ -140,8 +144,8 @@ class HomeScreen extends ConsumerWidget {
                 spacing: 14,
                 runSpacing: 4,
                 children: [
-                  _HeroLegend(color: const Color(0xFFBAE6FD), text: '${l.carbonScope2}: ${fmt.tonnes(totals.scope2T)} t'),
-                  _HeroLegend(color: const Color(0xFFFDE68A), text: '${l.carbonScope1}: ${fmt.tonnes(totals.scope1T)} t'),
+                  _HeroLegend(color: const Color(0xFFBAE6FD), text: '${l.carbonScope2}: ${l.tonnesCo2e(fmt.tonnes(totals.scope2T))}'),
+                  _HeroLegend(color: const Color(0xFFFDE68A), text: '${l.carbonScope1}: ${l.tonnesCo2e(fmt.tonnes(totals.scope1T))}'),
                 ],
               ),
             ],
@@ -278,7 +282,8 @@ class HomeScreen extends ConsumerWidget {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
-        body: ListView(
+        body: StatusBarScrim(
+          child: ListView(
           padding: EdgeInsets.zero,
           children: [
             hero,
@@ -347,6 +352,12 @@ class HomeScreen extends ConsumerWidget {
                       ),
                     ),
                   if (doneCount < steps.length) checklist,
+                  _GapsCard(
+                    gaps: findGaps(bills, production),
+                    onAddBill: () => _push(context, const AddBillScreen()),
+                    onAddProduction: () => _push(context, const ProductionScreen()),
+                  ),
+                  if (carbon != null) const TargetCard(),
                   SectionHeader(l.homeExplore),
                   // Rows of two tiles sized to their content, so long (Bangla) labels never clip.
                   for (var i = 0; i < tiles.length; i += 2)
@@ -364,6 +375,7 @@ class HomeScreen extends ConsumerWidget {
               ),
             ),
           ],
+        ),
         ),
       ),
     );
@@ -391,4 +403,71 @@ class _HeroLegend extends StatelessWidget {
       ),
     ],
   );
+}
+
+/// Recent months with no electricity bill or production figure, with a shortcut to add them.
+class _GapsCard extends StatelessWidget {
+  const _GapsCard({required this.gaps, required this.onAddBill, required this.onAddProduction});
+  final DataGaps gaps;
+  final VoidCallback onAddBill;
+  final VoidCallback onAddProduction;
+
+  static const _shown = 4;
+
+  @override
+  Widget build(BuildContext context) {
+    if (gaps.isEmpty) return const SizedBox.shrink();
+    final l = AppLocalizations.of(context);
+    final fmt = Fmt.of(context);
+    final t = Theme.of(context).textTheme;
+    String list(List<String> months) => [
+      ...months.take(_shown).map(fmt.month),
+      if (months.length > _shown) l.gapsMore(months.length - _shown),
+    ].join(', ');
+
+    Widget row(Key key, IconData icon, Color color, String text, String button, VoidCallback onTap) => Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Icon(icon, size: 20, color: color),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(text, style: t.bodyMedium),
+            TextButton(
+              key: key,
+              style: TextButton.styleFrom(padding: EdgeInsets.zero, minimumSize: const Size(0, 36), foregroundColor: color),
+              onPressed: onTap,
+              child: Text(button),
+            ),
+          ]),
+        ),
+      ]),
+    );
+
+    return SoftCard(
+      key: const Key('home-gaps'),
+      color: Colors.orange.withValues(alpha: 0.06),
+      borderColor: Colors.orange.withValues(alpha: 0.3),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(children: [
+          IconBlob(Icons.event_busy_rounded, color: Colors.orange.shade800, size: 38),
+          const SizedBox(width: 12),
+          Expanded(child: Text(l.gapsTitle, style: t.titleMedium)),
+        ]),
+        const SizedBox(height: 6),
+        Text(l.gapsHint, style: t.bodySmall),
+        if (gaps.electricity.isNotEmpty)
+          row(const Key('gaps-add-bill'), Icons.bolt_rounded, FeatureColors.bills, l.gapsElectricity(list(gaps.electricity)), l.gapsAddBill, onAddBill),
+        if (gaps.production.isNotEmpty)
+          row(
+            const Key('gaps-add-production'),
+            Icons.precision_manufacturing_rounded,
+            FeatureColors.production,
+            l.gapsProduction(list(gaps.production)),
+            l.gapsAddProduction,
+            onAddProduction,
+          ),
+      ]),
+    );
+  }
 }

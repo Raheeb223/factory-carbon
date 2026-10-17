@@ -85,7 +85,7 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
   String? _text(TextEditingController c) => c.text.trim().isEmpty ? null : c.text.trim();
 
   Map<String, Object?> _values() => {
-    'bill_type': _type.name,
+    'bill_type': _type.wire,
     'utility_name': _text(_utility),
     'billing_month': _month,
     'period_start': _iso(_start),

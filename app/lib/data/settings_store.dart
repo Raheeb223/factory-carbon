@@ -17,6 +17,10 @@ abstract interface class SettingsStore {
   String? get serverToken;
   Future<void> setServer(String? url, String? token);
 
+  /// Carbon report period key (see domain/report_period.dart); null = all data.
+  String? get reportPeriod;
+  Future<void> setReportPeriod(String? v);
+
   Future<void> clear();
 }
 
@@ -29,10 +33,11 @@ class PrefsSettingsStore implements SettingsStore {
   static const _locale = 'locale';
   static const _serverUrl = 'server_url';
   static const _serverToken = 'server_token';
+  static const _reportPeriod = 'report_period';
 
   static Future<PrefsSettingsStore> open() async => PrefsSettingsStore(await SharedPreferencesWithCache.create(
         cacheOptions: const SharedPreferencesWithCacheOptions(
-          allowList: {_keepImages, _uploadNoticeAck, _locale, _serverUrl, _serverToken},
+          allowList: {_keepImages, _uploadNoticeAck, _locale, _serverUrl, _serverToken, _reportPeriod},
         ),
       ));
 
@@ -62,6 +67,11 @@ class PrefsSettingsStore implements SettingsStore {
   }
 
   @override
+  String? get reportPeriod => _prefs.getString(_reportPeriod);
+  @override
+  Future<void> setReportPeriod(String? v) => v == null ? _prefs.remove(_reportPeriod) : _prefs.setString(_reportPeriod, v);
+
+  @override
   Future<void> clear() => _prefs.clear();
 }
 
@@ -77,6 +87,8 @@ class MemorySettingsStore implements SettingsStore {
   String? serverUrl;
   @override
   String? serverToken;
+  @override
+  String? reportPeriod;
 
   @override
   Future<void> setKeepImages(bool v) async => keepImages = v;
@@ -91,11 +103,15 @@ class MemorySettingsStore implements SettingsStore {
   }
 
   @override
+  Future<void> setReportPeriod(String? v) async => reportPeriod = v;
+
+  @override
   Future<void> clear() async {
     keepImages = false;
     uploadNoticeAcknowledged = false;
     localeCode = null;
     serverUrl = null;
     serverToken = null;
+    reportPeriod = null;
   }
 }

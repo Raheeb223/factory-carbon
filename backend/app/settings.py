@@ -87,13 +87,26 @@ class EmissionFactors(BaseModel):
     grid_electricity: ConfigValue
     diesel: ConfigValue
     natural_gas: ConfigValue
+    lpg: ConfigValue
+    furnace_oil: ConfigValue
 
     def as_dict(self) -> dict[str, ConfigValue]:
         return {
             "grid_electricity": self.grid_electricity,
             "diesel": self.diesel,
             "natural_gas": self.natural_gas,
+            "lpg": self.lpg,
+            "furnace_oil": self.furnace_oil,
         }
+
+
+class EnergyContent(BaseModel):
+    """Net calorific value per unit of each fuel (kWh per litre, m3 or kg)."""
+
+    diesel: ConfigValue
+    natural_gas: ConfigValue
+    lpg: ConfigValue
+    furnace_oil: ConfigValue
 
 
 class SolarDefaults(BaseModel):
@@ -142,6 +155,7 @@ class AppConfig(BaseModel):
     emission_factors: EmissionFactors
     solar_defaults: SolarDefaults
     validation_rules: ValidationRules
+    energy_content: EnergyContent | None = None
 
     def placeholder_names(self) -> list[str]:
         names = [f"emission_factors.{k}" for k, v in self.emission_factors.as_dict().items() if v.status == "PLACEHOLDER"]
@@ -162,6 +176,7 @@ def load_app_config(config_dir: Path) -> AppConfig:
         emission_factors=EmissionFactors.model_validate(_read_yaml(config_dir / "emission_factors.yaml")),
         solar_defaults=SolarDefaults.model_validate(_read_yaml(config_dir / "solar_defaults.yaml")),
         validation_rules=ValidationRules.model_validate(_read_yaml(config_dir / "validation_rules.yaml")),
+        energy_content=EnergyContent.model_validate(_read_yaml(config_dir / "energy_content.yaml")) if (config_dir / "energy_content.yaml").exists() else None,
     )
 
 

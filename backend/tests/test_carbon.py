@@ -14,7 +14,7 @@ GRID = 0.6  # test-only value, not a real factor
 
 
 def bill(month: str, kind: str, qty: float, **kw: object) -> dict[str, object]:
-    unit = {"electricity": "kWh", "diesel": "litre", "gas": "m3"}[kind]
+    unit = {"electricity": "kWh", "diesel": "litre", "gas": "m3", "lpg": "kg", "furnace_oil": "litre"}[kind]
     return {"billing_month": month, "bill_type": kind, "consumed_units": qty, "unit": unit, **kw}
 
 
@@ -49,6 +49,25 @@ def test_scope2_and_scope1_values(factors_with_grid) -> None:  # type: ignore[no
     assert m.is_complete
     assert r.errors == []
     assert r.placeholders_in_use == []
+
+
+def test_lpg_and_furnace_oil_are_scope1(factors_default) -> None:  # type: ignore[no-untyped-def]
+    r = calculate(req([bill("2026-01", "electricity", 10_000), bill("2026-01", "lpg", 450), bill("2026-01", "furnace_oil", 2000)]), factors_default)
+    m = r.months[0]
+    assert m.lpg_kg == 450 and m.furnace_oil_litres == 2000
+    assert m.scope1_lpg_t == pytest.approx(450 * 2.93936 / 1000)
+    assert m.scope1_furnace_oil_t == pytest.approx(2000 * 3.17492 / 1000)
+    assert m.scope1_t == pytest.approx(m.scope1_lpg_t + m.scope1_furnace_oil_t)
+    assert m.total_t == pytest.approx(m.scope1_t + 10_000 * 0.62 / 1000)
+    assert r.placeholders_in_use == [] and r.errors == []
+    assert {"lpg", "furnace_oil"} <= r.factors.keys()
+
+
+def test_lpg_needs_kg(factors_default) -> None:  # type: ignore[no-untyped-def]
+    from app.security import ApiError
+
+    with pytest.raises(ApiError):
+        calculate(req([{"billing_month": "2026-01", "bill_type": "lpg", "consumed_units": 12, "unit": "litre"}]), factors_default)
 
 
 def test_missing_months_are_null_not_zero(factors_with_grid) -> None:  # type: ignore[no-untyped-def]
@@ -129,7 +148,7 @@ def test_default_factors_are_verified_with_sources(factors_default) -> None:  # 
     assert factors_default.grid_electricity.value == pytest.approx(0.62)
     assert "Department of Environment" in factors_default.grid_electricity.source
     assert factors_default.diesel.value == pytest.approx(2.66155)
-    assert factors_default.natural_gas.value == pytest.approx(2.06672)
+    assert factors_default.natural_gas.value == pytest.approx(2.02633)
     for f in factors_default.as_dict().values():
         assert f.status == "verified" and f.source and f.year
 
@@ -164,3 +183,27 @@ def test_endpoint_returns_factor_metadata() -> None:
     assert r.status_code == 200
     f = r.json()["factors"]["diesel"]
     assert f["status"] == "verified" and "DESNZ" in f["source"] and f["unit"] == "kg_CO2e_per_litre"
+
+
+def test_energy_summary_in_kwh_and_gj() -> None:
+    from app.settings import DEFAULT_CONFIG_DIR
+
+    cfg = load_app_config(DEFAULT_CONFIG_DIR)
+    r = calculate(req([bill("2026-01", "electricity", 10_000), bill("2026-01", "diesel", 100), bill("2026-02", "lpg", 45)]), cfg.emission_factors, cfg.energy_content)
+    assert r.energy is not None and r.energy.complete
+    by = {e.source: e for e in r.energy.by_source}
+    assert by["electricity"].kwh == 10_000
+    assert by["diesel"].kwh == pytest.approx(100 * 9.929, abs=0.1)
+    assert by["lpg"].kwh == pytest.approx(45 * 12.762, abs=0.1)
+    total = 10_000 + 992.9 + 574.29
+    assert r.energy.total_kwh == pytest.approx(total, abs=0.2)
+    assert r.energy.total_gj == pytest.approx(total * 0.0036, abs=0.001)
+    assert sum(e.share or 0 for e in r.energy.by_source) == pytest.approx(1, abs=1e-3)
+    assert set(r.energy.energy_content) == {"diesel", "lpg"}
+
+
+def test_energy_summary_incomplete_without_conversion(factors_default) -> None:  # type: ignore[no-untyped-def]
+    r = calculate(req([bill("2026-01", "electricity", 1000), bill("2026-01", "gas", 10)]), factors_default, None)
+    assert r.energy is not None and not r.energy.complete
+    assert r.energy.total_kwh is None
+    assert {e.source: e.kwh for e in r.energy.by_source} == {"electricity": 1000, "gas": None}

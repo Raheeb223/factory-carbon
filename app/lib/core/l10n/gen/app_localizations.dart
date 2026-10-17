@@ -242,6 +242,18 @@ abstract class AppLocalizations {
   /// **'Could not reach the server. Check your internet connection and the server address in Settings.'**
   String get errorNetwork;
 
+  /// No description provided for @connWakingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting to the server…'**
+  String get connWakingTitle;
+
+  /// No description provided for @connWakingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The free server sleeps when nobody uses it and can take up to a minute to wake up. You can keep using the app meanwhile.'**
+  String get connWakingBody;
+
   /// No description provided for @errorTimeout.
   ///
   /// In en, this message translates to:
@@ -1007,7 +1019,7 @@ abstract class AppLocalizations {
   /// No description provided for @carbonScope1.
   ///
   /// In en, this message translates to:
-  /// **'Scope 1 (diesel + gas)'**
+  /// **'Scope 1 (fuels burned on site)'**
   String get carbonScope1;
 
   /// No description provided for @carbonScope2.
@@ -1859,7 +1871,7 @@ abstract class AppLocalizations {
   /// No description provided for @limitationsBody.
   ///
   /// In en, this message translates to:
-  /// **'• Scope 1 and 2 from utility bills only. No Scope 3; no coal, biomass or other fuels unless entered manually.\n• The emissions report is a draft until its method and format are checked against your buyer\'s requirements.\n• Bill-reading accuracy has only been measured on a few sample bills. Always check values.\n• Names are hidden automatically only when printed in English letters. Cover handwritten or Bangla names by hand.\n• The unusual-use check flags statistical outliers against production; it cannot identify causes and does not prove waste.\n• Measured savings compare the whole factory before and after an action; weather, product mix or other changes can also play a part.\n• Solar results are estimates only.\n• Emission factors come from published government sources (shown with source and year in the report). Update them when newer editions appear and confirm they match the buyer\'s rules.\n• The app token is weak protection, adequate for a demo only.'**
+  /// **'• Scope 1 and 2 from bills and fuel receipts: grid electricity, natural gas, diesel, LPG and furnace oil. No Scope 3, refrigerant leaks, coal or biomass.\n• The emissions report is a draft until its method and format are checked against your buyer\'s requirements.\n• Bill-reading accuracy has only been measured on a few sample bills. Always check values.\n• Names are hidden automatically only when printed in English letters. Cover handwritten or Bangla names by hand.\n• The unusual-use check flags statistical outliers against production; it cannot identify causes and does not prove waste.\n• Measured savings compare the whole factory before and after an action; weather, product mix or other changes can also play a part.\n• Solar results are estimates only.\n• Emission factors come from published government sources (shown with source and year in the report). Update them when newer editions appear and confirm they match the buyer\'s rules.\n• The app token is weak protection, adequate for a demo only.'**
   String get limitationsBody;
 
   /// No description provided for @demoNeedsEmpty.
@@ -2309,7 +2321,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeScanSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Take a photo of an electricity, gas or diesel bill. We read the numbers for you.'**
+  /// **'Take a photo of an electricity, gas, diesel, LPG or furnace oil bill. We read the numbers for you.'**
   String get homeScanSubtitle;
 
   /// No description provided for @homeExplore.
@@ -2693,7 +2705,7 @@ abstract class AppLocalizations {
   /// No description provided for @tut1Body.
   ///
   /// In en, this message translates to:
-  /// **'Tap the big + button, then the camera. Use your electricity, gas or diesel bill.'**
+  /// **'Tap \"Scan a bill\" on the home screen, then the camera. Use an electricity, gas, diesel, LPG or furnace oil bill.'**
   String get tut1Body;
 
   /// No description provided for @tut2Title.
@@ -2717,7 +2729,7 @@ abstract class AppLocalizations {
   /// No description provided for @tut3Body.
   ///
   /// In en, this message translates to:
-  /// **'The app reads the units and the taka. If they match your bill, tap Save.'**
+  /// **'The app reads the units and the taka. If they match your bill, tick the box and tap Save.'**
   String get tut3Body;
 
   /// No description provided for @tut4Title.
@@ -2753,7 +2765,7 @@ abstract class AppLocalizations {
   /// No description provided for @tut6Body.
   ///
   /// In en, this message translates to:
-  /// **'A red warning means electricity was wasted that month. The sun page shows how much solar panels can save.'**
+  /// **'A red warning means a month used more electricity than expected: check why. The Solar page shows how much solar panels can save.'**
   String get tut6Body;
 
   /// No description provided for @homeHowTo.
@@ -2921,7 +2933,7 @@ abstract class AppLocalizations {
   /// No description provided for @impactIntensityLine.
   ///
   /// In en, this message translates to:
-  /// **'Electricity per unit produced: {pct}% compared with before'**
+  /// **'Electricity per unit produced: {pct} than before'**
   String impactIntensityLine(String pct);
 
   /// No description provided for @impactMeasuredMonths.
@@ -3101,7 +3113,7 @@ abstract class AppLocalizations {
   /// No description provided for @actionResult.
   ///
   /// In en, this message translates to:
-  /// **'kWh per unit produced: {pct}% ({before} → {after})'**
+  /// **'kWh per unit produced: {pct} ({before} → {after})'**
   String actionResult(String pct, String before, String after);
 
   /// No description provided for @actionPayback.
@@ -3679,6 +3691,1099 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Written on the panel label or the installer\'s quote. Most new panels are 540–600 W. Not sure? Keep 550 W.'**
   String get paramPanelHint;
+
+  /// No description provided for @carbonPlainTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'In simple words'**
+  String get carbonPlainTitle;
+
+  /// No description provided for @carbonSay1.
+  ///
+  /// In en, this message translates to:
+  /// **'From {start} to {end}, your factory released {total} tonnes of CO₂, about {perMonth} tonnes a month.'**
+  String carbonSay1(String start, String end, String total, String perMonth);
+
+  /// No description provided for @carbonSay2.
+  ///
+  /// In en, this message translates to:
+  /// **'{source} causes the most: {pct}% of the total.'**
+  String carbonSay2(String source, String pct);
+
+  /// No description provided for @carbonSay3.
+  ///
+  /// In en, this message translates to:
+  /// **'For every 1,000 {unit} you make, about {t} tonnes of CO₂ is released.'**
+  String carbonSay3(String unit, String t);
+
+  /// No description provided for @carbonSay4.
+  ///
+  /// In en, this message translates to:
+  /// **'Highest month: {month}, with {t} tonnes.'**
+  String carbonSay4(String month, String t);
+
+  /// No description provided for @carbonCalcTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How it was calculated'**
+  String get carbonCalcTitle;
+
+  /// No description provided for @carbonCalcHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Units on your bills × emission factor = CO₂'**
+  String get carbonCalcHint;
+
+  /// No description provided for @carbonCalcLine.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} {unit} × {factor} kg per {per}'**
+  String carbonCalcLine(String amount, String unit, String factor, String per);
+
+  /// No description provided for @carbonCalcResult.
+  ///
+  /// In en, this message translates to:
+  /// **'= {t} t'**
+  String carbonCalcResult(String t);
+
+  /// No description provided for @carbonCalcTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get carbonCalcTotal;
+
+  /// No description provided for @carbonCalcNote.
+  ///
+  /// In en, this message translates to:
+  /// **'1 tonne (t) = 1,000 kg. The factors and their sources are listed further down.'**
+  String get carbonCalcNote;
+
+  /// No description provided for @carbonUnitKwh.
+  ///
+  /// In en, this message translates to:
+  /// **'kWh'**
+  String get carbonUnitKwh;
+
+  /// No description provided for @carbonUnitLitre.
+  ///
+  /// In en, this message translates to:
+  /// **'litres'**
+  String get carbonUnitLitre;
+
+  /// No description provided for @carbonUnitLitreOne.
+  ///
+  /// In en, this message translates to:
+  /// **'litre'**
+  String get carbonUnitLitreOne;
+
+  /// No description provided for @carbonUnitM3.
+  ///
+  /// In en, this message translates to:
+  /// **'m³'**
+  String get carbonUnitM3;
+
+  /// No description provided for @carbonCutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Where to start'**
+  String get carbonCutTitle;
+
+  /// No description provided for @carbonCutTk.
+  ///
+  /// In en, this message translates to:
+  /// **'Using 10% less electricity would save about {kwh} kWh, Tk {tk} and {t} tonnes of CO₂ a year.'**
+  String carbonCutTk(String kwh, String tk, String t);
+
+  /// No description provided for @carbonCutNoTk.
+  ///
+  /// In en, this message translates to:
+  /// **'Using 10% less electricity would save about {kwh} kWh and {t} tonnes of CO₂ a year.'**
+  String carbonCutNoTk(String kwh, String t);
+
+  /// No description provided for @carbonCutButton.
+  ///
+  /// In en, this message translates to:
+  /// **'See what to do'**
+  String get carbonCutButton;
+
+  /// No description provided for @actionBestForYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Best for you'**
+  String get actionBestForYou;
+
+  /// No description provided for @actionBestWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'{source} is {pct}% of your CO₂, so this helps most.'**
+  String actionBestWhy(String source, String pct);
+
+  /// No description provided for @actionCostFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get actionCostFree;
+
+  /// No description provided for @actionCostLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Low cost'**
+  String get actionCostLow;
+
+  /// No description provided for @actionCostMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium cost'**
+  String get actionCostMedium;
+
+  /// No description provided for @actionCostHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'Big investment'**
+  String get actionCostHigh;
+
+  /// No description provided for @actionCutsElectricity.
+  ///
+  /// In en, this message translates to:
+  /// **'Cuts electricity'**
+  String get actionCutsElectricity;
+
+  /// No description provided for @actionCutsDiesel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cuts diesel'**
+  String get actionCutsDiesel;
+
+  /// No description provided for @actionCutsGas.
+  ///
+  /// In en, this message translates to:
+  /// **'Cuts gas'**
+  String get actionCutsGas;
+
+  /// No description provided for @actionHowTo.
+  ///
+  /// In en, this message translates to:
+  /// **'How to do it'**
+  String get actionHowTo;
+
+  /// No description provided for @actionSuggestionsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Start with the ones marked “Best for you”. Tap a card to see the steps.'**
+  String get actionSuggestionsHint;
+
+  /// No description provided for @actFixAirLeaksSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'With machines stopped (lunch or a holiday), walk the floor and listen for hissing at hoses, couplings and air guns.\nTie a tag on each leak and write it on a list.\nRepair or replace the parts, then check again every month.'**
+  String get actFixAirLeaksSteps;
+
+  /// No description provided for @actSwitchOffIdleSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose one person on each floor to be in charge of switching off.\nSwitch off machines, lights and fans at lunch, after the last shift and on holidays.\nPut a simple checklist on the wall and sign it every day.'**
+  String get actSwitchOffIdleSteps;
+
+  /// No description provided for @actLowerAirPressureSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask the machine suppliers what air pressure each machine really needs.\nLower the compressor setting a little at a time while production keeps running.\nStop at the lowest setting where every machine still works well.'**
+  String get actLowerAirPressureSteps;
+
+  /// No description provided for @actSteamLeaksSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Walk the steam lines and mark leaks and steam traps that blow steam all the time.\nRepair them and insulate bare hot pipes and valves.\nSend hot condensate water back to the boiler.'**
+  String get actSteamLeaksSteps;
+
+  /// No description provided for @actGeneratorHoursSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep a log book of when the generator starts and stops.\nSwitch back to grid power as soon as it returns.\nEach week, compare the log with the power-cut times.'**
+  String get actGeneratorHoursSteps;
+
+  /// No description provided for @actLedLightingSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Find the lights that are on the longest (production floor, 2–3 shifts).\nReplace those tube lights and bulbs with LED first.\nChange the rest when the old ones fail.'**
+  String get actLedLightingSteps;
+
+  /// No description provided for @actServoMotorsSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Count the sewing machines that still have clutch motors (they hum even when nobody sews).\nAsk a supplier for a price to fit servo motors.\nStart with one line, compare its electricity, then do the rest.'**
+  String get actServoMotorsSteps;
+
+  /// No description provided for @actPowerFactorSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Look on the electricity bill for a power-factor (PF) penalty or a low PF value.\nAsk a licensed electrician to check the capacitor bank.\nRepair or add capacitors until the penalty is gone from the bill.'**
+  String get actPowerFactorSteps;
+
+  /// No description provided for @actRooftopSolarSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the Solar page and tap your roof for a free estimate.\nGet quotes from 2–3 solar companies.\nAsk an engineer to check that the roof can carry the panels.'**
+  String get actRooftopSolarSteps;
+
+  /// No description provided for @scope1Short.
+  ///
+  /// In en, this message translates to:
+  /// **'Scope 1'**
+  String get scope1Short;
+
+  /// No description provided for @scope2Short.
+  ///
+  /// In en, this message translates to:
+  /// **'Scope 2'**
+  String get scope2Short;
+
+  /// No description provided for @actionTapForSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a card to see the steps.'**
+  String get actionTapForSteps;
+
+  /// No description provided for @importSkipped.
+  ///
+  /// In en, this message translates to:
+  /// **'Already on the phone from a bill or typed in, so these are not imported: {list}.'**
+  String importSkipped(String list);
+
+  /// No description provided for @importReplaced.
+  ///
+  /// In en, this message translates to:
+  /// **'These replace values imported earlier: {list}.'**
+  String importReplaced(String list);
+
+  /// No description provided for @importNothingNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything in this file is already on the phone. There is nothing new to import.'**
+  String get importNothingNew;
+
+  /// No description provided for @backupGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup'**
+  String get backupGroup;
+
+  /// No description provided for @backupSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save a backup'**
+  String get backupSave;
+
+  /// No description provided for @backupSaveHint.
+  ///
+  /// In en, this message translates to:
+  /// **'One file with your factory, bills, production, actions and solar plans. Bill photos are not included. Keep it safe, e.g. in Google Drive.'**
+  String get backupSaveHint;
+
+  /// No description provided for @backupRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore from backup'**
+  String get backupRestore;
+
+  /// No description provided for @backupRestoreHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this on a new phone or after deleting the app.'**
+  String get backupRestoreHint;
+
+  /// No description provided for @backupNotABackup.
+  ///
+  /// In en, this message translates to:
+  /// **'This file is not a BillToGreen backup.'**
+  String get backupNotABackup;
+
+  /// No description provided for @backupNewer.
+  ///
+  /// In en, this message translates to:
+  /// **'This backup was made by a newer version of the app. Update the app first.'**
+  String get backupNewer;
+
+  /// No description provided for @backupDamaged.
+  ///
+  /// In en, this message translates to:
+  /// **'This backup file is damaged and cannot be restored.'**
+  String get backupDamaged;
+
+  /// No description provided for @backupRestoreConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace all data on this phone?'**
+  String get backupRestoreConfirmTitle;
+
+  /// No description provided for @backupRestoreConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The backup from {date} ({factory}) has {bills} bills covering {months} months, {actions} actions and {plans} solar plans. Everything now on this phone will be replaced.'**
+  String backupRestoreConfirmBody(
+    String date,
+    String factory,
+    int bills,
+    int months,
+    int actions,
+    int plans,
+  );
+
+  /// No description provided for @backupRestored.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup restored.'**
+  String get backupRestored;
+
+  /// No description provided for @gapsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing months'**
+  String get gapsTitle;
+
+  /// No description provided for @gapsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Reports and the electricity check are only complete when every month is entered.'**
+  String get gapsHint;
+
+  /// No description provided for @gapsElectricity.
+  ///
+  /// In en, this message translates to:
+  /// **'No electricity bill: {months}'**
+  String gapsElectricity(String months);
+
+  /// No description provided for @gapsProduction.
+  ///
+  /// In en, this message translates to:
+  /// **'No production figure: {months}'**
+  String gapsProduction(String months);
+
+  /// No description provided for @gapsMore.
+  ///
+  /// In en, this message translates to:
+  /// **'+{count} more'**
+  String gapsMore(int count);
+
+  /// No description provided for @gapsAddBill.
+  ///
+  /// In en, this message translates to:
+  /// **'Add bill'**
+  String get gapsAddBill;
+
+  /// No description provided for @gapsAddProduction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add production'**
+  String get gapsAddProduction;
+
+  /// No description provided for @periodLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Report period'**
+  String get periodLabel;
+
+  /// No description provided for @periodHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Buyers usually ask for one year. Bangladesh\'s fiscal year runs from July to June.'**
+  String get periodHint;
+
+  /// No description provided for @periodAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All data'**
+  String get periodAll;
+
+  /// No description provided for @periodCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'{year} (January–December)'**
+  String periodCalendar(String year);
+
+  /// No description provided for @periodFiscal.
+  ///
+  /// In en, this message translates to:
+  /// **'Fiscal year {label} (July–June)'**
+  String periodFiscal(String label);
+
+  /// No description provided for @periodSoFar.
+  ///
+  /// In en, this message translates to:
+  /// **'year so far'**
+  String get periodSoFar;
+
+  /// No description provided for @compareTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Compared with a year earlier'**
+  String get compareTitle;
+
+  /// No description provided for @compareWith.
+  ///
+  /// In en, this message translates to:
+  /// **'Same months one year earlier: {start} – {end}'**
+  String compareWith(String start, String end);
+
+  /// No description provided for @compareDown.
+  ///
+  /// In en, this message translates to:
+  /// **'{pct}% lower'**
+  String compareDown(String pct);
+
+  /// No description provided for @compareUp.
+  ///
+  /// In en, this message translates to:
+  /// **'{pct}% higher'**
+  String compareUp(String pct);
+
+  /// No description provided for @compareSame.
+  ///
+  /// In en, this message translates to:
+  /// **'No change'**
+  String get compareSame;
+
+  /// No description provided for @compareNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Lower CO₂ per 1,000 {unit} means the factory is becoming more efficient, even if it made more.'**
+  String compareNote(String unit);
+
+  /// No description provided for @compareGaps.
+  ///
+  /// In en, this message translates to:
+  /// **'Some months have no data in one of the two periods, so this comparison is less reliable.'**
+  String get compareGaps;
+
+  /// No description provided for @billTypeLpg.
+  ///
+  /// In en, this message translates to:
+  /// **'LPG'**
+  String get billTypeLpg;
+
+  /// No description provided for @billTypeFurnaceOil.
+  ///
+  /// In en, this message translates to:
+  /// **'Furnace oil'**
+  String get billTypeFurnaceOil;
+
+  /// No description provided for @factorLpg.
+  ///
+  /// In en, this message translates to:
+  /// **'LPG'**
+  String get factorLpg;
+
+  /// No description provided for @factorFurnaceOil.
+  ///
+  /// In en, this message translates to:
+  /// **'Furnace oil'**
+  String get factorFurnaceOil;
+
+  /// No description provided for @legendLpg.
+  ///
+  /// In en, this message translates to:
+  /// **'LPG'**
+  String get legendLpg;
+
+  /// No description provided for @legendFurnaceOil.
+  ///
+  /// In en, this message translates to:
+  /// **'Furnace oil'**
+  String get legendFurnaceOil;
+
+  /// No description provided for @importColLpg.
+  ///
+  /// In en, this message translates to:
+  /// **'LPG kg'**
+  String get importColLpg;
+
+  /// No description provided for @importColFurnaceOil.
+  ///
+  /// In en, this message translates to:
+  /// **'Furnace oil L'**
+  String get importColFurnaceOil;
+
+  /// No description provided for @carbonUnitKg.
+  ///
+  /// In en, this message translates to:
+  /// **'kg'**
+  String get carbonUnitKg;
+
+  /// No description provided for @actionCutsBoilerFuel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cuts boiler fuel'**
+  String get actionCutsBoilerFuel;
+
+  /// No description provided for @setupStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {n} of {total}'**
+  String setupStep(int n, int total);
+
+  /// No description provided for @actionNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get actionNext;
+
+  /// No description provided for @actionBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get actionBack;
+
+  /// No description provided for @setupBasicsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your factory'**
+  String get setupBasicsTitle;
+
+  /// No description provided for @setupBasicsSub.
+  ///
+  /// In en, this message translates to:
+  /// **'The name and type appear on your reports to buyers.'**
+  String get setupBasicsSub;
+
+  /// No description provided for @facilityTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Main product or process'**
+  String get facilityTypeLabel;
+
+  /// No description provided for @facilityKnit.
+  ///
+  /// In en, this message translates to:
+  /// **'Knit'**
+  String get facilityKnit;
+
+  /// No description provided for @facilityWoven.
+  ///
+  /// In en, this message translates to:
+  /// **'Woven'**
+  String get facilityWoven;
+
+  /// No description provided for @facilitySweater.
+  ///
+  /// In en, this message translates to:
+  /// **'Sweater'**
+  String get facilitySweater;
+
+  /// No description provided for @facilityDenim.
+  ///
+  /// In en, this message translates to:
+  /// **'Denim'**
+  String get facilityDenim;
+
+  /// No description provided for @facilityDyeing.
+  ///
+  /// In en, this message translates to:
+  /// **'Dyeing & finishing'**
+  String get facilityDyeing;
+
+  /// No description provided for @facilityWashing.
+  ///
+  /// In en, this message translates to:
+  /// **'Washing'**
+  String get facilityWashing;
+
+  /// No description provided for @facilityOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get facilityOther;
+
+  /// No description provided for @districtLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'District'**
+  String get districtLabel;
+
+  /// No description provided for @districtDhaka.
+  ///
+  /// In en, this message translates to:
+  /// **'Dhaka'**
+  String get districtDhaka;
+
+  /// No description provided for @districtGazipur.
+  ///
+  /// In en, this message translates to:
+  /// **'Gazipur'**
+  String get districtGazipur;
+
+  /// No description provided for @districtNarayanganj.
+  ///
+  /// In en, this message translates to:
+  /// **'Narayanganj'**
+  String get districtNarayanganj;
+
+  /// No description provided for @districtNarsingdi.
+  ///
+  /// In en, this message translates to:
+  /// **'Narsingdi'**
+  String get districtNarsingdi;
+
+  /// No description provided for @districtChattogram.
+  ///
+  /// In en, this message translates to:
+  /// **'Chattogram'**
+  String get districtChattogram;
+
+  /// No description provided for @districtMymensingh.
+  ///
+  /// In en, this message translates to:
+  /// **'Mymensingh'**
+  String get districtMymensingh;
+
+  /// No description provided for @districtCumilla.
+  ///
+  /// In en, this message translates to:
+  /// **'Cumilla'**
+  String get districtCumilla;
+
+  /// No description provided for @districtKhulna.
+  ///
+  /// In en, this message translates to:
+  /// **'Khulna'**
+  String get districtKhulna;
+
+  /// No description provided for @districtOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other district'**
+  String get districtOther;
+
+  /// No description provided for @addressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Address or area (optional)'**
+  String get addressLabel;
+
+  /// No description provided for @addressHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Konabari, Kashimpur'**
+  String get addressHint;
+
+  /// No description provided for @setupLocationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Factory location'**
+  String get setupLocationTitle;
+
+  /// No description provided for @setupLocationSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Used for the sunlight data in the solar estimate and to open the map at your roof. You can skip this and add it later.'**
+  String get setupLocationSub;
+
+  /// No description provided for @locGps.
+  ///
+  /// In en, this message translates to:
+  /// **'I am at the factory: use my location'**
+  String get locGps;
+
+  /// No description provided for @locGpsBusy.
+  ///
+  /// In en, this message translates to:
+  /// **'Finding your location…'**
+  String get locGpsBusy;
+
+  /// No description provided for @locPasteLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Or paste a Google Maps link or coordinates'**
+  String get locPasteLabel;
+
+  /// No description provided for @locPasteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 23.9995, 90.4203'**
+  String get locPasteHint;
+
+  /// No description provided for @locPasteInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'No coordinates found. In Google Maps, hold your finger on the factory and copy the numbers shown, or type latitude, longitude.'**
+  String get locPasteInvalid;
+
+  /// No description provided for @locSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Location set: {lat}, {lon}'**
+  String locSet(String lat, String lon);
+
+  /// No description provided for @locNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'No location yet'**
+  String get locNotSet;
+
+  /// No description provided for @locOutside.
+  ///
+  /// In en, this message translates to:
+  /// **'This point is outside Bangladesh. Check the numbers: latitude is about 20.5–26.7 and longitude about 88–92.7.'**
+  String get locOutside;
+
+  /// No description provided for @locBothNeeded.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter both latitude and longitude, or clear them.'**
+  String get locBothNeeded;
+
+  /// No description provided for @locManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Type latitude and longitude'**
+  String get locManual;
+
+  /// No description provided for @setupSkipLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip for now'**
+  String get setupSkipLocation;
+
+  /// No description provided for @setupProductionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Production and energy'**
+  String get setupProductionTitle;
+
+  /// No description provided for @setupProductionSub.
+  ///
+  /// In en, this message translates to:
+  /// **'This makes CO₂ per unit, reminders and suggestions fit your factory.'**
+  String get setupProductionSub;
+
+  /// No description provided for @workersLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of workers (optional)'**
+  String get workersLabel;
+
+  /// No description provided for @shiftsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Shifts per day'**
+  String get shiftsLabel;
+
+  /// No description provided for @energySourcesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Energy the factory uses'**
+  String get energySourcesLabel;
+
+  /// No description provided for @energySourcesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tick everything that applies. You can change this later in Settings.'**
+  String get energySourcesHint;
+
+  /// No description provided for @sourcesNeedOne.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose at least one energy source.'**
+  String get sourcesNeedOne;
+
+  /// No description provided for @sourceElectricity.
+  ///
+  /// In en, this message translates to:
+  /// **'Grid electricity'**
+  String get sourceElectricity;
+
+  /// No description provided for @sourceGas.
+  ///
+  /// In en, this message translates to:
+  /// **'Natural gas'**
+  String get sourceGas;
+
+  /// No description provided for @sourceDiesel.
+  ///
+  /// In en, this message translates to:
+  /// **'Diesel generator'**
+  String get sourceDiesel;
+
+  /// No description provided for @sourceLpg.
+  ///
+  /// In en, this message translates to:
+  /// **'LPG'**
+  String get sourceLpg;
+
+  /// No description provided for @sourceFurnaceOil.
+  ///
+  /// In en, this message translates to:
+  /// **'Furnace oil'**
+  String get sourceFurnaceOil;
+
+  /// No description provided for @sourceSolar.
+  ///
+  /// In en, this message translates to:
+  /// **'Rooftop solar (installed)'**
+  String get sourceSolar;
+
+  /// No description provided for @reportingYearLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reporting year'**
+  String get reportingYearLabel;
+
+  /// No description provided for @reportingCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Jan–Dec'**
+  String get reportingCalendar;
+
+  /// No description provided for @reportingFiscal.
+  ///
+  /// In en, this message translates to:
+  /// **'Jul–Jun (fiscal)'**
+  String get reportingFiscal;
+
+  /// No description provided for @reportingYearHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Most buyers and the Higg FEM use January–December. Reports open on this year.'**
+  String get reportingYearHint;
+
+  /// No description provided for @setupReviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your details'**
+  String get setupReviewTitle;
+
+  /// No description provided for @setupReviewSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Go back to change anything. Then read the privacy notice and start.'**
+  String get setupReviewSub;
+
+  /// No description provided for @shareSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Share summary (WhatsApp)'**
+  String get shareSummary;
+
+  /// No description provided for @shareSummaryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A short message for the owner or management, in plain words.'**
+  String get shareSummaryHint;
+
+  /// No description provided for @shareHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'CO₂ report from our utility bills'**
+  String get shareHeading;
+
+  /// No description provided for @shareCompare.
+  ///
+  /// In en, this message translates to:
+  /// **'That is {change} than {start} – {end}.'**
+  String shareCompare(String change, String start, String end);
+
+  /// No description provided for @shareCost.
+  ///
+  /// In en, this message translates to:
+  /// **'Electricity bills in this period: Tk {tk}.'**
+  String shareCost(String tk);
+
+  /// No description provided for @shareFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft figures from bills checked by the factory. Made with BillToGreen.'**
+  String get shareFooter;
+
+  /// No description provided for @targetSetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a CO₂ reduction target'**
+  String get targetSetTitle;
+
+  /// No description provided for @targetSetBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Buyers increasingly ask suppliers for a target and yearly progress. A science-based pace is at least {pct}% less CO₂ each year.'**
+  String targetSetBody(String pct);
+
+  /// No description provided for @targetSetButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a target'**
+  String get targetSetButton;
+
+  /// No description provided for @targetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your CO₂ target'**
+  String get targetTitle;
+
+  /// No description provided for @targetEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Change target'**
+  String get targetEdit;
+
+  /// No description provided for @targetLine.
+  ///
+  /// In en, this message translates to:
+  /// **'{pct}% less {metric} by {year}, compared with {baseline}.'**
+  String targetLine(String pct, String metric, String year, String baseline);
+
+  /// No description provided for @targetMetricPerUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'CO₂ per 1,000 {unit}'**
+  String targetMetricPerUnit(String unit);
+
+  /// No description provided for @targetMetricTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'total CO₂'**
+  String get targetMetricTotal;
+
+  /// No description provided for @targetPerUnitShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Per 1,000 {unit}'**
+  String targetPerUnitShort(String unit);
+
+  /// No description provided for @targetTotalShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Total CO₂'**
+  String get targetTotalShort;
+
+  /// No description provided for @targetOnTrack.
+  ///
+  /// In en, this message translates to:
+  /// **'On track'**
+  String get targetOnTrack;
+
+  /// No description provided for @targetBehind.
+  ///
+  /// In en, this message translates to:
+  /// **'Behind'**
+  String get targetBehind;
+
+  /// No description provided for @targetNoData.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough data yet'**
+  String get targetNoData;
+
+  /// No description provided for @targetNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Last 12 months: {change} than the baseline year.'**
+  String targetNow(String change);
+
+  /// No description provided for @targetNeeded.
+  ///
+  /// In en, this message translates to:
+  /// **'To stay on track: {pct}% less by now.'**
+  String targetNeeded(String pct);
+
+  /// No description provided for @targetNoDataHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add bills for all of {year} and for the latest 12 months to see progress.'**
+  String targetNoDataHint(String year);
+
+  /// No description provided for @targetSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'CO₂ reduction target'**
+  String get targetSheetTitle;
+
+  /// No description provided for @targetWhat.
+  ///
+  /// In en, this message translates to:
+  /// **'What do you want to reduce?'**
+  String get targetWhat;
+
+  /// No description provided for @targetPerUnitHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Fair to a growing factory: making more {unit} does not count against you.'**
+  String targetPerUnitHint(String unit);
+
+  /// No description provided for @targetBaseline.
+  ///
+  /// In en, this message translates to:
+  /// **'Baseline year'**
+  String get targetBaseline;
+
+  /// No description provided for @targetBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Target year'**
+  String get targetBy;
+
+  /// No description provided for @targetHowMuch.
+  ///
+  /// In en, this message translates to:
+  /// **'How much less?'**
+  String get targetHowMuch;
+
+  /// No description provided for @targetSbtiChip.
+  ///
+  /// In en, this message translates to:
+  /// **'{pct}% (science-based)'**
+  String targetSbtiChip(String pct);
+
+  /// No description provided for @targetPctLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reduction'**
+  String get targetPctLabel;
+
+  /// No description provided for @targetSbtiHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Science-based targets need at least {rate}% less a year: {pct}% for these years.'**
+  String targetSbtiHint(String rate, String pct);
+
+  /// No description provided for @targetRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove target'**
+  String get targetRemove;
+
+  /// No description provided for @energyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Energy used'**
+  String get energyTitle;
+
+  /// No description provided for @energyTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'{mwh} MWh · {gj} GJ'**
+  String energyTotal(String mwh, String gj);
+
+  /// No description provided for @energyNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Buyer questionnaires such as the Higg FEM ask for these numbers. Fuels are counted at their net heating value; the PDF lists the conversion values and sources.'**
+  String get energyNote;
+
+  /// No description provided for @energyIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Some fuels could not be converted to kWh, so no total is shown.'**
+  String get energyIncomplete;
+
+  /// No description provided for @homeMonthsWithData.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} of {total} months have data'**
+  String homeMonthsWithData(int n, int total);
+
+  /// No description provided for @targetNowSame.
+  ///
+  /// In en, this message translates to:
+  /// **'Last 12 months: about the same as the baseline year.'**
+  String get targetNowSame;
 }
 
 class _AppLocalizationsDelegate

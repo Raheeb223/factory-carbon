@@ -8,6 +8,8 @@ class SeriesColors {
   static const electricity = Color(0xFF2A6F97);
   static const diesel = Color(0xFFC8553D);
   static const gas = Color(0xFFE0A458);
+  static const lpg = Color(0xFF7B6CB0);
+  static const furnaceOil = Color(0xFF8B6B4E);
   static const flagged = Color(0xFFB00020);
   static const expected = Color(0xFF6C757D);
 }

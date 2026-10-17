@@ -1,0 +1,46 @@
+# Energy content (net calorific value) of each fuel, used to report energy use in kWh
+# and GJ for buyer questionnaires (Higg FEM, CDP). Grid electricity needs no conversion.
+#
+# Each value is derived from the UK DESNZ Greenhouse Gas Conversion Factors 2026 (flat
+# file, revised): kg CO2e per unit divided by kg CO2e per kWh (Net CV) for the same fuel,
+# so it is consistent with the emission factors in emission_factors.yaml.
+
+diesel:
+  value: 9.929
+  unit: kWh_per_litre
+  source: >-
+    Derived from UK DESNZ GHG Conversion Factors 2026: "Diesel (100% mineral diesel)"
+    2.66155 kg CO2e/litre (row 1_101_1012_8_1) / 0.26806 kg CO2e/kWh Net CV (row 1_101_1012_7_1).
+  year: 2026
+  status: verified
+  notes: "Net calorific value. 9.929 kWh = 35.7 MJ per litre."
+
+natural_gas:
+  value: 10.032
+  unit: kWh_per_m3
+  source: >-
+    Derived from UK DESNZ GHG Conversion Factors 2026: "Natural gas" 2.02633 kg CO2e/m3
+    (row 1_100_1004_1_1) / 0.20199 kg CO2e/kWh Net CV (row 1_100_1004_7_1).
+  year: 2026
+  status: verified
+  notes: "Net calorific value of UK pipeline gas, 36.1 MJ per m3. Bangladesh gas is ~97% methane with a similar heating value."
+
+lpg:
+  value: 12.762
+  unit: kWh_per_kg
+  source: >-
+    Derived from UK DESNZ GHG Conversion Factors 2026: "LPG" 2,939.36095 kg CO2e/tonne
+    (row 1_100_1003_15_1) / 0.23032 kg CO2e/kWh Net CV (row 1_100_1003_7_1), per kg.
+  year: 2026
+  status: verified
+  notes: "Net calorific value. 12.762 kWh = 45.9 MJ per kg."
+
+furnace_oil:
+  value: 11.131
+  unit: kWh_per_litre
+  source: >-
+    Derived from UK DESNZ GHG Conversion Factors 2026: "Fuel oil" 3.17492 kg CO2e/litre
+    (row 1_101_1013_8_1) / 0.28523 kg CO2e/kWh Net CV (row 1_101_1013_7_1).
+  year: 2026
+  status: verified
+  notes: "Net calorific value of residual (heavy) fuel oil. 11.131 kWh = 40.1 MJ per litre."

@@ -120,7 +120,7 @@ async def extract_bill(
 
 @router.post("/carbon/calculate", response_model=CarbonCalculateResponse, tags=["carbon"])
 def carbon_calculate(req: CarbonCalculateRequest, svc: ServicesDep) -> CarbonCalculateResponse:
-    return calculate(req, svc.config.emission_factors)
+    return calculate(req, svc.config.emission_factors, svc.config.energy_content)
 
 
 @router.post("/waste/analyze", response_model=WasteAnalyzeResponse, tags=["waste"])
@@ -166,7 +166,7 @@ def solar_estimate(req: SolarEstimateRequest, svc: ServicesDep) -> SolarEstimate
     responses={200: {"content": {"application/pdf": {}}, "description": "PDF report"}},
 )
 def report_pdf(req: ReportPdfRequest, svc: ServicesDep) -> Response:
-    carbon = calculate(req.carbon, svc.config.emission_factors)
+    carbon = calculate(req.carbon, svc.config.emission_factors, svc.config.energy_content)
     pdf = build_pdf(req.factory, carbon, req.solar, synthetic=req.contains_synthetic_data, bills=req.carbon.bills)
     return Response(content=pdf, media_type="application/pdf", headers={"Content-Disposition": 'attachment; filename="ghg-report.pdf"'})
 

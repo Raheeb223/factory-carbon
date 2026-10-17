@@ -56,16 +56,30 @@ class _ImportScreenState extends ConsumerState<ImportScreen> {
     if (preview == null || !preview.canImport) return;
     final l = AppLocalizations.of(context);
     setState(() => _busy = true);
-    final data = importRowsToData(preview.rows, newId: newId);
-    await ref.read(billRepositoryProvider).insertAll(data.bills);
-    final prodRepo = ref.read(productionRepositoryProvider);
-    for (final (month, units) in data.production) {
-      await prodRepo.upsertMonth(month, units, DataOrigin.imported);
+    try {
+      final billRepo = ref.read(billRepositoryProvider);
+      final prodRepo = ref.read(productionRepositoryProvider);
+      final plan = planImport(preview.rows, existingBills: await billRepo.all(), existingProduction: await prodRepo.all(), newId: newId);
+      for (final id in plan.replaceBillIds) {
+        await billRepo.softDelete(id);
+      }
+      await billRepo.insertAll(plan.bills);
+      for (final (month, units) in plan.production) {
+        await prodRepo.upsertMonth(month, units, DataOrigin.imported);
+      }
+      if (!mounted) return;
+      showSnack(context, l.importDone(preview.rows.length));
+      Navigator.of(context).pop();
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _busy = false);
+      showSnack(context, errorText(l, e));
     }
-    if (!mounted) return;
-    showSnack(context, l.importDone(preview.rows.length));
-    Navigator.of(context).pop();
   }
+
+  String _overlaps(AppLocalizations l, Fmt fmt, List<ImportOverlap> list) => [
+    for (final o in list) '${fmt.month(o.month)} ${o.kind == 'production' ? l.importColProduction : billTypeLabel(l, BillType.parse(o.kind))}',
+  ].join(', ');
 
   String _issue(AppLocalizations l, ImportIssue i) {
     final row = '${i.row ?? ''}';
@@ -88,6 +102,15 @@ class _ImportScreenState extends ConsumerState<ImportScreen> {
     final l = AppLocalizations.of(context);
     final fmt = Fmt.of(context);
     final p = _preview;
+    final plan = p == null || !p.canImport
+        ? null
+        : planImport(
+            p.rows,
+            existingBills: ref.watch(billsProvider).value ?? const [],
+            existingProduction: ref.watch(productionProvider).value ?? const [],
+            newId: () => '',
+          );
+    final nothingNew = plan != null && plan.bills.isEmpty && plan.production.isEmpty;
     return Scaffold(
       appBar: AppBar(title: Text(l.importTitle)),
       body: ListView(padding: const EdgeInsets.all(16), children: [
@@ -128,6 +151,8 @@ class _ImportScreenState extends ConsumerState<ImportScreen> {
                   DataColumn(label: Text(l.importColKwh), numeric: true),
                   DataColumn(label: Text(l.importColDiesel), numeric: true),
                   DataColumn(label: Text(l.importColGas), numeric: true),
+                  if (p.rows.any((r) => r.lpgKg != null)) DataColumn(label: Text(l.importColLpg), numeric: true),
+                  if (p.rows.any((r) => r.furnaceOilLitres != null)) DataColumn(label: Text(l.importColFurnaceOil), numeric: true),
                   DataColumn(label: Text(l.importColProduction), numeric: true),
                 ],
                 rows: [
@@ -137,14 +162,28 @@ class _ImportScreenState extends ConsumerState<ImportScreen> {
                       DataCell(Text(fmt.number(r.electricityKwh))),
                       DataCell(Text(fmt.number(r.dieselLitres))),
                       DataCell(Text(fmt.number(r.gasM3))),
+                      if (p.rows.any((r) => r.lpgKg != null)) DataCell(Text(fmt.number(r.lpgKg))),
+                      if (p.rows.any((r) => r.furnaceOilLitres != null)) DataCell(Text(fmt.number(r.furnaceOilLitres))),
                       DataCell(Text(fmt.number(r.productionUnits))),
                     ]),
                 ],
               ),
             ),
           ],
+          if (plan != null && plan.skipped.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            Text(l.importSkipped(_overlaps(l, fmt, plan.skipped)), key: const Key('import-skipped'), style: TextStyle(color: Colors.orange.shade900)),
+          ],
+          if (plan != null && plan.replaced.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Text(l.importReplaced(_overlaps(l, fmt, plan.replaced)), key: const Key('import-replaced')),
+          ],
+          if (nothingNew) ...[
+            const SizedBox(height: 8),
+            Text(l.importNothingNew, key: const Key('import-nothing-new'), style: const TextStyle(fontWeight: FontWeight.bold)),
+          ],
           const SizedBox(height: 16),
-          FilledButton(key: const Key('import-confirm'), onPressed: (_busy || !p.canImport) ? null : _import, child: Text(l.importConfirm)),
+          FilledButton(key: const Key('import-confirm'), onPressed: (_busy || !p.canImport || nothingNew) ? null : _import, child: Text(l.importConfirm)),
         ],
       ]),
     );

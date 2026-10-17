@@ -22,6 +22,15 @@ class DriftFactoryRepository implements FactoryRepository {
         lon: r.lon,
         productionUnitLabel: r.productionUnitLabel,
         privacyAcknowledgedAt: r.privacyAcknowledgedAt,
+        facilityType: r.facilityType,
+        district: r.district,
+        workers: r.workers,
+        shiftsPerDay: r.shiftsPerDay,
+        energySources: r.energySources == null ? null : (jsonDecode(r.energySources!) as List<dynamic>).cast<String>().toSet(),
+        reportingYear: r.reportingYear,
+        target: r.targetPct == null || r.targetBaselineYear == null || r.targetYear == null
+            ? null
+            : ReductionTarget(metric: r.targetMetric ?? 'intensity', pct: r.targetPct!, baselineYear: r.targetBaselineYear!, year: r.targetYear!),
       );
 
   SimpleSelectStatement<$FactoryProfilesTable, FactoryProfileRow> get _query =>
@@ -48,6 +57,16 @@ class DriftFactoryRepository implements FactoryRepository {
           lon: Value(p.lon),
           productionUnitLabel: Value(p.productionUnitLabel),
           privacyAcknowledgedAt: p.privacyAcknowledgedAt,
+          facilityType: Value(p.facilityType),
+          district: Value(p.district),
+          workers: Value(p.workers),
+          shiftsPerDay: Value(p.shiftsPerDay),
+          energySources: Value(p.energySources == null ? null : jsonEncode([for (final s in energySourceOptions) if (p.energySources!.contains(s)) s])),
+          reportingYear: Value(p.reportingYear),
+          targetMetric: Value(p.target?.metric),
+          targetPct: Value(p.target?.pct),
+          targetBaselineYear: Value(p.target?.baselineYear),
+          targetYear: Value(p.target?.year),
           createdAt: existing?.createdAt ?? now,
           updatedAt: now,
         ));
@@ -85,7 +104,7 @@ class DriftBillRepository implements BillRepository {
         id: b.id,
         createdAt: b.createdAt,
         updatedAt: b.updatedAt,
-        billType: b.billType.name,
+        billType: b.billType.wire,
         billingMonth: b.billingMonth,
         consumedUnits: b.consumedUnits,
         unit: b.unit.wire,

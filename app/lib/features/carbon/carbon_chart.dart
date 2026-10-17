@@ -62,6 +62,8 @@ class CarbonMonthlyChart extends StatelessWidget {
       if (m.scope2ElectricityT != null) (m.scope2ElectricityT!, SeriesColors.electricity),
       if (m.scope1DieselT != null) (m.scope1DieselT!, SeriesColors.diesel),
       if (m.scope1GasT != null) (m.scope1GasT!, SeriesColors.gas),
+      if (m.scope1LpgT != null) (m.scope1LpgT!, SeriesColors.lpg),
+      if (m.scope1FurnaceOilT != null) (m.scope1FurnaceOilT!, SeriesColors.furnaceOil),
     ];
     var y = 0.0;
     final stack = <BarChartRodStackItem>[];

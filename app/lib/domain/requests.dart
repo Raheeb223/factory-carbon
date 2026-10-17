@@ -2,6 +2,7 @@
 library;
 
 import 'models.dart';
+import 'report_period.dart';
 
 /// Bills whose type/unit can be sent to the carbon calculator.
 Iterable<Bill> _usable(Iterable<Bill> bills) =>
@@ -11,13 +12,16 @@ Map<String, dynamic> carbonRequest({
   required List<Bill> bills,
   required List<ProductionEntry> production,
   String? productionUnitLabel,
+  MonthSpan? period,
 }) =>
     {
+      if (period != null) 'period_start': period.start,
+      if (period != null) 'period_end': period.end,
       'bills': [
         for (final b in _usable(bills))
           {
             'billing_month': b.billingMonth,
-            'bill_type': b.billType.name,
+            'bill_type': b.billType.wire,
             'consumed_units': b.consumedUnits,
             'unit': b.unit.wire,
             'total_amount_bdt': b.totalAmountBdt,
@@ -107,3 +111,13 @@ String inputHash(String jsonText) {
   }
   return h.toRadixString(16).padLeft(8, '0');
 }
+
+/// Last month (YYYY-MM) with a usable bill or production figure, or null.
+String? lastDataMonth(List<Bill> bills, List<ProductionEntry> production) {
+  final months = [for (final b in _usable(bills)) b.billingMonth, for (final p in production) p.month]..sort();
+  return months.isEmpty ? null : months.last;
+}
+
+/// True when any usable bill falls inside [span].
+bool hasBillsIn(List<Bill> bills, MonthSpan span) =>
+    _usable(bills).any((b) => b.billingMonth.compareTo(span.start) >= 0 && b.billingMonth.compareTo(span.end) <= 0);

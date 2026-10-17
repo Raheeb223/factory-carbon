@@ -54,6 +54,8 @@ String billTypeLabel(AppLocalizations l, BillType t) => switch (t) {
       BillType.electricity => l.billTypeElectricity,
       BillType.gas => l.billTypeGas,
       BillType.diesel => l.billTypeDiesel,
+      BillType.lpg => l.billTypeLpg,
+      BillType.furnaceOil => l.billTypeFurnaceOil,
       BillType.unknown => l.billTypeUnknown,
     };
 
@@ -68,6 +70,8 @@ String factorLabel(AppLocalizations l, String name) => switch (name) {
       'grid_electricity' => l.factorGrid,
       'diesel' => l.factorDiesel,
       'natural_gas' => l.factorGas,
+      'lpg' => l.factorLpg,
+      'furnace_oil' => l.factorFurnaceOil,
       _ => name,
     };
 
@@ -117,3 +121,6 @@ double? parseNumber(String? text) {
   final v = double.tryParse(cleaned);
   return v != null && v.isFinite ? v : null;
 }
+
+/// First letter in upper case, for labels that also appear mid-sentence ("grid electricity").
+String capitalized(String s) => s.isEmpty ? s : s[0].toUpperCase() + s.substring(1);

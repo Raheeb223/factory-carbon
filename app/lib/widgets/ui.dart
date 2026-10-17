@@ -478,3 +478,30 @@ class FadeSlideIn extends StatelessWidget {
     child: child,
   );
 }
+
+/// Keeps the phone's status bar readable on pages whose hero header scrolls away: a band
+/// in the brand colours stays behind the clock and battery icons. At the top of the page
+/// it blends into the header.
+class StatusBarScrim extends StatelessWidget {
+  const StatusBarScrim({super.key, required this.child});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final top = MediaQuery.paddingOf(context).top;
+    return Stack(children: [
+      child,
+      Positioned(
+        top: 0,
+        left: 0,
+        right: 0,
+        height: top,
+        child: const IgnorePointer(
+          child: DecoratedBox(
+            decoration: BoxDecoration(gradient: LinearGradient(colors: [Color(0xFF064E3B), Color(0xFF0F766E), Color(0xFF14B8A6)])),
+          ),
+        ),
+      ),
+    ]);
+  }
+}
