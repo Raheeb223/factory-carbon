@@ -731,6 +731,180 @@
         }
       }
     },
+    "/v1/solar/buildings": {
+      "get": {
+        "tags": [
+          "solar"
+        ],
+        "summary": "Solar Buildings",
+        "description": "Building outlines around a point, to suggest the roof on the solar map.",
+        "operationId": "solar_buildings_v1_solar_buildings_get",
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 90,
+              "minimum": -90,
+              "title": "Lat"
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 180,
+              "minimum": -180,
+              "title": "Lon"
+            }
+          },
+          {
+            "name": "radius_m",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "maximum": 300,
+              "minimum": 10,
+              "default": 150,
+              "title": "Radius M"
+            }
+          },
+          {
+            "name": "x-app-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-App-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BuildingsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request Entity Too Large"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unsupported Media Type"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Gateway"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Gateway Timeout"
+          }
+        }
+      }
+    },
     "/v1/solar/estimate": {
       "post": {
         "tags": [
@@ -1182,6 +1356,62 @@
           "file"
         ],
         "title": "Body_extract_bill_v1_extract_bill_post"
+      },
+      "BuildingOutline": {
+        "properties": {
+          "polygon": {
+            "items": {
+              "$ref": "#/components/schemas/LatLon"
+            },
+            "type": "array",
+            "title": "Polygon",
+            "description": "Outer ring, not closed."
+          },
+          "area_m2": {
+            "type": "number",
+            "title": "Area M2"
+          },
+          "distance_m": {
+            "type": "number",
+            "title": "Distance M",
+            "description": "0 when the requested point is inside the building."
+          },
+          "source": {
+            "type": "string",
+            "title": "Source",
+            "description": "Where the outline comes from, e.g. OpenStreetMap or Google Open Buildings."
+          }
+        },
+        "type": "object",
+        "required": [
+          "polygon",
+          "area_m2",
+          "distance_m",
+          "source"
+        ],
+        "title": "BuildingOutline"
+      },
+      "BuildingsResponse": {
+        "properties": {
+          "buildings": {
+            "items": {
+              "$ref": "#/components/schemas/BuildingOutline"
+            },
+            "type": "array",
+            "title": "Buildings",
+            "description": "The building containing the point first (smallest first), then the nearest."
+          },
+          "attribution": {
+            "type": "string",
+            "title": "Attribution"
+          }
+        },
+        "type": "object",
+        "required": [
+          "buildings",
+          "attribution"
+        ],
+        "title": "BuildingsResponse"
       },
       "CalculationError": {
         "properties": {

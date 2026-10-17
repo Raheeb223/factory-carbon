@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 
 import '../domain/api_models.dart';
+import '../domain/models.dart' show LatLon;
 import 'config.dart';
 
 enum ApiErrorKind { network, timeout, server, client, rateLimited, unavailable }
@@ -112,6 +113,20 @@ class ApiClient {
   Future<Uint8List> reportPdf(Map<String, dynamic> body) => _guard(() async {
         final res = await _dio.post<List<int>>('/v1/report/pdf', data: body, options: Options(responseType: ResponseType.bytes));
         return Uint8List.fromList(res.data ?? const []);
+      });
+
+  /// Building outlines around [at] (Overture Maps: OpenStreetMap + Google/Microsoft footprints),
+  /// the building containing the point first.
+  Future<List<List<LatLon>>> buildingsNear(LatLon at, {Duration? timeout}) => _guard(() async {
+        final res = await _dio.get<dynamic>(
+          '/v1/solar/buildings',
+          queryParameters: {'lat': at.lat, 'lon': at.lon},
+          options: timeout == null ? null : Options(receiveTimeout: timeout),
+        );
+        return [
+          for (final b in (_json(res.data)['buildings'] as List<dynamic>).cast<Map<String, dynamic>>())
+            [for (final p in (b['polygon'] as List<dynamic>).cast<Map<String, dynamic>>()) LatLon.fromJson(p)],
+        ];
       });
 
   Future<String> historyTemplate() => _guard(() async {

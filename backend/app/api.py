@@ -6,7 +6,7 @@ import logging
 from dataclasses import dataclass, field
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, File, Header, Request, UploadFile
+from fastapi import APIRouter, Depends, File, Header, Query, Request, UploadFile
 from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import PlainTextResponse, Response
 
@@ -17,12 +17,15 @@ from app.extraction.upload import read_limited, validate_image
 from app.extraction.validate import validate_bill
 from app.report.pdf import build_pdf
 from app.schemas import (
+    BuildingOutline,
+    BuildingsResponse,
     CarbonCalculateRequest,
     CarbonCalculateResponse,
     ErrorResponse,
     ExtractBillResponse,
     HealthFactorStatus,
     HealthResponse,
+    LatLon,
     ReportPdfRequest,
     SolarDefaultsResponse,
     SolarEstimateRequest,
@@ -33,6 +36,7 @@ from app.schemas import (
 )
 from app.security import ApiError, DailyCap, RateLimiter, check_app_token, client_ip
 from app.settings import API_VERSION, APP_VERSION, AppConfig, Settings
+from app.solar.buildings import ATTRIBUTION, BuildingFootprints
 from app.solar.geometry import roof_geometry
 from app.solar.model import DISCLAIMER, estimate, resolve_params
 from app.solar.nasa_power import NasaPowerClient
@@ -49,6 +53,7 @@ class Services:
     extract_rate_limiter: RateLimiter
     daily_cap: DailyCap
     nasa: NasaPowerClient
+    buildings: BuildingFootprints
     extractor: GeminiExtractor | None = None
     history_template: str = field(default="")
 
@@ -133,6 +138,29 @@ def solar_defaults(svc: ServicesDep) -> SolarDefaultsResponse:
     d = svc.config.solar_defaults
     params = resolve_params(SolarParamOverrides(), d, []).used
     return SolarDefaultsResponse(params=params, net_metering=d.net_metering, disclaimer=DISCLAIMER)
+
+
+@router.get("/solar/buildings", response_model=BuildingsResponse, tags=["solar"])
+def solar_buildings(
+    svc: ServicesDep,
+    lat: Annotated[float, Query(ge=-90, le=90)],
+    lon: Annotated[float, Query(ge=-180, le=180)],
+    radius_m: Annotated[float, Query(ge=10, le=300)] = 150,
+) -> BuildingsResponse:
+    """Building outlines around a point, to suggest the roof on the solar map."""
+    found = svc.buildings.near(lat, lon, radius_m)
+    return BuildingsResponse(
+        buildings=[
+            BuildingOutline(
+                polygon=[LatLon(lat=y, lon=x) for x, y in b.ring],
+                area_m2=round(b.area_m2, 1),
+                distance_m=round(b.distance_m, 1),
+                source=b.source,
+            )
+            for b in found[:30]
+        ],
+        attribution=ATTRIBUTION,
+    )
 
 
 @router.post("/solar/estimate", response_model=SolarEstimateResponse, tags=["solar"])

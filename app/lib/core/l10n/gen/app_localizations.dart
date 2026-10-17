@@ -1175,7 +1175,7 @@ abstract class AppLocalizations {
   /// No description provided for @methodologyBody.
   ///
   /// In en, this message translates to:
-  /// **'Scope 2 (location-based) = electricity kWh × grid emission factor. Scope 1 = diesel litres × diesel factor + gas m³ × gas factor. Results are in tonnes CO2e. Intensity is shown only for complete months with production.'**
+  /// **'Scope 2 (location-based) = electricity kWh × Bangladesh grid emission factor. Scope 1 = fuel used × that fuel\'s factor (diesel litres, natural gas m³, LPG kg, furnace oil litres; DESNZ factors). Results are in tonnes CO2e. Intensity is shown only for complete months with production. These are estimates for planning and reporting to buyers, not a certified audit.'**
   String get methodologyBody;
 
   /// No description provided for @noteMissingData.
@@ -1367,7 +1367,7 @@ abstract class AppLocalizations {
   /// No description provided for @solarDrawHint.
   ///
   /// In en, this message translates to:
-  /// **'Search your area or tap the GPS button. Zoom in and tap your factory roof: the outline is drawn for you. No outline? Tap each roof corner.'**
+  /// **'Tap your factory roof and its outline is drawn for you. Drag the corners to fit it exactly, tap + on an edge to add a corner, long-press a corner to remove it.'**
   String get solarDrawHint;
 
   /// No description provided for @solarPoints.
@@ -3365,7 +3365,7 @@ abstract class AppLocalizations {
   /// No description provided for @solarOutlineFound.
   ///
   /// In en, this message translates to:
-  /// **'Roof outline found. Check that it matches your roof, then tap Continue.'**
+  /// **'Roof outline found. Drag the corners if it needs adjusting, then tap Continue.'**
   String get solarOutlineFound;
 
   /// No description provided for @solarOutlineNone.
@@ -3379,6 +3379,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not load building outlines. Tap each corner of your roof instead.'**
   String get solarOutlineOffline;
+
+  /// No description provided for @solarOutlineAttribution.
+  ///
+  /// In en, this message translates to:
+  /// **'Buildings © OpenStreetMap, Overture Maps'**
+  String get solarOutlineAttribution;
+
+  /// No description provided for @solarNoRoofThere.
+  ///
+  /// In en, this message translates to:
+  /// **'No roof outline there. Drag the corners to adjust, or tap Clear to draw by hand.'**
+  String get solarNoRoofThere;
+
+  /// No description provided for @solarAdjustHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag a corner to move it, tap + on an edge to add a corner, or long-press a corner to remove it.'**
+  String get solarAdjustHint;
+
+  /// No description provided for @solarOutlineSwitched.
+  ///
+  /// In en, this message translates to:
+  /// **'Switched to this roof. Undo goes back.'**
+  String get solarOutlineSwitched;
+
+  /// No description provided for @solarSuggested.
+  ///
+  /// In en, this message translates to:
+  /// **'We marked the roof at your factory\'s location. Drag the corners to adjust, or tap another roof.'**
+  String get solarSuggested;
 
   /// No description provided for @solarAreaApprox.
   ///

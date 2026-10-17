@@ -284,6 +284,18 @@ class LatLon(StrictModel):
     lon: float = Field(ge=-180, le=180)
 
 
+class BuildingOutline(BaseModel):
+    polygon: list[LatLon] = Field(description="Outer ring, not closed.")
+    area_m2: float
+    distance_m: float = Field(description="0 when the requested point is inside the building.")
+    source: str = Field(description="Where the outline comes from, e.g. OpenStreetMap or Google Open Buildings.")
+
+
+class BuildingsResponse(BaseModel):
+    buildings: list[BuildingOutline] = Field(description="The building containing the point first (smallest first), then the nearest.")
+    attribution: str
+
+
 class SolarParamOverrides(StrictModel):
     usable_roof_fraction: float | None = Field(default=None, gt=0, le=1)
     m2_per_kwp: float | None = Field(default=None, gt=0, le=50)
