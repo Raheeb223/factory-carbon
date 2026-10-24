@@ -1199,6 +1199,152 @@
         }
       }
     },
+    "/v1/report/loan-pdf": {
+      "post": {
+        "tags": [
+          "report"
+        ],
+        "summary": "Report Loan Pdf",
+        "description": "One-page summary for a bank: can the solar plan's savings repay a loan for it?",
+        "operationId": "report_loan_pdf_v1_report_loan_pdf_post",
+        "parameters": [
+          {
+            "name": "x-app-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-App-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoanPdfRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Green finance readiness summary",
+            "content": {
+              "application/pdf": {}
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request Entity Too Large"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unsupported Media Type"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Gateway"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Gateway Timeout"
+          }
+        }
+      }
+    },
     "/v1/passport": {
       "post": {
         "tags": [
@@ -2690,6 +2836,65 @@
           "lon"
         ],
         "title": "LatLon"
+      },
+      "LoanPdfRequest": {
+        "properties": {
+          "factory": {
+            "$ref": "#/components/schemas/FactoryInfo"
+          },
+          "carbon": {
+            "$ref": "#/components/schemas/CarbonCalculateRequest"
+          },
+          "solar": {
+            "$ref": "#/components/schemas/SolarEstimateResponse"
+          },
+          "contains_synthetic_data": {
+            "type": "boolean",
+            "title": "Contains Synthetic Data",
+            "default": false
+          },
+          "loan": {
+            "$ref": "#/components/schemas/LoanTerms"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "factory",
+          "carbon",
+          "solar"
+        ],
+        "title": "LoanPdfRequest"
+      },
+      "LoanTerms": {
+        "properties": {
+          "loan_share": {
+            "type": "number",
+            "maximum": 1.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Loan Share",
+            "description": "Part of the capex borrowed; the rest is the factory's own money.",
+            "default": 0.8
+          },
+          "years": {
+            "type": "integer",
+            "maximum": 20.0,
+            "minimum": 1.0,
+            "title": "Years",
+            "default": 5
+          },
+          "annual_rate_pct": {
+            "type": "number",
+            "maximum": 40.0,
+            "minimum": 0.0,
+            "title": "Annual Rate Pct",
+            "default": 9.0
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "LoanTerms",
+        "description": "Financing the user assumes for the solar plan. The rate is theirs to set (a bank's quote), not a scheme rate."
       },
       "MonthEmissions": {
         "properties": {

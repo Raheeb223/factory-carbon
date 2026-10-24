@@ -10,6 +10,7 @@ import 'package:share_plus/share_plus.dart';
 import '../../data/providers.dart';
 import '../../domain/api_models.dart';
 import '../../domain/csv_export.dart';
+import '../../domain/loan.dart';
 import '../carbon/carbon_controller.dart';
 
 /// Builds export files and hands them to the system share sheet (spec 6.5, 8.8).
@@ -64,6 +65,13 @@ class ExportService {
   Future<void> exportPdf() async {
     final bytes = await _ref.read(apiClientProvider).reportPdf(await pdfRequest());
     await shareBytes(bytes, 'ghg-report.pdf', 'application/pdf');
+  }
+
+  /// Bank summary for [solar] (a solar plan result) financed on [terms].
+  Future<void> exportLoanPdf(Map<String, dynamic> solar, LoanTerms terms) async {
+    final body = {...await pdfRequest(), 'solar': solar, 'loan': terms.toJson()};
+    final bytes = await _ref.read(apiClientProvider).loanPdf(body);
+    await shareBytes(bytes, 'green-loan-summary.pdf', 'application/pdf');
   }
 
   Future<({String url, DateTime issuedOn})> createPassport() async => _ref.read(apiClientProvider).passport(await pdfRequest());

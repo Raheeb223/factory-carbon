@@ -2924,4 +2924,118 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get homeSolarTrySub =>
       'Draw your roof on the map to see the savings and payback time.';
+
+  @override
+  String get loanTitle => 'Green Loan Ready';
+
+  @override
+  String get loanBannerSub =>
+      'Can solar pay its own loan? Check it, then send your bank a summary.';
+
+  @override
+  String get loanOpen => 'Can solar pay its own loan?';
+
+  @override
+  String get loanPaysItself => 'Solar pays its own loan';
+
+  @override
+  String loanCovers(String pct) {
+    return 'Savings cover $pct% of the loan payment';
+  }
+
+  @override
+  String loanVs(String save, String emi) {
+    return 'Tk $save saved a month vs Tk $emi loan payment a month';
+  }
+
+  @override
+  String get loanStatSave => 'saved a month';
+
+  @override
+  String get loanStatEmi => 'loan a month';
+
+  @override
+  String get loanStatCover => 'coverage';
+
+  @override
+  String get loanTerms => 'Your loan';
+
+  @override
+  String loanShare(String pct) {
+    return 'Borrow $pct% of the cost';
+  }
+
+  @override
+  String loanYears(String years) {
+    return 'Pay back over $years years';
+  }
+
+  @override
+  String loanRate(String rate) {
+    return 'Interest $rate% a year';
+  }
+
+  @override
+  String get loanRateNote =>
+      'Use the rate your bank quotes. These are your assumptions, not a loan offer.';
+
+  @override
+  String get loanAmount => 'Loan';
+
+  @override
+  String get loanOwnMoney => 'Your own money';
+
+  @override
+  String get loanInterestTotal => 'Total interest';
+
+  @override
+  String loanAfter(String years, String amount) {
+    return 'After the loan is paid: Tk $amount more savings over $years years';
+  }
+
+  @override
+  String loanReadyTitle(String done, String total) {
+    return 'Ready for the bank? $done of $total';
+  }
+
+  @override
+  String get loanCheckBills => '12 months of bills';
+
+  @override
+  String loanCheckBillsDetail(String months) {
+    return '$months so far';
+  }
+
+  @override
+  String get loanCheckOwnUse => 'Solar sized on your own electricity use';
+
+  @override
+  String get loanCheckCover => 'Savings cover the loan payment';
+
+  @override
+  String get loanCheckRoof => 'Roof checked by an engineer';
+
+  @override
+  String get loanCheckFactors => 'Emission factors verified';
+
+  @override
+  String get loanCheckProfile => 'Factory profile has location and workers';
+
+  @override
+  String get loanWhereTitle => 'Where to apply';
+
+  @override
+  String get loanWhere =>
+      'Ask your bank about green finance for rooftop solar. Banks in Bangladesh can lend for it under Bangladesh Bank\'s sustainable finance policy and green refinance schemes, and IDCOL supports rooftop solar through partner organisations. The lender sets the terms.';
+
+  @override
+  String get loanPdf => 'Bank summary (PDF)';
+
+  @override
+  String get loanDisclaimer =>
+      'A pre-feasibility estimate, not a credit assessment. Bring an installer\'s quote and a roof check to the bank.';
+
+  @override
+  String get loanNoFinancials =>
+      'This solar plan has no savings estimate yet. Add electricity bills with the amount paid, then estimate solar again.';
 }

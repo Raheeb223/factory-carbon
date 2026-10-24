@@ -120,6 +120,12 @@ class ApiClient {
         return Uint8List.fromList(res.data ?? const []);
       });
 
+  /// Green finance readiness summary for a bank (needs a solar plan with financials).
+  Future<Uint8List> loanPdf(Map<String, dynamic> body) => _guard(() async {
+        final res = await _dio.post<List<int>>('/v1/report/loan-pdf', data: body, options: Options(responseType: ResponseType.bytes));
+        return Uint8List.fromList(res.data ?? const []);
+      });
+
   /// Signs a one-page carbon summary on the server; returns its public link (for a QR code).
   Future<({String url, DateTime issuedOn})> passport(Map<String, dynamic> body) => _guard(() async {
         final j = _json((await _dio.post<dynamic>('/v1/passport', data: body)).data);

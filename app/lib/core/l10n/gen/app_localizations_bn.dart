@@ -2908,4 +2908,118 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get homeSolarTrySub =>
       'সাশ্রয় ও খরচ ফেরতের সময় দেখতে মানচিত্রে আপনার ছাদ আঁকুন।';
+
+  @override
+  String get loanTitle => 'সবুজ ঋণের প্রস্তুতি';
+
+  @override
+  String get loanBannerSub =>
+      'সোলার কি নিজের ঋণ নিজেই শোধ করবে? দেখে নিন, তারপর ব্যাংকে সারাংশ পাঠান।';
+
+  @override
+  String get loanOpen => 'সোলার কি নিজের ঋণ শোধ করবে?';
+
+  @override
+  String get loanPaysItself => 'সোলার নিজের ঋণ নিজেই শোধ করে';
+
+  @override
+  String loanCovers(String pct) {
+    return 'সাশ্রয় ঋণের কিস্তির $pct% মেটায়';
+  }
+
+  @override
+  String loanVs(String save, String emi) {
+    return 'মাসে ৳$save সাশ্রয়, মাসিক কিস্তি ৳$emi';
+  }
+
+  @override
+  String get loanStatSave => 'মাসিক সাশ্রয়';
+
+  @override
+  String get loanStatEmi => 'মাসিক কিস্তি';
+
+  @override
+  String get loanStatCover => 'কভারেজ';
+
+  @override
+  String get loanTerms => 'আপনার ঋণ';
+
+  @override
+  String loanShare(String pct) {
+    return 'খরচের $pct% ঋণ নিন';
+  }
+
+  @override
+  String loanYears(String years) {
+    return '$years বছরে পরিশোধ';
+  }
+
+  @override
+  String loanRate(String rate) {
+    return 'সুদ বছরে $rate%';
+  }
+
+  @override
+  String get loanRateNote =>
+      'আপনার ব্যাংক যে সুদের হার বলে সেটি দিন। এগুলো আপনার অনুমান, ঋণের প্রস্তাব নয়।';
+
+  @override
+  String get loanAmount => 'ঋণ';
+
+  @override
+  String get loanOwnMoney => 'নিজের টাকা';
+
+  @override
+  String get loanInterestTotal => 'মোট সুদ';
+
+  @override
+  String loanAfter(String years, String amount) {
+    return 'ঋণ শোধের পর: আরও $years বছরে ৳$amount সাশ্রয়';
+  }
+
+  @override
+  String loanReadyTitle(String done, String total) {
+    return 'ব্যাংকের জন্য প্রস্তুত? $totalটির মধ্যে $doneটি';
+  }
+
+  @override
+  String get loanCheckBills => '১২ মাসের বিল';
+
+  @override
+  String loanCheckBillsDetail(String months) {
+    return 'এখন পর্যন্ত $months মাস';
+  }
+
+  @override
+  String get loanCheckOwnUse => 'নিজের বিদ্যুৎ ব্যবহারের ভিত্তিতে সোলারের মাপ';
+
+  @override
+  String get loanCheckCover => 'সাশ্রয় দিয়ে কিস্তি মেটে';
+
+  @override
+  String get loanCheckRoof => 'ইঞ্জিনিয়ার দিয়ে ছাদ পরীক্ষা';
+
+  @override
+  String get loanCheckFactors => 'নির্গমন ফ্যাক্টর যাচাই করা';
+
+  @override
+  String get loanCheckProfile => 'কারখানার প্রোফাইলে ঠিকানা ও শ্রমিক সংখ্যা';
+
+  @override
+  String get loanWhereTitle => 'কোথায় আবেদন করবেন';
+
+  @override
+  String get loanWhere =>
+      'ছাদে সোলারের জন্য সবুজ অর্থায়ন সম্পর্কে আপনার ব্যাংকে জিজ্ঞেস করুন। বাংলাদেশ ব্যাংকের টেকসই অর্থায়ন নীতি ও সবুজ পুনঃঅর্থায়ন স্কিমের আওতায় ব্যাংক এতে ঋণ দিতে পারে, আর IDCOL সহযোগী প্রতিষ্ঠানের মাধ্যমে ছাদের সোলারে অর্থায়ন করে। শর্ত ঠিক করে ঋণদাতা।';
+
+  @override
+  String get loanPdf => 'ব্যাংকের জন্য সারাংশ (PDF)';
+
+  @override
+  String get loanDisclaimer =>
+      'এটি প্রাক-সম্ভাব্যতা অনুমান, ঋণযোগ্যতার মূল্যায়ন নয়। ব্যাংকে ইনস্টলারের কোটেশন ও ছাদ পরীক্ষার কাগজ নিয়ে যান।';
+
+  @override
+  String get loanNoFinancials =>
+      'এই সোলার পরিকল্পনায় এখনো সাশ্রয়ের হিসাব নেই। পরিশোধিত টাকাসহ বিদ্যুৎ বিল যোগ করুন, তারপর আবার সোলার হিসাব করুন।';
 }

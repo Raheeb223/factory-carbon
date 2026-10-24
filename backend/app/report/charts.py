@@ -75,3 +75,18 @@ def solar_cashflow_chart(solar: SolarEstimateResponse) -> bytes | None:
     ax.spines[["top", "right"]].set_visible(False)
     ax.grid(alpha=0.3)
     return _png(fig)
+
+
+def loan_coverage_chart(net_by_year: list[float], instalment_by_year: list[float]) -> bytes:
+    """Yearly solar net savings (bars) against the yearly loan repayment (line)."""
+    years = list(range(1, len(net_by_year) + 1))
+    fig, ax = plt.subplots(figsize=(8, 2.8))
+    ax.bar(years, [v / 1e6 for v in net_by_year], color="#f59e0b", label="Net solar savings")
+    ax.step([0.5, *[y + 0.5 for y in years]], [instalment_by_year[0] / 1e6, *[v / 1e6 for v in instalment_by_year]], color="#2a6f97", linewidth=2, label="Loan repayment")
+    ax.set_xlabel("Year")
+    ax.set_ylabel("Million BDT per year")
+    ax.set_xlim(0.5, len(years) + 0.5)
+    ax.spines[["top", "right"]].set_visible(False)
+    ax.grid(alpha=0.3, axis="y")
+    ax.legend(fontsize=7, frameon=False, loc="upper left", bbox_to_anchor=(0, 1.15), ncols=2)
+    return _png(fig)

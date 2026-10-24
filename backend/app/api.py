@@ -16,7 +16,7 @@ from app.extraction.gemini_client import ExtractionFailed, GeminiExtractor
 from app.extraction.prompts import PROMPT_VERSION
 from app.extraction.upload import read_limited, validate_image
 from app.extraction.validate import validate_bill
-from app.report import passport
+from app.report import loan, passport
 from app.report.pdf import build_pdf
 from app.schemas import (
     BuildingOutline,
@@ -28,6 +28,7 @@ from app.schemas import (
     HealthFactorStatus,
     HealthResponse,
     LatLon,
+    LoanPdfRequest,
     PassportResponse,
     ReportPdfRequest,
     SolarDefaultsResponse,
@@ -201,6 +202,22 @@ def report_pdf(req: ReportPdfRequest, svc: ServicesDep) -> Response:
     carbon = calculate(req.carbon, svc.config.emission_factors, svc.config.energy_content)
     pdf = build_pdf(req.factory, carbon, req.solar, synthetic=req.contains_synthetic_data, bills=req.carbon.bills)
     return Response(content=pdf, media_type="application/pdf", headers={"Content-Disposition": 'attachment; filename="ghg-report.pdf"'})
+
+
+@router.post(
+    "/report/loan-pdf",
+    response_class=Response,
+    tags=["report"],
+    responses={200: {"content": {"application/pdf": {}}, "description": "Green finance readiness summary"}},
+)
+def report_loan_pdf(req: LoanPdfRequest, svc: ServicesDep) -> Response:
+    """One-page summary for a bank: can the solar plan's savings repay a loan for it?"""
+    plan = loan.plan_loan(req.solar, req.loan)
+    if plan is None:
+        raise ApiError(422, "solar_financials_missing", "The solar plan has no savings estimate. Add bills with amounts, then estimate again.")
+    carbon = calculate(req.carbon, svc.config.emission_factors, svc.config.energy_content)
+    pdf = loan.build_loan_pdf(req.factory, carbon, req.solar, req.loan, plan, synthetic=req.contains_synthetic_data, bills=req.carbon.bills)
+    return Response(content=pdf, media_type="application/pdf", headers={"Content-Disposition": 'attachment; filename="green-loan-summary.pdf"'})
 
 
 def public_base_url(request: Request, trust_proxy_headers: bool) -> str:

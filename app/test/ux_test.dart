@@ -8,6 +8,7 @@ import 'package:factory_carbon/data/settings_store.dart';
 import 'package:factory_carbon/domain/api_models.dart';
 import 'package:factory_carbon/domain/models.dart';
 import 'package:factory_carbon/domain/solar_summary.dart';
+import 'package:factory_carbon/features/loan/green_loan_screen.dart';
 import 'package:factory_carbon/features/bills/bills_screen.dart';
 import 'package:factory_carbon/features/carbon/reports_screen.dart';
 import 'package:factory_carbon/features/home/home_shell.dart';
@@ -25,6 +26,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'domain_test.dart' show carbonJsonFixture;
 import 'helpers.dart';
+import 'loan_test.dart' show loanFinancialsFixture;
 
 void main() {
   group('server address', () {
@@ -239,6 +241,7 @@ void main() {
       'settings': const SettingsScreen(),
       'solar details': const SolarParamsScreen(polygon: [LatLon(23.8, 90.4), LatLon(23.8, 90.401), LatLon(23.801, 90.401)]),
       'solar result': SolarResultScreen(result: SolarResult.fromJson(solarResultFixture()), polygon: const [LatLon(23.8, 90.4)], params: const {'panel_watt': 550}),
+      'green loan': GreenLoanScreen(result: SolarResult.fromJson({...solarResultFixture(), 'financials': loanFinancialsFixture()})),
     };
     for (final entry in screens.entries) {
       testWidgets('${entry.key} renders in ${locale.languageCode} on a small phone', (tester) async {

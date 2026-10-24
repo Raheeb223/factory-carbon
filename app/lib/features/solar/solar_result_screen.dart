@@ -13,6 +13,7 @@ import '../../domain/models.dart';
 import '../../domain/solar_summary.dart';
 import '../../widgets/common.dart';
 import '../../widgets/ui.dart';
+import '../loan/green_loan_screen.dart';
 import 'solar_map_screen.dart';
 
 /// Localized text for a backend solar warning code (English server text as fallback).
@@ -394,7 +395,17 @@ class SolarResultScreen extends ConsumerWidget {
             SectionTitle(l.solarNotes),
             for (final w in r.warnings) Padding(padding: const EdgeInsets.only(bottom: 4), child: Text('• ${solarWarningText(l, fmt, w)}')),
           ],
-          const SizedBox(height: 16),
+          if (f != null) ...[
+            const SizedBox(height: 16),
+            OutlinedButton.icon(
+              key: const Key('solar-loan'),
+              style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(52)),
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => GreenLoanScreen(result: r))),
+              icon: const Icon(Icons.account_balance_rounded),
+              label: Text(l.loanOpen),
+            ),
+          ],
+          const SizedBox(height: 12),
           FilledButton.icon(
             style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(56)),
             onPressed: () => _save(context, ref),

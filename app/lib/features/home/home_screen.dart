@@ -6,6 +6,7 @@ import '../../core/format.dart';
 import '../../core/l10n/gen/app_localizations.dart';
 import '../../core/theme.dart';
 import '../../data/providers.dart';
+import '../../domain/api_models.dart';
 import '../../domain/data_gaps.dart';
 import '../../domain/impact.dart';
 import '../../widgets/co2_explainer.dart';
@@ -18,6 +19,7 @@ import '../carbon/carbon_controller.dart';
 import '../export/export_service.dart';
 import '../impact/impact_screen.dart';
 import '../import_history/import_screen.dart';
+import '../loan/green_loan_screen.dart';
 import '../passport/passport_screen.dart';
 import '../production/production_screen.dart';
 import '../settings/data_admin.dart';
@@ -336,6 +338,15 @@ class HomeScreen extends ConsumerWidget {
                     ),
                   ],
                   if (carbon != null) _SolarSavingsCard(plan: solarPlan, onOpen: () => onOpenTab(Tabs.solar)),
+                  if (solarPlan?['financials'] != null)
+                    ActionBanner(
+                      key: const Key('home-loan'),
+                      icon: Icons.account_balance_rounded,
+                      title: l.loanTitle,
+                      subtitle: l.loanBannerSub,
+                      gradient: BrandGradients.solar,
+                      onTap: () => _push(context, GreenLoanScreen(result: SolarResult.fromJson(solarPlan!))),
+                    ),
                   if (waste != null && !waste.result.insufficient && waste.result.flaggedMonths.isNotEmpty)
                     SoftCard(
                       color: FeatureColors.waste.withValues(alpha: 0.07),

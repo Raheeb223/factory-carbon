@@ -1789,5 +1789,101 @@
     }
   },
   "homeSolarTry": "How much could solar save you?",
-  "homeSolarTrySub": "Draw your roof on the map to see the savings and payback time."
+  "homeSolarTrySub": "Draw your roof on the map to see the savings and payback time.",
+  "loanTitle": "Green Loan Ready",
+  "loanBannerSub": "Can solar pay its own loan? Check it, then send your bank a summary.",
+  "loanOpen": "Can solar pay its own loan?",
+  "loanPaysItself": "Solar pays its own loan",
+  "loanCovers": "Savings cover {pct}% of the loan payment",
+  "@loanCovers": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "loanVs": "Tk {save} saved a month vs Tk {emi} loan payment a month",
+  "@loanVs": {
+    "placeholders": {
+      "save": {
+        "type": "String"
+      },
+      "emi": {
+        "type": "String"
+      }
+    }
+  },
+  "loanStatSave": "saved a month",
+  "loanStatEmi": "loan a month",
+  "loanStatCover": "coverage",
+  "loanTerms": "Your loan",
+  "loanShare": "Borrow {pct}% of the cost",
+  "@loanShare": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "loanYears": "Pay back over {years} years",
+  "@loanYears": {
+    "placeholders": {
+      "years": {
+        "type": "String"
+      }
+    }
+  },
+  "loanRate": "Interest {rate}% a year",
+  "@loanRate": {
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
+  "loanRateNote": "Use the rate your bank quotes. These are your assumptions, not a loan offer.",
+  "loanAmount": "Loan",
+  "loanOwnMoney": "Your own money",
+  "loanInterestTotal": "Total interest",
+  "loanAfter": "After the loan is paid: Tk {amount} more savings over {years} years",
+  "@loanAfter": {
+    "placeholders": {
+      "years": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "loanReadyTitle": "Ready for the bank? {done} of {total}",
+  "@loanReadyTitle": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "loanCheckBills": "12 months of bills",
+  "loanCheckBillsDetail": "{months} so far",
+  "@loanCheckBillsDetail": {
+    "placeholders": {
+      "months": {
+        "type": "String"
+      }
+    }
+  },
+  "loanCheckOwnUse": "Solar sized on your own electricity use",
+  "loanCheckCover": "Savings cover the loan payment",
+  "loanCheckRoof": "Roof checked by an engineer",
+  "loanCheckFactors": "Emission factors verified",
+  "loanCheckProfile": "Factory profile has location and workers",
+  "loanWhereTitle": "Where to apply",
+  "loanWhere": "Ask your bank about green finance for rooftop solar. Banks in Bangladesh can lend for it under Bangladesh Bank's sustainable finance policy and green refinance schemes, and IDCOL supports rooftop solar through partner organisations. The lender sets the terms.",
+  "loanPdf": "Bank summary (PDF)",
+  "loanDisclaimer": "A pre-feasibility estimate, not a credit assessment. Bring an installer's quote and a roof check to the bank.",
+  "loanNoFinancials": "This solar plan has no savings estimate yet. Add electricity bills with the amount paid, then estimate solar again."
 }

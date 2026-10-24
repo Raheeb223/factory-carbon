@@ -4904,6 +4904,192 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Draw your roof on the map to see the savings and payback time.'**
   String get homeSolarTrySub;
+
+  /// No description provided for @loanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Green Loan Ready'**
+  String get loanTitle;
+
+  /// No description provided for @loanBannerSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Can solar pay its own loan? Check it, then send your bank a summary.'**
+  String get loanBannerSub;
+
+  /// No description provided for @loanOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Can solar pay its own loan?'**
+  String get loanOpen;
+
+  /// No description provided for @loanPaysItself.
+  ///
+  /// In en, this message translates to:
+  /// **'Solar pays its own loan'**
+  String get loanPaysItself;
+
+  /// No description provided for @loanCovers.
+  ///
+  /// In en, this message translates to:
+  /// **'Savings cover {pct}% of the loan payment'**
+  String loanCovers(String pct);
+
+  /// No description provided for @loanVs.
+  ///
+  /// In en, this message translates to:
+  /// **'Tk {save} saved a month vs Tk {emi} loan payment a month'**
+  String loanVs(String save, String emi);
+
+  /// No description provided for @loanStatSave.
+  ///
+  /// In en, this message translates to:
+  /// **'saved a month'**
+  String get loanStatSave;
+
+  /// No description provided for @loanStatEmi.
+  ///
+  /// In en, this message translates to:
+  /// **'loan a month'**
+  String get loanStatEmi;
+
+  /// No description provided for @loanStatCover.
+  ///
+  /// In en, this message translates to:
+  /// **'coverage'**
+  String get loanStatCover;
+
+  /// No description provided for @loanTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Your loan'**
+  String get loanTerms;
+
+  /// No description provided for @loanShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Borrow {pct}% of the cost'**
+  String loanShare(String pct);
+
+  /// No description provided for @loanYears.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay back over {years} years'**
+  String loanYears(String years);
+
+  /// No description provided for @loanRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Interest {rate}% a year'**
+  String loanRate(String rate);
+
+  /// No description provided for @loanRateNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the rate your bank quotes. These are your assumptions, not a loan offer.'**
+  String get loanRateNote;
+
+  /// No description provided for @loanAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Loan'**
+  String get loanAmount;
+
+  /// No description provided for @loanOwnMoney.
+  ///
+  /// In en, this message translates to:
+  /// **'Your own money'**
+  String get loanOwnMoney;
+
+  /// No description provided for @loanInterestTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total interest'**
+  String get loanInterestTotal;
+
+  /// No description provided for @loanAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'After the loan is paid: Tk {amount} more savings over {years} years'**
+  String loanAfter(String years, String amount);
+
+  /// No description provided for @loanReadyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready for the bank? {done} of {total}'**
+  String loanReadyTitle(String done, String total);
+
+  /// No description provided for @loanCheckBills.
+  ///
+  /// In en, this message translates to:
+  /// **'12 months of bills'**
+  String get loanCheckBills;
+
+  /// No description provided for @loanCheckBillsDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'{months} so far'**
+  String loanCheckBillsDetail(String months);
+
+  /// No description provided for @loanCheckOwnUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Solar sized on your own electricity use'**
+  String get loanCheckOwnUse;
+
+  /// No description provided for @loanCheckCover.
+  ///
+  /// In en, this message translates to:
+  /// **'Savings cover the loan payment'**
+  String get loanCheckCover;
+
+  /// No description provided for @loanCheckRoof.
+  ///
+  /// In en, this message translates to:
+  /// **'Roof checked by an engineer'**
+  String get loanCheckRoof;
+
+  /// No description provided for @loanCheckFactors.
+  ///
+  /// In en, this message translates to:
+  /// **'Emission factors verified'**
+  String get loanCheckFactors;
+
+  /// No description provided for @loanCheckProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Factory profile has location and workers'**
+  String get loanCheckProfile;
+
+  /// No description provided for @loanWhereTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Where to apply'**
+  String get loanWhereTitle;
+
+  /// No description provided for @loanWhere.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask your bank about green finance for rooftop solar. Banks in Bangladesh can lend for it under Bangladesh Bank\'s sustainable finance policy and green refinance schemes, and IDCOL supports rooftop solar through partner organisations. The lender sets the terms.'**
+  String get loanWhere;
+
+  /// No description provided for @loanPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank summary (PDF)'**
+  String get loanPdf;
+
+  /// No description provided for @loanDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'A pre-feasibility estimate, not a credit assessment. Bring an installer\'s quote and a roof check to the bank.'**
+  String get loanDisclaimer;
+
+  /// No description provided for @loanNoFinancials.
+  ///
+  /// In en, this message translates to:
+  /// **'This solar plan has no savings estimate yet. Add electricity bills with the amount paid, then estimate solar again.'**
+  String get loanNoFinancials;
 }
 
 class _AppLocalizationsDelegate

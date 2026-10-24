@@ -417,3 +417,19 @@ class PassportResponse(BaseModel):
     url: str
     issued_on: date
     total_t: float | None
+
+
+# ---------------------------------------------------------------- green loan
+
+
+class LoanTerms(StrictModel):
+    """Financing the user assumes for the solar plan. The rate is theirs to set (a bank's quote), not a scheme rate."""
+
+    loan_share: float = Field(default=0.8, gt=0, le=1, description="Part of the capex borrowed; the rest is the factory's own money.")
+    years: int = Field(default=5, ge=1, le=20)
+    annual_rate_pct: float = Field(default=9.0, ge=0, le=40)
+
+
+class LoanPdfRequest(ReportPdfRequest):
+    solar: SolarEstimateResponse
+    loan: LoanTerms = Field(default_factory=LoanTerms)
