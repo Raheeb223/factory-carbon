@@ -410,3 +410,10 @@ class ReportPdfRequest(StrictModel):
     carbon: CarbonCalculateRequest
     solar: SolarEstimateResponse | None = None
     contains_synthetic_data: bool = False
+
+
+# ---------------------------------------------------------------- carbon passport
+class PassportResponse(BaseModel):
+    url: str
+    issued_on: date
+    total_t: float | None

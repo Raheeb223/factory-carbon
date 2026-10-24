@@ -2853,4 +2853,59 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get targetNowSame => 'গত ১২ মাস: ভিত্তি বছরের প্রায় সমান।';
+
+  @override
+  String get passportTitle => 'কার্বন পাসপোর্ট';
+
+  @override
+  String get passportBannerSub =>
+      'একটি QR কোড — ক্রেতারা স্ক্যান করে আপনার স্বাক্ষরিত কার্বন সারাংশ দেখতে পারবেন।';
+
+  @override
+  String get passportWhy =>
+      'বড় ব্র্যান্ডগুলো সরবরাহকারীদের কাছে নির্গমনের তথ্য চায়। প্রমাণ হিসেবে এই QR কোড দেখান — যেকোনো ফোনে খোলে, অ্যাপ লাগে না।';
+
+  @override
+  String get passportScanHint => 'যেকোনো ফোনের ক্যামেরা দিয়ে স্ক্যান করুন';
+
+  @override
+  String get passportShare => 'লিংক শেয়ার করুন';
+
+  @override
+  String get passportCopy => 'লিংক কপি করুন';
+
+  @override
+  String get passportCopied => 'লিংক কপি হয়েছে';
+
+  @override
+  String get passportRefresh => 'নতুন করে তৈরি করুন';
+
+  @override
+  String passportIssued(String date) {
+    return 'ইস্যু: $date · BillToGreen সার্ভার দ্বারা স্বাক্ষরিত';
+  }
+
+  @override
+  String get passportNeedsData =>
+      'কার্বন পাসপোর্ট তৈরি করতে অন্তত একটি বিল যোগ করুন।';
+
+  @override
+  String get passportMaking => 'আপনার কার্বন পাসপোর্ট তৈরি হচ্ছে…';
+
+  @override
+  String homeSolarSaves(String amount) {
+    return 'সোলার বছরে $amount টাকা বাঁচাতে পারে';
+  }
+
+  @override
+  String homeSolarSavesSub(String kwp, String co2) {
+    return 'আপনার ছাদে $kwp kWp · প্রতি বছর $co2 টন CO₂e কম';
+  }
+
+  @override
+  String get homeSolarTry => 'সোলারে কত টাকা বাঁচবে?';
+
+  @override
+  String get homeSolarTrySub =>
+      'সাশ্রয় ও খরচ ফেরতের সময় দেখতে মানচিত্রে আপনার ছাদ আঁকুন।';
 }

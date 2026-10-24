@@ -4814,6 +4814,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Last 12 months: about the same as the baseline year.'**
   String get targetNowSame;
+
+  /// No description provided for @passportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Carbon Passport'**
+  String get passportTitle;
+
+  /// No description provided for @passportBannerSub.
+  ///
+  /// In en, this message translates to:
+  /// **'A QR code your buyers can scan to see your signed carbon summary.'**
+  String get passportBannerSub;
+
+  /// No description provided for @passportWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'Big brands ask their suppliers for emissions data. Show this QR code to prove yours — it opens on any phone, no app needed.'**
+  String get passportWhy;
+
+  /// No description provided for @passportScanHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan with any phone camera'**
+  String get passportScanHint;
+
+  /// No description provided for @passportShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share link'**
+  String get passportShare;
+
+  /// No description provided for @passportCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy link'**
+  String get passportCopy;
+
+  /// No description provided for @passportCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Link copied'**
+  String get passportCopied;
+
+  /// No description provided for @passportRefresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Make a new one'**
+  String get passportRefresh;
+
+  /// No description provided for @passportIssued.
+  ///
+  /// In en, this message translates to:
+  /// **'Issued {date} · signed by the BillToGreen server'**
+  String passportIssued(String date);
+
+  /// No description provided for @passportNeedsData.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least one bill to create your Carbon Passport.'**
+  String get passportNeedsData;
+
+  /// No description provided for @passportMaking.
+  ///
+  /// In en, this message translates to:
+  /// **'Creating your Carbon Passport…'**
+  String get passportMaking;
+
+  /// No description provided for @homeSolarSaves.
+  ///
+  /// In en, this message translates to:
+  /// **'Solar could save Tk {amount} a year'**
+  String homeSolarSaves(String amount);
+
+  /// No description provided for @homeSolarSavesSub.
+  ///
+  /// In en, this message translates to:
+  /// **'{kwp} kWp on your roof · {co2} t CO₂e less each year'**
+  String homeSolarSavesSub(String kwp, String co2);
+
+  /// No description provided for @homeSolarTry.
+  ///
+  /// In en, this message translates to:
+  /// **'How much could solar save you?'**
+  String get homeSolarTry;
+
+  /// No description provided for @homeSolarTrySub.
+  ///
+  /// In en, this message translates to:
+  /// **'Draw your roof on the map to see the savings and payback time.'**
+  String get homeSolarTrySub;
 }
 
 class _AppLocalizationsDelegate

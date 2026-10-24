@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from datetime import date
 from dataclasses import dataclass, field
 from typing import Annotated
 
@@ -15,6 +16,7 @@ from app.extraction.gemini_client import ExtractionFailed, GeminiExtractor
 from app.extraction.prompts import PROMPT_VERSION
 from app.extraction.upload import read_limited, validate_image
 from app.extraction.validate import validate_bill
+from app.report import passport
 from app.report.pdf import build_pdf
 from app.schemas import (
     BuildingOutline,
@@ -26,6 +28,7 @@ from app.schemas import (
     HealthFactorStatus,
     HealthResponse,
     LatLon,
+    PassportResponse,
     ReportPdfRequest,
     SolarDefaultsResponse,
     SolarEstimateRequest,
@@ -56,6 +59,7 @@ class Services:
     buildings: BuildingFootprints
     extractor: GeminiExtractor | None = None
     history_template: str = field(default="")
+    passport_key: bytes = field(default=b"")
 
 
 def services(request: Request) -> Services:
@@ -197,6 +201,27 @@ def report_pdf(req: ReportPdfRequest, svc: ServicesDep) -> Response:
     carbon = calculate(req.carbon, svc.config.emission_factors, svc.config.energy_content)
     pdf = build_pdf(req.factory, carbon, req.solar, synthetic=req.contains_synthetic_data, bills=req.carbon.bills)
     return Response(content=pdf, media_type="application/pdf", headers={"Content-Disposition": 'attachment; filename="ghg-report.pdf"'})
+
+
+def public_base_url(request: Request, trust_proxy_headers: bool) -> str:
+    """Scheme + host the phone used to reach us (Render terminates TLS in front of the app)."""
+    base = str(request.base_url).rstrip("/")
+    proto = request.headers.get("x-forwarded-proto", "").split(",")[0].strip()
+    if trust_proxy_headers and proto in ("http", "https"):
+        base = proto + base[base.index("://"):]
+    return base
+
+
+@router.post("/passport", response_model=PassportResponse, tags=["report"])
+def create_passport(req: ReportPdfRequest, request: Request, svc: ServicesDep) -> PassportResponse:
+    """Sign a one-page carbon summary and return a public link to it (for a QR code)."""
+    carbon = calculate(req.carbon, svc.config.emission_factors, svc.config.energy_content)
+    issued = date.today()
+    summary = passport.build_summary(
+        req.factory, carbon, req.solar, synthetic=req.contains_synthetic_data, bill_count=len(req.carbon.bills), issued=issued
+    )
+    token = passport.encode(summary, svc.passport_key)
+    return PassportResponse(url=f"{public_base_url(request, svc.settings.trust_proxy_headers)}/p/{token}", issued_on=issued, total_t=carbon.totals.total_t)
 
 
 @router.get(

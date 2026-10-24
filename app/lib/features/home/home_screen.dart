@@ -15,8 +15,10 @@ import '../../widgets/language_switch.dart';
 import '../../widgets/ui.dart';
 import '../add_bill/add_bill_screen.dart';
 import '../carbon/carbon_controller.dart';
+import '../export/export_service.dart';
 import '../impact/impact_screen.dart';
 import '../import_history/import_screen.dart';
+import '../passport/passport_screen.dart';
 import '../production/production_screen.dart';
 import '../settings/data_admin.dart';
 import '../target/target_card.dart';
@@ -50,6 +52,7 @@ class HomeScreen extends ConsumerWidget {
     final waste = ref.watch(wasteResultProvider);
     final impact = ref.watch(overallImpactProvider);
     final months = {for (final b in bills) b.billingMonth}.toList()..sort();
+    final solarPlan = (ref.watch(solarPlansProvider).value ?? const []).where((p) => p.resultJson != null).firstOrNull?.resultJson;
 
     final steps = [
       (done: bills.isNotEmpty, label: l.stepAddData, icon: Icons.receipt_long_outlined, onTap: () => _push(context, const AddBillScreen())),
@@ -144,8 +147,11 @@ class HomeScreen extends ConsumerWidget {
                 spacing: 14,
                 runSpacing: 4,
                 children: [
-                  _HeroLegend(color: const Color(0xFFBAE6FD), text: '${l.carbonScope2}: ${l.tonnesCo2e(fmt.tonnes(totals.scope2T))}'),
-                  _HeroLegend(color: const Color(0xFFFDE68A), text: '${l.carbonScope1}: ${l.tonnesCo2e(fmt.tonnes(totals.scope1T))}'),
+                  // A scope with no bills at all is left out rather than shown as "–".
+                  if (totals.scope2T != null)
+                    _HeroLegend(color: const Color(0xFFBAE6FD), text: '${l.carbonScope2}: ${l.tonnesCo2e(fmt.tonnes(totals.scope2T))}'),
+                  if (totals.scope1T != null)
+                    _HeroLegend(color: const Color(0xFFFDE68A), text: '${l.carbonScope1}: ${l.tonnesCo2e(fmt.tonnes(totals.scope1T))}'),
                 ],
               ),
             ],
@@ -303,6 +309,33 @@ class HomeScreen extends ConsumerWidget {
                       onTap: () => _push(context, const AddBillScreen()),
                     ),
                   ),
+                  if (bills.isNotEmpty) ...[
+                    ActionBanner(
+                      key: const Key('home-passport'),
+                      icon: Icons.qr_code_2_rounded,
+                      title: l.passportTitle,
+                      subtitle: l.passportBannerSub,
+                      gradient: BrandGradients.primary,
+                      onTap: () => _push(context, const PassportScreen()),
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: TextButton.icon(
+                        key: const Key('home-pdf'),
+                        onPressed: () async {
+                          showSnack(context, l.exporting);
+                          try {
+                            await ref.read(exportServiceProvider).exportPdf();
+                          } catch (e) {
+                            if (context.mounted) showSnack(context, errorText(l, e));
+                          }
+                        },
+                        icon: const Icon(Icons.picture_as_pdf_rounded, size: 20),
+                        label: Text(l.exportPdf),
+                      ),
+                    ),
+                  ],
+                  if (carbon != null) _SolarSavingsCard(plan: solarPlan, onOpen: () => onOpenTab(Tabs.solar)),
                   if (waste != null && !waste.result.insufficient && waste.result.flaggedMonths.isNotEmpty)
                     SoftCard(
                       color: FeatureColors.waste.withValues(alpha: 0.07),
@@ -467,6 +500,44 @@ class _GapsCard extends StatelessWidget {
             l.gapsAddProduction,
             onAddProduction,
           ),
+      ]),
+    );
+  }
+}
+
+/// The money side of the pitch: what the latest solar plan saves a year, or a nudge to make one.
+class _SolarSavingsCard extends StatelessWidget {
+  const _SolarSavingsCard({required this.plan, required this.onOpen});
+  final Map<String, dynamic>? plan;
+  final VoidCallback onOpen;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final fmt = Fmt.of(context);
+    final t = Theme.of(context).textTheme;
+    final savings = (plan?['financials'] as Map?)?['year1_net_bdt'] as num?;
+    final kwp = plan?['kwp'] as num?;
+    final co2 = plan?['co2_avoided_t_per_year'] as num?;
+    final has = savings != null && savings > 0;
+    return SoftCard(
+      key: const Key('home-solar-savings'),
+      color: FeatureColors.solar.withValues(alpha: 0.08),
+      borderColor: FeatureColors.solar.withValues(alpha: 0.35),
+      onTap: onOpen,
+      child: Row(children: [
+        const IconBlob(Icons.solar_power_rounded, color: FeatureColors.solar, filled: true),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(has ? l.homeSolarSaves(fmt.number(savings.toDouble())) : l.homeSolarTry, style: t.titleSmall),
+            Text(
+              has ? l.homeSolarSavesSub(fmt.number(kwp?.toDouble(), decimals: 1), fmt.tonnes(co2?.toDouble())) : l.homeSolarTrySub,
+              style: t.bodySmall,
+            ),
+          ]),
+        ),
+        const Icon(Icons.chevron_right_rounded),
       ]),
     );
   }

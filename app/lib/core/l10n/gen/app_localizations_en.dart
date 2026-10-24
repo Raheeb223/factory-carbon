@@ -2869,4 +2869,59 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get targetNowSame =>
       'Last 12 months: about the same as the baseline year.';
+
+  @override
+  String get passportTitle => 'Carbon Passport';
+
+  @override
+  String get passportBannerSub =>
+      'A QR code your buyers can scan to see your signed carbon summary.';
+
+  @override
+  String get passportWhy =>
+      'Big brands ask their suppliers for emissions data. Show this QR code to prove yours — it opens on any phone, no app needed.';
+
+  @override
+  String get passportScanHint => 'Scan with any phone camera';
+
+  @override
+  String get passportShare => 'Share link';
+
+  @override
+  String get passportCopy => 'Copy link';
+
+  @override
+  String get passportCopied => 'Link copied';
+
+  @override
+  String get passportRefresh => 'Make a new one';
+
+  @override
+  String passportIssued(String date) {
+    return 'Issued $date · signed by the BillToGreen server';
+  }
+
+  @override
+  String get passportNeedsData =>
+      'Add at least one bill to create your Carbon Passport.';
+
+  @override
+  String get passportMaking => 'Creating your Carbon Passport…';
+
+  @override
+  String homeSolarSaves(String amount) {
+    return 'Solar could save Tk $amount a year';
+  }
+
+  @override
+  String homeSolarSavesSub(String kwp, String co2) {
+    return '$kwp kWp on your roof · $co2 t CO₂e less each year';
+  }
+
+  @override
+  String get homeSolarTry => 'How much could solar save you?';
+
+  @override
+  String get homeSolarTrySub =>
+      'Draw your roof on the map to see the savings and payback time.';
 }

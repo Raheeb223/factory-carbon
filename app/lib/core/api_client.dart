@@ -76,7 +76,12 @@ class ApiClient {
 
   Map<String, dynamic> _json(Object? data) => (data as Map<dynamic, dynamic>).cast<String, dynamic>();
 
-  Future<HealthInfo> health() => _guard(() async => HealthInfo.fromJson(_json((await _dio.get<dynamic>('/v1/health')).data)));
+  /// Short timeouts so a request that stalls while the server wakes fails fast and is retried.
+  Future<HealthInfo> health() => _guard(() async => HealthInfo.fromJson(_json((await _dio.get<dynamic>(
+        '/v1/health',
+        options: Options(sendTimeout: const Duration(seconds: 10), receiveTimeout: const Duration(seconds: 12)),
+      ))
+          .data)));
 
   Future<ExtractBillResult> extractBill(
     Uint8List jpegBytes, {
@@ -113,6 +118,12 @@ class ApiClient {
   Future<Uint8List> reportPdf(Map<String, dynamic> body) => _guard(() async {
         final res = await _dio.post<List<int>>('/v1/report/pdf', data: body, options: Options(responseType: ResponseType.bytes));
         return Uint8List.fromList(res.data ?? const []);
+      });
+
+  /// Signs a one-page carbon summary on the server; returns its public link (for a QR code).
+  Future<({String url, DateTime issuedOn})> passport(Map<String, dynamic> body) => _guard(() async {
+        final j = _json((await _dio.post<dynamic>('/v1/passport', data: body)).data);
+        return (url: j['url'] as String, issuedOn: DateTime.parse(j['issued_on'] as String));
       });
 
   /// Building outlines around [at] (Overture Maps: OpenStreetMap + Google/Microsoft footprints),

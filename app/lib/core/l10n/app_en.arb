@@ -1750,5 +1750,44 @@
       }
     }
   },
-  "targetNowSame": "Last 12 months: about the same as the baseline year."
+  "targetNowSame": "Last 12 months: about the same as the baseline year.",
+  "passportTitle": "Carbon Passport",
+  "passportBannerSub": "A QR code your buyers can scan to see your signed carbon summary.",
+  "passportWhy": "Big brands ask their suppliers for emissions data. Show this QR code to prove yours — it opens on any phone, no app needed.",
+  "passportScanHint": "Scan with any phone camera",
+  "passportShare": "Share link",
+  "passportCopy": "Copy link",
+  "passportCopied": "Link copied",
+  "passportRefresh": "Make a new one",
+  "passportIssued": "Issued {date} · signed by the BillToGreen server",
+  "@passportIssued": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "passportNeedsData": "Add at least one bill to create your Carbon Passport.",
+  "passportMaking": "Creating your Carbon Passport…",
+  "homeSolarSaves": "Solar could save Tk {amount} a year",
+  "@homeSolarSaves": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "homeSolarSavesSub": "{kwp} kWp on your roof · {co2} t CO₂e less each year",
+  "@homeSolarSavesSub": {
+    "placeholders": {
+      "kwp": {
+        "type": "String"
+      },
+      "co2": {
+        "type": "String"
+      }
+    }
+  },
+  "homeSolarTry": "How much could solar save you?",
+  "homeSolarTrySub": "Draw your roof on the map to see the savings and payback time."
 }

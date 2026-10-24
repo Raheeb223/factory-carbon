@@ -8,18 +8,20 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import secrets
 import threading
 from collections.abc import Awaitable, Callable
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse, Response
+from fastapi.responses import HTMLResponse, JSONResponse, Response
 from pydantic import ValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from app.api import Services, router
+from app.api import Services, public_base_url, router
+from app.report import passport
 from app.extraction.gemini_client import GeminiExtractor, build_genai_client
-from app.security import ApiError, DailyCap, RateLimiter
+from app.security import ApiError, DailyCap, RateLimiter, client_ip
 from app.settings import API_VERSION, APP_VERSION, Settings, get_settings, load_app_config
 from app.solar.buildings import BuildingFootprints
 from app.solar.nasa_power import NasaPowerClient
@@ -56,6 +58,7 @@ def build_services(
         buildings=buildings or BuildingFootprints(settings.buildings_timeout_s, settings.buildings_pmtiles_url),
         extractor=extractor,
         history_template=template_path.read_text(encoding="utf-8"),
+        passport_key=passport.passport_key(settings.app_token.get_secret_value() if settings.app_token else None, secrets.token_bytes(32)),
     )
 
 
@@ -119,6 +122,17 @@ def create_app(services: Services | None = None) -> FastAPI:
     def livez() -> dict[str, str]:
         """Unauthenticated liveness probe for container hosts. Reveals nothing."""
         return {"status": "ok"}
+
+    @app.get("/p/{token}", response_class=HTMLResponse, include_in_schema=False)
+    def passport_page(token: str, request: Request) -> HTMLResponse:
+        """Public Carbon Passport page (opened from the QR code; no app token needed)."""
+        if svc.rate_limiter.hit(client_ip(request, settings.trust_proxy_headers)) is not None:
+            return HTMLResponse("Too many requests. Please wait a moment.", status_code=429)
+        data = passport.decode(token, svc.passport_key)
+        if data is None:
+            return HTMLResponse(passport.INVALID_HTML, status_code=404)
+        url = f"{public_base_url(request, settings.trust_proxy_headers)}/p/{token}"
+        return HTMLResponse(passport.render_html(data, url), headers={"Cache-Control": "public, max-age=300", "X-Robots-Tag": "noindex"})
 
     return app
 

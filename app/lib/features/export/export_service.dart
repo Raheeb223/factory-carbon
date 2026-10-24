@@ -66,6 +66,8 @@ class ExportService {
     await shareBytes(bytes, 'ghg-report.pdf', 'application/pdf');
   }
 
+  Future<({String url, DateTime issuedOn})> createPassport() async => _ref.read(apiClientProvider).passport(await pdfRequest());
+
   Future<void> exportEmissionsCsv(CarbonResult result) =>
       shareText(emissionsCsv(result, containsSynthetic: _ref.read(containsSyntheticProvider)), 'ghg-monthly.csv', 'text/csv');
 

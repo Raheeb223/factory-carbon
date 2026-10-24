@@ -62,7 +62,24 @@ final containsSyntheticProvider = Provider<bool>((ref) {
   return bills.any((b) => b.isSynthetic) || production.any((p) => p.isSynthetic) || actions.any((a) => a.isSynthetic);
 });
 
-final healthProvider = FutureProvider<HealthInfo>((ref) => ref.watch(apiClientProvider).health());
+/// Keeps retrying while the free server wakes up (up to ~90 s); other errors show at once.
+final healthProvider = FutureProvider<HealthInfo>((ref) async {
+  final api = ref.watch(apiClientProvider);
+  final deadline = DateTime.now().add(const Duration(seconds: 90));
+  for (var attempt = 0;; attempt++) {
+    try {
+      return await api.health();
+    } on ApiException catch (e) {
+      final waking = e.kind == ApiErrorKind.timeout ||
+          e.kind == ApiErrorKind.network ||
+          e.kind == ApiErrorKind.unavailable ||
+          e.statusCode == 502 ||
+          e.statusCode == 504;
+      if (!waking || DateTime.now().isAfter(deadline)) rethrow;
+      await Future<void>.delayed(Duration(seconds: attempt < 3 ? 2 : 4));
+    }
+  }
+});
 
 class LocaleNotifier extends Notifier<Locale?> {
   @override
