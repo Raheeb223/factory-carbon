@@ -6,7 +6,11 @@ import 'package:factory_carbon/domain/geo.dart';
 import 'package:factory_carbon/domain/models.dart';
 import 'package:factory_carbon/domain/panel_layout.dart';
 import 'package:factory_carbon/domain/solar_scenario.dart';
+import 'package:factory_carbon/features/solar/solar_3d_screen.dart';
 import 'package:factory_carbon/features/solar/solar_preview_screen.dart';
+import 'package:factory_carbon/features/solar/solar_result_screen.dart';
+import 'package:factory_carbon/core/l10n/gen/app_localizations_en.dart';
+import 'package:factory_carbon/core/format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -22,8 +26,7 @@ List<LatLon> _roof(double w, double h, {double deg = 0}) {
   final a = deg * math.pi / 180;
   final kx = _k * math.cos(lat0 * math.pi / 180);
   return [
-    for (final (x, y) in [(0.0, 0.0), (w, 0.0), (w, h), (0.0, h)])
-      LatLon(lat0 + (x * math.sin(a) + y * math.cos(a)) / _k, lon0 + (x * math.cos(a) - y * math.sin(a)) / kx),
+    for (final (x, y) in [(0.0, 0.0), (w, 0.0), (w, h), (0.0, h)]) LatLon(lat0 + (x * math.sin(a) + y * math.cos(a)) / _k, lon0 + (x * math.cos(a) - y * math.sin(a)) / kx),
   ];
 }
 
@@ -82,6 +85,29 @@ void main() {
     });
   });
 
+  test('a payback longer than the panels last reads "Over 25 years"', () {
+    final l = AppLocalizationsEn();
+    final fmt = Fmt('en');
+    final fast = SolarResult.fromJson({...solarResultFixture(), 'financials': loanFinancialsFixture()}).financials!;
+    expect(paybackText(l, fmt, fast), contains('years'));
+    expect(paybackBeyondLife(fast), isFalse);
+    final slow = SolarResult.fromJson({...solarResultFixture(), 'financials': loanFinancialsFixture(net: 400)}).financials!;
+    expect(paybackBeyondLife(slow), isTrue);
+    expect(paybackText(l, fmt, slow), 'Over 25 years');
+  });
+
+  test('3D view gets the roof, every panel and at most 25 height samples', () {
+    final roof = _roof(40, 20);
+    final panels = panelLayout(roof, maxPanels: 10000);
+    final c = viewerConfig(token: 't', roof: roof, panels: panels, mode: 'google', heightM: 8, showPanels: true);
+    expect(c['roof'], hasLength(4));
+    expect(c['panels'], hasLength(panels.length));
+    expect((c['samples'] as List).length, inInclusiveRange(1, 25));
+    expect((c['panels'] as List).first, hasLength(4));
+    // no panels: sample the roof corners instead
+    expect(viewerConfig(token: 't', roof: roof, panels: const [], mode: 'model', heightM: 8, showPanels: false)['samples'], hasLength(4));
+  });
+
   testWidgets('preview toggles the panels and compares before and after', (tester) async {
     tester.view.physicalSize = const Size(1080, 2400);
     tester.view.devicePixelRatio = 3;
@@ -93,10 +119,12 @@ void main() {
       }
     });
     final r = SolarResult.fromJson({...solarResultFixture(), 'financials': loanFinancialsFixture()});
-    await tester.pumpWidget(testApp(
-      SolarPreviewScreen(result: r, polygon: _roof(60, 60), panelWatt: 550),
-      overrides: testOverrides(db: db, api: fakeApi(FakeAdapter(defaultHandler))),
-    ));
+    await tester.pumpWidget(
+      testApp(
+        SolarPreviewScreen(result: r, polygon: _roof(60, 60), panelWatt: 550),
+        overrides: testOverrides(db: db, api: fakeApi(FakeAdapter(defaultHandler))),
+      ),
+    );
     await settle(tester);
     expect(find.textContaining('of your electricity would come from your own roof'), findsOneWidget);
     await tester.tap(find.text('Today'));

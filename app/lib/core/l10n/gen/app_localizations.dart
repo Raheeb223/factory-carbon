@@ -5142,7 +5142,7 @@ abstract class AppLocalizations {
   /// No description provided for @previewStatGridCut.
   ///
   /// In en, this message translates to:
-  /// **'less from the grid'**
+  /// **'less from grid'**
   String get previewStatGridCut;
 
   /// No description provided for @previewStatSaved.
@@ -5222,6 +5222,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Estimate from your own bills and the solar plan (first year). Solar power the factory cannot use (holidays, weekends) is not counted as savings. The panels are drawn to show the idea; an installer will make the real layout.'**
   String get previewNote;
+
+  /// No description provided for @solarPaybackOver.
+  ///
+  /// In en, this message translates to:
+  /// **'Over {years} years'**
+  String solarPaybackOver(String years);
+
+  /// No description provided for @solarSayTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'It saves about Tk {tk} a year, so the Tk {capex} system would not pay for itself within the panels\' {years}-year life. Add all your electricity bills, or draw only the part of the roof your factory needs.'**
+  String solarSayTooLong(String tk, String capex, String years);
+
+  /// No description provided for @view3dTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Factory in 3D'**
+  String get view3dTitle;
+
+  /// No description provided for @view3dOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'3D view'**
+  String get view3dOpen;
+
+  /// No description provided for @view3dReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset view'**
+  String get view3dReset;
+
+  /// No description provided for @view3dLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading 3D buildings…'**
+  String get view3dLoading;
+
+  /// No description provided for @view3dError.
+  ///
+  /// In en, this message translates to:
+  /// **'The 3D view could not load. Check the internet connection and try again.'**
+  String get view3dError;
+
+  /// No description provided for @view3dReal.
+  ///
+  /// In en, this message translates to:
+  /// **'Real 3D'**
+  String get view3dReal;
+
+  /// No description provided for @view3dModel.
+  ///
+  /// In en, this message translates to:
+  /// **'Model'**
+  String get view3dModel;
+
+  /// No description provided for @view3dFloors.
+  ///
+  /// In en, this message translates to:
+  /// **'Floors: {count}'**
+  String view3dFloors(String count);
+
+  /// No description provided for @view3dRealHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Google\'s 3D buildings. If your roof looks flat or blurry, switch to Model.'**
+  String get view3dRealHint;
+
+  /// No description provided for @view3dGesture.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to move · pinch to zoom · two fingers to turn and tilt'**
+  String get view3dGesture;
 }
 
 class _AppLocalizationsDelegate

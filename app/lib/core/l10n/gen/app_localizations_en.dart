@@ -3070,7 +3070,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get previewStatSolar => 'kWh from solar';
 
   @override
-  String get previewStatGridCut => 'less from the grid';
+  String get previewStatGridCut => 'less from grid';
 
   @override
   String get previewStatSaved => 'saved on bills';
@@ -3114,4 +3114,49 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get previewNote =>
       'Estimate from your own bills and the solar plan (first year). Solar power the factory cannot use (holidays, weekends) is not counted as savings. The panels are drawn to show the idea; an installer will make the real layout.';
+
+  @override
+  String solarPaybackOver(String years) {
+    return 'Over $years years';
+  }
+
+  @override
+  String solarSayTooLong(String tk, String capex, String years) {
+    return 'It saves about Tk $tk a year, so the Tk $capex system would not pay for itself within the panels\' $years-year life. Add all your electricity bills, or draw only the part of the roof your factory needs.';
+  }
+
+  @override
+  String get view3dTitle => 'Factory in 3D';
+
+  @override
+  String get view3dOpen => '3D view';
+
+  @override
+  String get view3dReset => 'Reset view';
+
+  @override
+  String get view3dLoading => 'Loading 3D buildings…';
+
+  @override
+  String get view3dError =>
+      'The 3D view could not load. Check the internet connection and try again.';
+
+  @override
+  String get view3dReal => 'Real 3D';
+
+  @override
+  String get view3dModel => 'Model';
+
+  @override
+  String view3dFloors(String count) {
+    return 'Floors: $count';
+  }
+
+  @override
+  String get view3dRealHint =>
+      'Google\'s 3D buildings. If your roof looks flat or blurry, switch to Model.';
+
+  @override
+  String get view3dGesture =>
+      'Drag to move · pinch to zoom · two fingers to turn and tilt';
 }

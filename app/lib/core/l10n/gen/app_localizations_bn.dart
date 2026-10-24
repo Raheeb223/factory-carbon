@@ -3098,4 +3098,49 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get previewNote =>
       'আপনার নিজের বিল ও সোলার পরিকল্পনা থেকে অনুমান (প্রথম বছর)। কারখানা যে সোলার বিদ্যুৎ ব্যবহার করতে পারে না (ছুটির দিন), তা সাশ্রয় হিসেবে ধরা হয়নি। প্যানেলগুলো ধারণা দেওয়ার জন্য আঁকা; আসল নকশা করবেন ইনস্টলার।';
+
+  @override
+  String solarPaybackOver(String years) {
+    return '$years বছরের বেশি';
+  }
+
+  @override
+  String solarSayTooLong(String tk, String capex, String years) {
+    return 'বছরে প্রায় $tk টাকা সাশ্রয় হবে, তাই $capex টাকার সিস্টেমের খরচ প্যানেলের $years বছরের আয়ুর মধ্যে উঠে আসবে না। সব বিদ্যুৎ বিল যোগ করুন, অথবা ছাদের শুধু যতটুকু দরকার ততটুকু আঁকুন।';
+  }
+
+  @override
+  String get view3dTitle => '৩ডি-তে কারখানা';
+
+  @override
+  String get view3dOpen => '৩ডি দেখুন';
+
+  @override
+  String get view3dReset => 'আগের দৃশ্যে ফিরুন';
+
+  @override
+  String get view3dLoading => '৩ডি ভবন লোড হচ্ছে…';
+
+  @override
+  String get view3dError =>
+      '৩ডি দৃশ্য লোড হয়নি। ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।';
+
+  @override
+  String get view3dReal => 'আসল ৩ডি';
+
+  @override
+  String get view3dModel => 'মডেল';
+
+  @override
+  String view3dFloors(String count) {
+    return 'তলা: $count';
+  }
+
+  @override
+  String get view3dRealHint =>
+      'Google-এর ৩ডি ভবন। ছাদ সমতল বা ঝাপসা দেখালে মডেল বেছে নিন।';
+
+  @override
+  String get view3dGesture =>
+      'টেনে সরান · দুই আঙুলে জুম · দুই আঙুলে ঘোরান ও কাত করুন';
 }

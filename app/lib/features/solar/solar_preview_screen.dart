@@ -17,6 +17,7 @@ import '../../domain/solar_summary.dart';
 import '../../widgets/common.dart';
 import '../../widgets/ui.dart';
 import '../loan/green_loan_screen.dart';
+import 'solar_3d_screen.dart';
 
 const _panelColor = Color(0xFF1E3A8A);
 
@@ -51,7 +52,7 @@ class _SolarPreviewScreenState extends ConsumerState<SolarPreviewScreen> {
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
         children: [
           const SyntheticBanner(),
-          _RoofView(roof: widget.polygon, panels: _after ? _panels : const [], after: _after, onToggle: (v) => setState(() => _after = v)),
+          _RoofView(roof: widget.polygon, allPanels: _panels, after: _after, onToggle: (v) => setState(() => _after = v)),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
             child: Text(
@@ -123,9 +124,9 @@ String _month(Fmt fmt, String ym) => DateFormat.yMMM(fmt.locale).format(DateTime
 
 /// The roof on the satellite (or street) map, with or without the panel rows.
 class _RoofView extends ConsumerWidget {
-  const _RoofView({required this.roof, required this.panels, required this.after, required this.onToggle});
+  const _RoofView({required this.roof, required this.allPanels, required this.after, required this.onToggle});
   final List<m.LatLon> roof;
-  final List<List<m.LatLon>> panels;
+  final List<List<m.LatLon>> allPanels;
   final bool after;
   final ValueChanged<bool> onToggle;
 
@@ -159,7 +160,8 @@ class _RoofView extends ConsumerWidget {
                   borderColor: after ? Colors.white.withValues(alpha: 0.8) : FeatureColors.solar,
                   borderStrokeWidth: 2,
                 ),
-                for (final p in panels)
+                if (after)
+                  for (final p in allPanels)
                   Polygon(
                     points: [for (final c in p) ll(c)],
                     color: _panelColor.withValues(alpha: 0.92),
@@ -180,6 +182,20 @@ class _RoofView extends ConsumerWidget {
               ),
             ],
           ),
+          if (config.has3d)
+            Positioned(
+              right: 10,
+              bottom: 28,
+              child: FilledButton.icon(
+                key: const Key('preview-3d'),
+                style: FilledButton.styleFrom(backgroundColor: const Color(0xFF1E3A8A), foregroundColor: Colors.white),
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(builder: (_) => Solar3DScreen(roof: roof, panels: allPanels, showPanels: after)),
+                ),
+                icon: const Icon(Icons.view_in_ar_rounded),
+                label: Text(l.view3dOpen),
+              ),
+            ),
           Positioned(
             top: 10,
             left: 10,

@@ -33,6 +33,7 @@ dependencies:
   share_plus: ^13.3.1
   shared_preferences: ^2.5.6
   uuid: ^4.6.0
+  webview_flutter: ^4.10.0
 
 dev_dependencies:
   integration_test:
@@ -51,6 +52,7 @@ flutter:
   assets:
     - assets/demo/demo_data.json
     - assets/templates/history_template.csv
+    - assets/cesium/viewer.html
 
 flutter_launcher_icons:
   android: "ic_launcher"

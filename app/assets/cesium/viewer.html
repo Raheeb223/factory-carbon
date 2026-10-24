@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Factory 3D</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cesium@1.121.0/Build/Cesium/Widgets/widgets.css">
+  <script src="https://cdn.jsdelivr.net/npm/cesium@1.121.0/Build/Cesium/Cesium.js"></script>
+  <style>
+    html, body, #view { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #0b1220; }
+    .cesium-viewer-bottom { font-size: 9px; }
+  </style>
+</head>
+<body>
+<div id="view"></div>
+<script>
+// Factory 3D view for BillToGreen. The app calls setup({...}) after the page loads and
+// talks to it with setPanels(bool), setMode('google'|'model'), setHeight(m), resetCamera().
+// Messages back go through the App channel: ready, roof:<metres>, error:<text>.
+(function () {
+  const post = (m) => { try { App.postMessage(m); } catch (_) { console.log('App:', m); } };
+  let viewer, cfg, panels, building, tileset, roofTop = 0, mode = 'google', showPanels = true, modelHeight = 8;
+
+  const deg = (ring) => ring.flatMap((p) => [p[1], p[0]]);
+
+  function sphere() {
+    const pts = cfg.roof.map((p) => Cesium.Cartesian3.fromDegrees(p[1], p[0], roofTop));
+    return Cesium.BoundingSphere.fromPoints(pts);
+  }
+
+  function resetCamera() {
+    const s = sphere();
+    viewer.camera.flyToBoundingSphere(s, {
+      offset: new Cesium.HeadingPitchRange(Cesium.Math.toRadians(25), Cesium.Math.toRadians(-38), Math.max(80, s.radius * 3.2)),
+      duration: 0,
+    });
+  }
+
+  function drawPanels() {
+    if (panels) viewer.scene.primitives.remove(panels);
+    panels = undefined;
+    if (!cfg.panels.length) return;
+    const blue = Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.fromCssColorString('#1e3a8a'));
+    const instances = cfg.panels.map((ring) => new Cesium.GeometryInstance({
+      geometry: new Cesium.PolygonGeometry({
+        polygonHierarchy: new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArray(deg(ring))),
+        height: roofTop + 0.25,
+        extrudedHeight: roofTop + 0.4,
+      }),
+      attributes: { color: blue },
+    }));
+    panels = viewer.scene.primitives.add(new Cesium.Primitive({
+      geometryInstances: instances,
+      appearance: new Cesium.PerInstanceColorAppearance({ flat: false, translucent: false }),
+      asynchronous: false, // no web workers: they fail to load cross-origin inside the app's WebView
+    }));
+    panels.show = showPanels;
+  }
+
+  function drawBuilding() {
+    if (building) viewer.entities.remove(building);
+    building = undefined;
+    if (mode !== 'model') return;
+    building = viewer.entities.add({
+      polygon: {
+        hierarchy: Cesium.Cartesian3.fromDegreesArray(deg(cfg.roof)),
+        height: 0,
+        extrudedHeight: modelHeight,
+        material: Cesium.Color.fromCssColorString('#a8b3c2'),
+        outline: true,
+        outlineColor: Cesium.Color.fromCssColorString('#475569'),
+      },
+    });
+  }
+
+  // Roof height on the Google mesh, from heights sampled inside the outline.
+  async function sampleRoof() {
+    const pts = cfg.samples.map((p) => Cesium.Cartographic.fromDegrees(p[1], p[0]));
+    try {
+      const out = await viewer.scene.sampleHeightMostDetailed(pts, [panels].filter(Boolean));
+      const h = out.map((c) => c.height).filter((v) => Number.isFinite(v)).sort((a, b) => a - b);
+      return h.length ? h[Math.floor(h.length * 0.75)] : 0; // upper quartile: panels sit on raised roof parts too
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  async function applyMode() {
+    if (mode === 'google') {
+      viewer.scene.globe.show = false;
+      if (!tileset) {
+        tileset = await Cesium.createGooglePhotorealistic3DTileset();
+        viewer.scene.primitives.add(tileset);
+      }
+      tileset.show = true;
+      resetCamera();
+      // wait for the detailed tiles around the roof before sampling its height
+      await new Promise((ok) => { const off = tileset.allTilesLoaded.addEventListener(() => { off(); ok(); }); setTimeout(ok, 15000); });
+      roofTop = await sampleRoof();
+    } else {
+      if (tileset) tileset.show = false;
+      viewer.scene.globe.show = true;
+      roofTop = modelHeight;
+    }
+    drawBuilding();
+    drawPanels();
+    resetCamera();
+    post('roof:' + roofTop.toFixed(1));
+  }
+
+  window.setup = async function (c) {
+    try {
+      cfg = c;
+      mode = c.mode || 'google';
+      modelHeight = c.height || 8;
+      showPanels = c.showPanels !== false;
+      Cesium.Ion.defaultAccessToken = c.token;
+      viewer = new Cesium.Viewer('view', {
+        animation: false, timeline: false, baseLayerPicker: false, geocoder: false, homeButton: false,
+        sceneModePicker: false, navigationHelpButton: false, fullscreenButton: false, infoBox: false,
+        selectionIndicator: false, requestRenderMode: false,
+        baseLayer: Cesium.ImageryLayer.fromWorldImagery(),
+      });
+      viewer.scene.skyAtmosphere.show = true;
+      // let the first frame size the canvas before the camera is placed
+      await new Promise((ok) => { const off = viewer.scene.postRender.addEventListener(() => { off(); ok(); }); });
+      viewer.scene.globe.depthTestAgainstTerrain = true;
+      await applyMode();
+      post('ready');
+    } catch (e) {
+      post('error:' + (e && e.message ? e.message : e));
+    }
+  };
+  window.setPanels = (v) => { showPanels = v; if (panels) panels.show = v; };
+  window.setMode = async (m) => { if (m !== mode) { mode = m; try { await applyMode(); } catch (e) { post('error:' + e.message); } } };
+  window.setHeight = (h) => { modelHeight = h; if (mode === 'model') { roofTop = h; drawBuilding(); drawPanels(); } };
+  window.resetCamera = () => viewer && resetCamera();
+  window.onerror = (msg) => post('error:' + msg);
+})();
+</script>
+</body>
+</html>

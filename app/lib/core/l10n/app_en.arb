@@ -1921,7 +1921,7 @@
     }
   },
   "previewStatSolar": "kWh from solar",
-  "previewStatGridCut": "less from the grid",
+  "previewStatGridCut": "less from grid",
   "previewStatSaved": "saved on bills",
   "previewCompare": "Before and after solar",
   "previewPeriod": "Your bills from {from} to {to}",
@@ -1944,5 +1944,44 @@
   "previewFromGrid": "From the grid",
   "previewFromSolar": "From your roof",
   "previewNoBills": "Add electricity bills to compare your real use with solar.",
-  "previewNote": "Estimate from your own bills and the solar plan (first year). Solar power the factory cannot use (holidays, weekends) is not counted as savings. The panels are drawn to show the idea; an installer will make the real layout."
+  "previewNote": "Estimate from your own bills and the solar plan (first year). Solar power the factory cannot use (holidays, weekends) is not counted as savings. The panels are drawn to show the idea; an installer will make the real layout.",
+  "solarPaybackOver": "Over {years} years",
+  "@solarPaybackOver": {
+    "placeholders": {
+      "years": {
+        "type": "String"
+      }
+    }
+  },
+  "solarSayTooLong": "It saves about Tk {tk} a year, so the Tk {capex} system would not pay for itself within the panels' {years}-year life. Add all your electricity bills, or draw only the part of the roof your factory needs.",
+  "@solarSayTooLong": {
+    "placeholders": {
+      "tk": {
+        "type": "String"
+      },
+      "capex": {
+        "type": "String"
+      },
+      "years": {
+        "type": "String"
+      }
+    }
+  },
+  "view3dTitle": "Factory in 3D",
+  "view3dOpen": "3D view",
+  "view3dReset": "Reset view",
+  "view3dLoading": "Loading 3D buildings…",
+  "view3dError": "The 3D view could not load. Check the internet connection and try again.",
+  "view3dReal": "Real 3D",
+  "view3dModel": "Model",
+  "view3dFloors": "Floors: {count}",
+  "@view3dFloors": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "view3dRealHint": "Google's 3D buildings. If your roof looks flat or blurry, switch to Model.",
+  "view3dGesture": "Drag to move · pinch to zoom · two fingers to turn and tilt"
 }

@@ -58,7 +58,9 @@ List<List<LatLon>> panelLayout(
     }
   }
   if (placed.length > maxPanels) {
-    double d((double, double) p) => math.pow(p.$1 + panelWidthM / 2, 2) + math.pow(p.$2 + panelLengthM / 2, 2).toDouble();
+    // Keep the panels nearest the roof's area centre (corner points can bunch at one end).
+    final (cx, cy) = _centroid(poly);
+    double d((double, double) p) => math.pow(p.$1 + panelWidthM / 2 - cx, 2) + math.pow(p.$2 + panelLengthM / 2 - cy, 2).toDouble();
     placed.sort((a, b) => d(a).compareTo(d(b)));
     placed.removeRange(maxPanels, placed.length);
   }
@@ -70,6 +72,19 @@ List<List<LatLon>> panelLayout(
     for (final (x, y) in placed)
       [back(x, y), back(x + panelWidthM, y), back(x + panelWidthM, y + panelLengthM), back(x, y + panelLengthM)],
   ];
+}
+
+(double, double) _centroid(List<(double, double)> poly) {
+  var a = 0.0, cx = 0.0, cy = 0.0;
+  for (var i = 0; i < poly.length; i++) {
+    final (x1, y1) = poly[i];
+    final (x2, y2) = poly[(i + 1) % poly.length];
+    final cross = x1 * y2 - x2 * y1;
+    a += cross;
+    cx += (x1 + x2) * cross;
+    cy += (y1 + y2) * cross;
+  }
+  return a == 0 ? (0, 0) : (cx / (3 * a), cy / (3 * a));
 }
 
 bool _inside(List<(double, double)> poly, double x, double y) {

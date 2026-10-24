@@ -18,6 +18,7 @@ class AppConfig {
     required this.satelliteTileUrl,
     required this.satelliteTileAttribution,
     required this.userAgentPackageName,
+    this.cesiumIonToken = '',
   });
 
   factory AppConfig.fromEnvironment() => const AppConfig(
@@ -30,6 +31,8 @@ class AppConfig {
         satelliteTileUrl: _satelliteUrl != '' ? _satelliteUrl : (_arcgisKey != '' ? '$esriImageryUrl$_arcgisKey' : ''),
         satelliteTileAttribution: _satelliteUrl != '' ? _satelliteAttribution : (_arcgisKey != '' ? esriImageryAttribution : ''),
         userAgentPackageName: 'org.factorycarbon.factory_carbon',
+        // Cesium ion token for the 3D view (Google Photorealistic 3D Tiles and world imagery).
+        cesiumIonToken: String.fromEnvironment('CESIUM_ION_TOKEN'),
       );
 
   final String apiBaseUrl;
@@ -39,8 +42,10 @@ class AppConfig {
   final String satelliteTileUrl;
   final String satelliteTileAttribution;
   final String userAgentPackageName;
+  final String cesiumIonToken;
 
   bool get hasSatellite => satelliteTileUrl.isNotEmpty;
+  bool get has3d => cesiumIonToken.isNotEmpty;
 
   AppConfig withServer({String? apiBaseUrl, String? appToken}) => AppConfig(
         apiBaseUrl: apiBaseUrl ?? this.apiBaseUrl,
@@ -50,6 +55,7 @@ class AppConfig {
         satelliteTileUrl: satelliteTileUrl,
         satelliteTileAttribution: satelliteTileAttribution,
         userAgentPackageName: userAgentPackageName,
+        cesiumIonToken: cesiumIonToken,
       );
 }
 

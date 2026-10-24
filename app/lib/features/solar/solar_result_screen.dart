@@ -38,6 +38,18 @@ String solarWarningText(AppLocalizations l, Fmt fmt, SolarWarning w) => switch (
   _ => w.message,
 };
 
+/// Years the cash flow covers (the panels' assumed life).
+int lifeYears(SolarFinancials f) => f.cashflow.isEmpty ? 0 : f.cashflow.last.year;
+
+/// Payback later than the panels last: shown as "over N years", not a meaningless number.
+bool paybackBeyondLife(SolarFinancials f) => f.paybackYears != null && f.paybackYears! > lifeYears(f);
+
+String paybackText(AppLocalizations l, Fmt fmt, SolarFinancials? f) {
+  if (f?.paybackYears == null) return f == null ? '–' : l.solarNoPayback;
+  if (paybackBeyondLife(f!)) return l.solarPaybackOver(fmt.number(lifeYears(f).toDouble()));
+  return l.valueYears(fmt.number(f.paybackYears, decimals: 1));
+}
+
 String _monthName(Fmt fmt, int index) => DateFormat.MMMM(fmt.locale).format(DateTime(2026, index + 1));
 
 /// The result in a few plain sentences, for owners who do not read kWp.
@@ -55,6 +67,8 @@ List<String> plainWords(AppLocalizations l, Fmt fmt, SolarSummary s) {
       l.solarSayNoPrice
     else if (f.paybackYears == null)
       l.swNoPayback
+    else if (paybackBeyondLife(f))
+      l.solarSayTooLong(fmt.number(f.year1SavingsBdt), fmt.number(f.capexBdt), fmt.number(lifeYears(f).toDouble()))
     else
       l.solarSay4(fmt.number(f.year1SavingsBdt), fmt.number(f.capexBdt), fmt.number(f.paybackYears, decimals: 1)),
   ];
@@ -229,7 +243,7 @@ class SolarResultScreen extends ConsumerWidget {
                     GlassStat(value: r.offsetShare == null ? '–' : l.valuePercent(fmt.number(r.offsetShare! * 100)), label: l.solarStatCovers),
                     const SizedBox(width: 8),
                     GlassStat(
-                      value: f?.paybackYears == null ? '–' : l.valueYears(fmt.number(f!.paybackYears, decimals: 1)),
+                      value: f?.paybackYears == null ? '–' : paybackText(l, fmt, f),
                       label: l.solarStatPayback,
                     ),
                   ],
@@ -339,7 +353,7 @@ class SolarResultScreen extends ConsumerWidget {
             LabeledValue(l.solarCapex, l.valueTk(fmt.number(f.capexBdt))),
             LabeledValue(l.solarYear1Savings, l.valueTk(fmt.number(f.year1SavingsBdt))),
             LabeledValue(l.solarYear1Om, l.valueTk(fmt.number(f.year1OmBdt))),
-            LabeledValue(l.solarPayback, f.paybackYears == null ? l.solarNoPayback : l.valueYears(fmt.number(f.paybackYears, decimals: 1))),
+            LabeledValue(l.solarPayback, paybackText(l, fmt, f)),
             const SizedBox(height: 12),
             Text(l.solarCashflow, style: Theme.of(context).textTheme.bodySmall),
             SizedBox(
