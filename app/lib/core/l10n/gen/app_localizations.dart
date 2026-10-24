@@ -5090,6 +5090,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This solar plan has no savings estimate yet. Add electricity bills with the amount paid, then estimate solar again.'**
   String get loanNoFinancials;
+
+  /// No description provided for @previewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Solar preview'**
+  String get previewTitle;
+
+  /// No description provided for @previewOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'See solar on your roof'**
+  String get previewOpen;
+
+  /// No description provided for @previewBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get previewBefore;
+
+  /// No description provided for @previewAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'With solar'**
+  String get previewAfter;
+
+  /// No description provided for @previewPanels.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} panels · {kwp} kWp'**
+  String previewPanels(String count, String kwp);
+
+  /// No description provided for @previewFitNote.
+  ///
+  /// In en, this message translates to:
+  /// **'The drawing shows {drawn} of {count} panels, keeping 1 m from the roof edges. An installer will plan the exact layout.'**
+  String previewFitNote(String drawn, String count);
+
+  /// No description provided for @previewHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'{pct}% of your electricity would come from your own roof'**
+  String previewHeadline(String pct);
+
+  /// No description provided for @previewStatSolar.
+  ///
+  /// In en, this message translates to:
+  /// **'kWh from solar'**
+  String get previewStatSolar;
+
+  /// No description provided for @previewStatGridCut.
+  ///
+  /// In en, this message translates to:
+  /// **'less from the grid'**
+  String get previewStatGridCut;
+
+  /// No description provided for @previewStatSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'saved on bills'**
+  String get previewStatSaved;
+
+  /// No description provided for @previewCompare.
+  ///
+  /// In en, this message translates to:
+  /// **'Before and after solar'**
+  String get previewCompare;
+
+  /// No description provided for @previewPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Your bills from {from} to {to}'**
+  String previewPeriod(String from, String to);
+
+  /// No description provided for @previewGrid.
+  ///
+  /// In en, this message translates to:
+  /// **'Electricity bought from the grid'**
+  String get previewGrid;
+
+  /// No description provided for @previewBill.
+  ///
+  /// In en, this message translates to:
+  /// **'Electricity bill'**
+  String get previewBill;
+
+  /// No description provided for @previewCo2.
+  ///
+  /// In en, this message translates to:
+  /// **'CO₂ from electricity'**
+  String get previewCo2;
+
+  /// No description provided for @previewNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Now'**
+  String get previewNow;
+
+  /// No description provided for @previewWithSolar.
+  ///
+  /// In en, this message translates to:
+  /// **'With solar'**
+  String get previewWithSolar;
+
+  /// No description provided for @previewMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Month by month: where your power comes from'**
+  String get previewMonthly;
+
+  /// No description provided for @previewFromGrid.
+  ///
+  /// In en, this message translates to:
+  /// **'From the grid'**
+  String get previewFromGrid;
+
+  /// No description provided for @previewFromSolar.
+  ///
+  /// In en, this message translates to:
+  /// **'From your roof'**
+  String get previewFromSolar;
+
+  /// No description provided for @previewNoBills.
+  ///
+  /// In en, this message translates to:
+  /// **'Add electricity bills to compare your real use with solar.'**
+  String get previewNoBills;
+
+  /// No description provided for @previewNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimate from your own bills and the solar plan (first year). Solar power the factory cannot use (holidays, weekends) is not counted as savings. The panels are drawn to show the idea; an installer will make the real layout.'**
+  String get previewNote;
 }
 
 class _AppLocalizationsDelegate

@@ -3038,4 +3038,80 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get loanNoFinancials =>
       'This solar plan has no savings estimate yet. Add electricity bills with the amount paid, then estimate solar again.';
+
+  @override
+  String get previewTitle => 'Solar preview';
+
+  @override
+  String get previewOpen => 'See solar on your roof';
+
+  @override
+  String get previewBefore => 'Today';
+
+  @override
+  String get previewAfter => 'With solar';
+
+  @override
+  String previewPanels(String count, String kwp) {
+    return '$count panels · $kwp kWp';
+  }
+
+  @override
+  String previewFitNote(String drawn, String count) {
+    return 'The drawing shows $drawn of $count panels, keeping 1 m from the roof edges. An installer will plan the exact layout.';
+  }
+
+  @override
+  String previewHeadline(String pct) {
+    return '$pct% of your electricity would come from your own roof';
+  }
+
+  @override
+  String get previewStatSolar => 'kWh from solar';
+
+  @override
+  String get previewStatGridCut => 'less from the grid';
+
+  @override
+  String get previewStatSaved => 'saved on bills';
+
+  @override
+  String get previewCompare => 'Before and after solar';
+
+  @override
+  String previewPeriod(String from, String to) {
+    return 'Your bills from $from to $to';
+  }
+
+  @override
+  String get previewGrid => 'Electricity bought from the grid';
+
+  @override
+  String get previewBill => 'Electricity bill';
+
+  @override
+  String get previewCo2 => 'CO₂ from electricity';
+
+  @override
+  String get previewNow => 'Now';
+
+  @override
+  String get previewWithSolar => 'With solar';
+
+  @override
+  String get previewMonthly => 'Month by month: where your power comes from';
+
+  @override
+  String get previewFromGrid => 'From the grid';
+
+  @override
+  String get previewFromSolar => 'From your roof';
+
+  @override
+  String get previewNoBills =>
+      'Add electricity bills to compare your real use with solar.';
+
+  @override
+  String get previewNote =>
+      'Estimate from your own bills and the solar plan (first year). Solar power the factory cannot use (holidays, weekends) is not counted as savings. The panels are drawn to show the idea; an installer will make the real layout.';
 }

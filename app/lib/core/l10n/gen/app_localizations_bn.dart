@@ -3022,4 +3022,80 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get loanNoFinancials =>
       'এই সোলার পরিকল্পনায় এখনো সাশ্রয়ের হিসাব নেই। পরিশোধিত টাকাসহ বিদ্যুৎ বিল যোগ করুন, তারপর আবার সোলার হিসাব করুন।';
+
+  @override
+  String get previewTitle => 'সোলারের পূর্বরূপ';
+
+  @override
+  String get previewOpen => 'আপনার ছাদে সোলার দেখুন';
+
+  @override
+  String get previewBefore => 'এখন';
+
+  @override
+  String get previewAfter => 'সোলারসহ';
+
+  @override
+  String previewPanels(String count, String kwp) {
+    return '$countটি প্যানেল · $kwp kWp';
+  }
+
+  @override
+  String previewFitNote(String drawn, String count) {
+    return 'ছবিতে $countটির মধ্যে $drawnটি প্যানেল দেখানো হয়েছে, ছাদের কিনারা থেকে ১ মিটার দূরে রেখে। আসল নকশা করবেন ইনস্টলার।';
+  }
+
+  @override
+  String previewHeadline(String pct) {
+    return 'আপনার বিদ্যুতের $pct% আসবে নিজের ছাদ থেকে';
+  }
+
+  @override
+  String get previewStatSolar => 'সোলার থেকে kWh';
+
+  @override
+  String get previewStatGridCut => 'গ্রিড থেকে কম';
+
+  @override
+  String get previewStatSaved => 'বিলে সাশ্রয়';
+
+  @override
+  String get previewCompare => 'সোলারের আগে ও পরে';
+
+  @override
+  String previewPeriod(String from, String to) {
+    return 'আপনার বিল: $from থেকে $to';
+  }
+
+  @override
+  String get previewGrid => 'গ্রিড থেকে কেনা বিদ্যুৎ';
+
+  @override
+  String get previewBill => 'বিদ্যুৎ বিল';
+
+  @override
+  String get previewCo2 => 'বিদ্যুৎ থেকে CO₂';
+
+  @override
+  String get previewNow => 'এখন';
+
+  @override
+  String get previewWithSolar => 'সোলারসহ';
+
+  @override
+  String get previewMonthly => 'মাসে মাসে: বিদ্যুৎ কোথা থেকে আসে';
+
+  @override
+  String get previewFromGrid => 'গ্রিড থেকে';
+
+  @override
+  String get previewFromSolar => 'আপনার ছাদ থেকে';
+
+  @override
+  String get previewNoBills =>
+      'সোলারের সাথে আসল ব্যবহারের তুলনা দেখতে বিদ্যুৎ বিল যোগ করুন।';
+
+  @override
+  String get previewNote =>
+      'আপনার নিজের বিল ও সোলার পরিকল্পনা থেকে অনুমান (প্রথম বছর)। কারখানা যে সোলার বিদ্যুৎ ব্যবহার করতে পারে না (ছুটির দিন), তা সাশ্রয় হিসেবে ধরা হয়নি। প্যানেলগুলো ধারণা দেওয়ার জন্য আঁকা; আসল নকশা করবেন ইনস্টলার।';
 }

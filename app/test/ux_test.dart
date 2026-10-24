@@ -9,6 +9,7 @@ import 'package:factory_carbon/domain/api_models.dart';
 import 'package:factory_carbon/domain/models.dart';
 import 'package:factory_carbon/domain/solar_summary.dart';
 import 'package:factory_carbon/features/loan/green_loan_screen.dart';
+import 'package:factory_carbon/features/solar/solar_preview_screen.dart';
 import 'package:factory_carbon/features/bills/bills_screen.dart';
 import 'package:factory_carbon/features/carbon/reports_screen.dart';
 import 'package:factory_carbon/features/home/home_shell.dart';
@@ -29,6 +30,8 @@ import 'helpers.dart';
 import 'loan_test.dart' show loanFinancialsFixture;
 
 void main() {
+  setUpAll(mockTileCache);
+
   group('server address', () {
     test('normalizeServerUrl accepts host:port and full URLs', () {
       expect(normalizeServerUrl('192.168.1.20:8000'), 'http://192.168.1.20:8000');
@@ -241,6 +244,11 @@ void main() {
       'settings': const SettingsScreen(),
       'solar details': const SolarParamsScreen(polygon: [LatLon(23.8, 90.4), LatLon(23.8, 90.401), LatLon(23.801, 90.401)]),
       'solar result': SolarResultScreen(result: SolarResult.fromJson(solarResultFixture()), polygon: const [LatLon(23.8, 90.4)], params: const {'panel_watt': 550}),
+      'solar preview': SolarPreviewScreen(
+        result: SolarResult.fromJson({...solarResultFixture(), 'financials': loanFinancialsFixture()}),
+        polygon: const [LatLon(24.0046, 90.3365), LatLon(24.0051, 90.3362), LatLon(24.0048, 90.3368), LatLon(24.0042, 90.3375)],
+        panelWatt: 550,
+      ),
       'green loan': GreenLoanScreen(result: SolarResult.fromJson({...solarResultFixture(), 'financials': loanFinancialsFixture()})),
     };
     for (final entry in screens.entries) {

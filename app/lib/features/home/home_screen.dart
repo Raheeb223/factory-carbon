@@ -23,6 +23,7 @@ import '../loan/green_loan_screen.dart';
 import '../passport/passport_screen.dart';
 import '../production/production_screen.dart';
 import '../settings/data_admin.dart';
+import '../solar/solar_preview_screen.dart';
 import '../target/target_card.dart';
 import '../tutorial/tutorial_screen.dart';
 import '../waste/waste_controller.dart';
@@ -54,7 +55,8 @@ class HomeScreen extends ConsumerWidget {
     final waste = ref.watch(wasteResultProvider);
     final impact = ref.watch(overallImpactProvider);
     final months = {for (final b in bills) b.billingMonth}.toList()..sort();
-    final solarPlan = (ref.watch(solarPlansProvider).value ?? const []).where((p) => p.resultJson != null).firstOrNull?.resultJson;
+    final latestPlan = (ref.watch(solarPlansProvider).value ?? const []).where((p) => p.resultJson != null).firstOrNull;
+    final solarPlan = latestPlan?.resultJson;
 
     final steps = [
       (done: bills.isNotEmpty, label: l.stepAddData, icon: Icons.receipt_long_outlined, onTap: () => _push(context, const AddBillScreen())),
@@ -337,7 +339,19 @@ class HomeScreen extends ConsumerWidget {
                       ),
                     ),
                   ],
-                  if (carbon != null) _SolarSavingsCard(plan: solarPlan, onOpen: () => onOpenTab(Tabs.solar)),
+                  if (carbon != null) _SolarSavingsCard(
+                      plan: solarPlan,
+                      onOpen: latestPlan == null
+                          ? () => onOpenTab(Tabs.solar)
+                          : () => _push(
+                                context,
+                                SolarPreviewScreen(
+                                  result: SolarResult.fromJson(latestPlan.resultJson!),
+                                  polygon: latestPlan.polygon,
+                                  panelWatt: (latestPlan.params['panel_watt'] as num?)?.toInt(),
+                                ),
+                              ),
+                    ),
                   if (solarPlan?['financials'] != null)
                     ActionBanner(
                       key: const Key('home-loan'),

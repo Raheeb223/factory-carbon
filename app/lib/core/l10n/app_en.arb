@@ -1885,5 +1885,64 @@
   "loanWhere": "Ask your bank about green finance for rooftop solar. Banks in Bangladesh can lend for it under Bangladesh Bank's sustainable finance policy and green refinance schemes, and IDCOL supports rooftop solar through partner organisations. The lender sets the terms.",
   "loanPdf": "Bank summary (PDF)",
   "loanDisclaimer": "A pre-feasibility estimate, not a credit assessment. Bring an installer's quote and a roof check to the bank.",
-  "loanNoFinancials": "This solar plan has no savings estimate yet. Add electricity bills with the amount paid, then estimate solar again."
+  "loanNoFinancials": "This solar plan has no savings estimate yet. Add electricity bills with the amount paid, then estimate solar again.",
+  "previewTitle": "Solar preview",
+  "previewOpen": "See solar on your roof",
+  "previewBefore": "Today",
+  "previewAfter": "With solar",
+  "previewPanels": "{count} panels · {kwp} kWp",
+  "@previewPanels": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      },
+      "kwp": {
+        "type": "String"
+      }
+    }
+  },
+  "previewFitNote": "The drawing shows {drawn} of {count} panels, keeping 1 m from the roof edges. An installer will plan the exact layout.",
+  "@previewFitNote": {
+    "placeholders": {
+      "drawn": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "previewHeadline": "{pct}% of your electricity would come from your own roof",
+  "@previewHeadline": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "previewStatSolar": "kWh from solar",
+  "previewStatGridCut": "less from the grid",
+  "previewStatSaved": "saved on bills",
+  "previewCompare": "Before and after solar",
+  "previewPeriod": "Your bills from {from} to {to}",
+  "@previewPeriod": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "previewGrid": "Electricity bought from the grid",
+  "previewBill": "Electricity bill",
+  "previewCo2": "CO₂ from electricity",
+  "previewNow": "Now",
+  "previewWithSolar": "With solar",
+  "previewMonthly": "Month by month: where your power comes from",
+  "previewFromGrid": "From the grid",
+  "previewFromSolar": "From your roof",
+  "previewNoBills": "Add electricity bills to compare your real use with solar.",
+  "previewNote": "Estimate from your own bills and the solar plan (first year). Solar power the factory cannot use (holidays, weekends) is not counted as savings. The panels are drawn to show the idea; an installer will make the real layout."
 }

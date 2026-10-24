@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:typed_data';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:drift/drift.dart' show driftRuntimeOptions;
@@ -12,6 +12,7 @@ import 'package:factory_carbon/data/providers.dart';
 import 'package:factory_carbon/data/settings_store.dart';
 import 'package:factory_carbon/domain/models.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
@@ -158,4 +159,11 @@ Future<void> teardownDb(WidgetTester tester, AppDatabase db) async {
   await tester.pumpWidget(const SizedBox());
   await tester.pump(const Duration(seconds: 1));
   await tester.runAsync(db.close);
+}
+
+/// flutter_map keeps its tile cache in the app cache folder; give tests a temp one.
+void mockTileCache() {
+  final dir = Directory.systemTemp.createTempSync('tiles').path;
+  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+      .setMockMethodCallHandler(const MethodChannel('plugins.flutter.io/path_provider'), (_) async => dir);
 }

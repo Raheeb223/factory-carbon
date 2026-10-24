@@ -15,6 +15,7 @@ import '../../widgets/common.dart';
 import '../../widgets/ui.dart';
 import '../loan/green_loan_screen.dart';
 import 'solar_map_screen.dart';
+import 'solar_preview_screen.dart';
 
 /// Localized text for a backend solar warning code (English server text as fallback).
 String solarWarningText(AppLocalizations l, Fmt fmt, SolarWarning w) => switch (w.code) {
@@ -235,6 +236,15 @@ class SolarResultScreen extends ConsumerWidget {
                 ),
               ],
             ),
+          ),
+          FilledButton.icon(
+            key: const Key('solar-preview'),
+            style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(54), backgroundColor: const Color(0xFF1E3A8A), foregroundColor: Colors.white),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => SolarPreviewScreen(result: r, polygon: polygon, panelWatt: s.panelWatt)),
+            ),
+            icon: const Icon(Icons.roofing_rounded),
+            label: Text(l.previewOpen),
           ),
           SoftCard(
             key: const Key('solar-summary'),
