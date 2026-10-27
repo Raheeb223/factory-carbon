@@ -11,6 +11,11 @@ on:
 jobs:
   ping:
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 8
     steps:
-      - run: curl -fsS --max-time 90 --retry 2 https://factory-carbon-api.onrender.com/livez
+      # Render answers 5xx for a short time while it restarts or deploys the service, so retry
+      # every error (not only timeouts) for up to ~6 minutes before calling the ping failed.
+      - run: >-
+          curl -fsS -o /dev/null -w "livez: HTTP %{http_code} in %{time_total}s\n"
+          --max-time 45 --retry 6 --retry-delay 15 --retry-all-errors
+          https://factory-carbon-api.onrender.com/livez
